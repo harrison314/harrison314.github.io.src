@@ -20,9 +20,9 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'custom'
-    custom: 'install'
-    arguments: '-g Wyam.Tool'
+    command: custom
+    custom: tool
+    arguments: 'install -g Wyam.Tool'
 
 - script: wyam
   workingDirectory: src
