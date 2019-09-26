@@ -1,0 +1,23 @@
+@{
+    ViewBag.Title = "Portfólio";
+    var allDocs = Documents["PortfolioPosts"].OrderByDescending(x => DateTime.Parse((string)x["Published"])).ToList();
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="row">
+    <p class="col-sm-12">
+         <p>Na tejto stránke uvádzam zoznam niektorých mojich zaujímavých projektov, ktoré som sa rozhodol zverejniť.</p>
+    </p>
+</div>
+
+<div class="row">
+    <p class="col-sm-12">
+         <ul class="list-unstyled">
+                @foreach(var doc in allDocs.Where(t => true))
+                {
+                  <li><a href="@Context.GetLink(doc["PostFile"].ToString(), (bool)Context.Settings["GS.UseAbsoluteUrls"])">@doc["Menu"]</a></li>
+                }
+        </ul>
+    </p>
+</div>

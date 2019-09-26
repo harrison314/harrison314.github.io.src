@@ -1,0 +1,7 @@
+@{
+    string content = Metadata["Post"].ToString();
+    ViewBag.UseHighiler = content.Contains("</code>");
+    ViewBag.UseMathjax = false;
+    ViewBag.Title = Metadata["Title"].ToString();
+}
+@Html.Raw(content)
