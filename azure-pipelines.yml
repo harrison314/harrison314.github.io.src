@@ -28,3 +28,8 @@ steps:
   workingDirectory: src
   displayName: 'Build using wyam'
   name: 'WyamBuild'
+
+- publish: $(System.DefaultWorkingDirectory)/src/output
+  artifact: BlogContent
+  displayName: 'Collect BlogContent artifact'
+  name: CollectBlogContentArtifact
