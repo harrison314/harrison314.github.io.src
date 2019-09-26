@@ -20,6 +20,7 @@ steps:
     custom: 'install'
     arguments: '-g Wyam.Tool'
 
-- script: |
-  cd src
-  wyam
+- script: wyam
+  workingDirectory: src
+  displayName: 'Build using wyam'
+  name: 'WyamBuild'
