@@ -1,35 +1,49 @@
-# ASP.NET Core
-
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Build statuc page using Wyam.io
 
 trigger:
-- master
-
-pool:
-  vmImage: 'ubuntu-latest'
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - build/*
+    - README.md
+    - .gitignore
 
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '2.1.300'
+stages:
+- stage: Build
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreInstaller@0
+      inputs:
+        version: '2.1.300'
+    
+    - task: DotNetCoreCLI@1
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install -g Wyam.Tool'
+    
+    - script: wyam build
+      workingDirectory: src
+      displayName: 'Build using wyam'
+      name: 'WyamBuild'
+    
+    - publish: $(System.DefaultWorkingDirectory)/src/output
+      artifact: BlogContent
+      displayName: 'Collect BlogContent artifact'
+      name: CollectBlogContentArtifact
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: custom
-    custom: tool
-    arguments: 'install -g Wyam.Tool'
-
-- script: wyam build --verbose
-  workingDirectory: src
-  displayName: 'Build using wyam'
-  name: 'WyamBuild'
-
-- publish: $(System.DefaultWorkingDirectory)/src/output
-  artifact: BlogContent
-  displayName: 'Collect BlogContent artifact'
-  name: CollectBlogContentArtifact
+# - stage: Deploy
+#   dependsOn: Build
+#   - job: Deploy
+#     displayName: Deploy
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     steps:
