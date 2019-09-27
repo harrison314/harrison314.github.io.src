@@ -22,10 +22,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - checkout: self
-      clean: true
-      path: sources
-
     - task: DotNetCoreInstaller@0
       inputs:
         version: '2.1.300'
@@ -35,44 +31,49 @@ stages:
         command: custom
         custom: tool
         arguments: 'install -g Wyam.Tool'
-      
-    - task: DownloadSecureFile@1
-      inputs:
-        secureFile: 'AzurePiplineKey'
 
-    - script: |
-        echo "Install deploy key"
-        mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
-        chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
-        echo "Cloning page"
-        mkdrir deploy
-        cd deploy
-        git clone https://github.com/harrison314/harrison314.github.io.git
-        git config --local user.name "Azure Pipelines"
-        git config --local user.email "azuredevops@microsoft.com"
-      displayName: 'Clone  harrison314.github.io'
-      workingDirectory: $(Agent.BuildDirectory)
+    - checkout: self
+      clean: true
+      path: sources
 
     - script: wyam
-      workingDirectory: $(Agent.BuildDirectory)/sources/$(currentRepoName)/src
+      workingDirectory: sources/$(currentRepoName)/src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
+
+    # - task: DownloadSecureFile@1
+    #   inputs:
+    #     secureFile: 'AzurePiplineKey'
+
+    # - script: |
+    #     echo "Install deploy key"
+    #     mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
+    #     chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
+    #     ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+    #     echo "Cloning page"
+    #     mkdrir deploy
+    #     cd deploy
+    #     git clone https://github.com/harrison314/harrison314.github.io.git
+    #     git config --local user.name "Azure Pipelines"
+    #     git config --local user.email "azuredevops@microsoft.com"
+    #   displayName: 'Clone  harrison314.github.io'
+    #   workingDirectory: $(Agent.BuildDirectory)
+
     
-    - publish: $(Agent.BuildDirectory)/sources/$(currentRepoName)/src/output
-      artifact: BlogContent
-      displayName: 'Collect BlogContent artifact'
-      name: CollectBlogContentArtifact
+    # - publish: $(Agent.BuildDirectory)/sources/$(currentRepoName)/src/output
+    #   artifact: BlogContent
+    #   displayName: 'Collect BlogContent artifact'
+    #   name: CollectBlogContentArtifact
     
-    - script: |
-        echo "Copy new page version"
-        cp -r ./sources/$(currentRepoName)/src/output/* ./deploy/harrison314.github.io
-        cd ./deploy/harrison314.github.io
-        git add .
-        git commit -m "Publishing GitHub Pages $(Build.BuildId)"
-        git spush origin master
-      displayName: 'Publish GitHub Pages'
-      workingDirectory: $(Agent.BuildDirectory)
+    # - script: |
+    #     echo "Copy new page version"
+    #     cp -r ./sources/$(currentRepoName)/src/output/* ./deploy/harrison314.github.io
+    #     cd ./deploy/harrison314.github.io
+    #     git add .
+    #     git commit -m "Publishing GitHub Pages $(Build.BuildId)"
+    #     git spush origin master
+    #   displayName: 'Publish GitHub Pages'
+    #   workingDirectory: $(Agent.BuildDirectory)
 
 # - stage: Deploy
 #   dependsOn: Build
