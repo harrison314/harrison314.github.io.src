@@ -25,13 +25,13 @@ stages:
       inputs:
         version: '2.1.300'
     
-    - task: DotNetCoreCLI@1
+    - task: DotNetCoreCLI@2
       inputs:
         command: custom
         custom: tool
         arguments: 'install -g Wyam.Tool'
     
-    - script: wyam build
+    - script: wyam
       workingDirectory: src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
