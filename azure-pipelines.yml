@@ -46,6 +46,15 @@ stages:
         knownHostsEntry: 'github.com'
         sshPublicKey: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1q9RfBMOmWj9oO0YxUJgnnPY+Wz7ViiS0R4sERPUtE ed25519-key-20190927'
         sshKeySecureFile: 'AzurePiplineKey'
+    
+    - script: |
+        mkdir deploy
+        cd deploy
+        git init .
+        git add origin https://github.com/harrison314/harrison314.github.io.git
+        git pull origin master
+      displayName: 'Clone  harrison314.github.io'
+      workingDirectory: ..
 
     # - script: |
     #     echo "Install deploy key"
