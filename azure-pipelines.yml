@@ -55,18 +55,17 @@ stages:
         echo "Install deploy key"
         mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+        ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
         echo "Cloning page"
-        mkdir ../pages
-        cd ../pages
-        git clone git@github.com:harrison314/harrison314.github.io.git
+        git remote add -f src/pages git@github.com:harrison314/harrison314.github.io.git
+        cd src/pages
         echo "Copy new page version"
         cp -r ../output/* .
         git add .
         git commit -m "Publishing GitHub Pages $(Build.BuildId)"
-        git subtree push --prefix=my/pages origin master
+        cd ../..
+        git subtree push --prefix=src/pages origin master
       displayName: 'Publish GitHub Pages'
-      workingDirectory: src/output
 
 # - stage: Deploy
 #   dependsOn: Build
