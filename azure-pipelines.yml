@@ -57,12 +57,11 @@ stages:
         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
         mkdir ../pages
         cd ../pages
-        git remote set-url --push origin git@github.com:harrison314/harrison314.github.io.git
-        git pull origin master
+        git clone git@github.com:harrison314/harrison314.github.io.git
         cp -r ../output/* .
         git add .
         git commit -m "Publishing GitHub Pages  ***NO_CI***"
-        git push origin HEAD:master
+        git push origin master
       displayName: 'Publish GitHub Pages'
       workingDirectory: src/output
 
