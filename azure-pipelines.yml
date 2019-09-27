@@ -49,9 +49,9 @@ stages:
       displayName: 'Commit pages'
       workingDirectory: src
       
-    - task: DownloadSecureFile@1
+    - task: DownloadSecureFile@4
       inputs:
-        secureFile: AzurePiplineKey.priv.ber
+        secureFile: AzurePiplineKey
         displayName: 'Get the deploy key'
     
     - script: |
