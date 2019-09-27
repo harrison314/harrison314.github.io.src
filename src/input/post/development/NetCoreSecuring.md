@@ -19,13 +19,13 @@ a pridávajú sa nastavenia  _unit súboru_ pre _systemd_.
 
 ### Vytvorenie používateľa
 Pre službu sa vytvorí samostatný používateľ a skupina (pre každú službu je vhodné mať samostatného používateľa):
-```txt
+```
 sudo groupadd helloappuser
 sudo adduser --system -g helloappuser --no-create-home helloappuser
 ```
 
 Používateľovi je možné zakázať shell, ale tento krok komplikuje prípadné neskoršie hľadanie problémov:
-```txt
+```
 sudo usermod -s /usr/sbin/nologin helloappuser
 ```
 
@@ -33,7 +33,7 @@ sudo usermod -s /usr/sbin/nologin helloappuser
 V [pôvodnom návode](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-2.2>) sa aplikácia umiestňuje do `/var/www` ale spolu z logmi (loguje sa aj do súborov) ju umiestnime do priečinka `/opt`, kam patria komerčné aplikácie.
 
 Vytvoríme priečinky pre službu:
-```txt
+```
 mkdir /opt/HelloApp
 mkdir /opt/HelloApp/bin
 mkdir /opt/HelloApp/log
