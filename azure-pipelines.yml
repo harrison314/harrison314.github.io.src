@@ -50,9 +50,7 @@ stages:
     - script: |
         mkdir deploy
         cd deploy
-        git init .
-        git add origin https://github.com/harrison314/harrison314.github.io.git
-        git pull origin master
+        git clone https://github.com/harrison314/harrison314.github.io.git .
       displayName: 'Clone  harrison314.github.io'
       workingDirectory: ..
 
