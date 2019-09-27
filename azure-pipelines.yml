@@ -58,7 +58,7 @@ stages:
         mkdir ../pages
         cd ../pages
         git remote set-url --push origin git@github.com:harrison314/harrison314.github.io.git
-        git pull
+        git pull origin master
         cp -r ../output/* .
         git add .
         git commit -m "Publishing GitHub Pages  ***NO_CI***"
