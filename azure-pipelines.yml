@@ -52,13 +52,14 @@ stages:
         git config --local user.name "Azure Pipelines"
         git config --local user.email "azuredevops@microsoft.com"
       displayName: 'Clone  harrison314.github.io'
+      workingDirectory: $(Agent.BuildDirectory)
 
     - script: wyam
-      workingDirectory: sources/$(currentRepoName)/src
+      workingDirectory: $(Agent.BuildDirectory)/sources/$(currentRepoName)/src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
     
-    - publish: $(System.DefaultWorkingDirectory)sources/src/output
+    - publish: $(Agent.BuildDirectory)/sources/$(currentRepoName)/src/output
       artifact: BlogContent
       displayName: 'Collect BlogContent artifact'
       name: CollectBlogContentArtifact
@@ -71,6 +72,7 @@ stages:
         git commit -m "Publishing GitHub Pages $(Build.BuildId)"
         git spush origin master
       displayName: 'Publish GitHub Pages'
+      workingDirectory: $(Agent.BuildDirectory)
 
 # - stage: Deploy
 #   dependsOn: Build
