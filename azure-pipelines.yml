@@ -21,6 +21,10 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - checkout: self
+      clean: true
+      path: sources
+
     - task: DotNetCoreInstaller@0
       inputs:
         version: '2.1.300'
@@ -40,30 +44,31 @@ stages:
         mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+        echo "Cloning page"
+        mkdri deploy
+        cd deploy
+        git clone https://github.com/harrison314/harrison314.github.io.git
         git config --local user.name "Azure Pipelines"
         git config --local user.email "azuredevops@microsoft.com"
-        echo "Cloning page"
-        git remote add -f src/pages git@github.com:harrison314/harrison314.github.io.git
-      displayName: 'Add submodule harrison314.github.io'
+      displayName: 'Clone  harrison314.github.io'
 
     - script: wyam
-      workingDirectory: src
+      workingDirectory: sources/src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
     
-    - publish: $(System.DefaultWorkingDirectory)/src/output
+    - publish: $(System.DefaultWorkingDirectory)sources/src/output
       artifact: BlogContent
       displayName: 'Collect BlogContent artifact'
       name: CollectBlogContentArtifact
     
     - script: |
-        cd src/pages
         echo "Copy new page version"
-        cp -r ../output/* .
+        cp -r ./sources/src/output/* ./deploy/harrison314.github.io
+        cd ./deploy/harrison314.github.io
         git add .
         git commit -m "Publishing GitHub Pages $(Build.BuildId)"
-        cd ../..
-        git subtree push --prefix=src/pages origin master
+        git spush origin master
       displayName: 'Publish GitHub Pages'
 
 # - stage: Deploy
