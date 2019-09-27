@@ -41,9 +41,15 @@ stages:
       displayName: 'Build using wyam'
       name: 'WyamBuild'
 
-    # - task: DownloadSecureFile@1
-    #   inputs:
-    #     secureFile: 'AzurePiplineKey'
+     - task: DownloadSecureFile@1
+       inputs:
+         secureFile: 'AzurePiplineKey'
+      
+     - task: InstallSSHKey@0
+       inputs:
+         knownHostsEntry: 'github.com'
+         sshPublicKey: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1q9RfBMOmWj9oO0YxUJgnnPY+Wz7ViiS0R4sERPUtE ed25519-key-20190927'
+         sshKeySecureFile: $DOWNLOADSECUREFILE_SECUREFILEPATH
 
     # - script: |
     #     echo "Install deploy key"
