@@ -49,10 +49,9 @@ stages:
       displayName: 'Commit pages'
       workingDirectory: src
       
-    - task: DownloadSecureFile@4
+    - task: DownloadSecureFile@1
       inputs:
-        secureFile: AzurePiplineKey
-        displayName: 'Get the deploy key'
+        secureFile: 'AzurePiplineKey'
     
     - script: |
         mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
