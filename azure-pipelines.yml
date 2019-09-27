@@ -12,6 +12,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
+  currentRepoName: 'harrison314.github.io.src'
 
 stages:
 - stage: Build
@@ -45,7 +46,7 @@ stages:
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
         echo "Cloning page"
-        mkdri deploy
+        mkdrir deploy
         cd deploy
         git clone https://github.com/harrison314/harrison314.github.io.git
         git config --local user.name "Azure Pipelines"
@@ -53,7 +54,7 @@ stages:
       displayName: 'Clone  harrison314.github.io'
 
     - script: wyam
-      workingDirectory: sources/src
+      workingDirectory: sources/$(currentRepoName)/src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
     
@@ -64,7 +65,7 @@ stages:
     
     - script: |
         echo "Copy new page version"
-        cp -r ./sources/src/output/* ./deploy/harrison314.github.io
+        cp -r ./sources/$(currentRepoName)/src/output/* ./deploy/harrison314.github.io
         cd ./deploy/harrison314.github.io
         git add .
         git commit -m "Publishing GitHub Pages $(Build.BuildId)"
