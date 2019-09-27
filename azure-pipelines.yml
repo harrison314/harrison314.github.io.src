@@ -51,9 +51,9 @@ stages:
         mkdir deploy
         cd deploy
         echo "Clone harrison314.github.io.git"
+        git clone https://github.com/harrison314/harrison314.github.io.git . --branch master
         git config --local user.name "Azure Pipelines"
         git config --local user.email "azuredevops@microsoft.com"
-        git clone https://github.com/harrison314/harrison314.github.io.git . --branch master
         echo "Copy files"
         cp -r ../sources/src/output/* .
         echo "Commit files"
