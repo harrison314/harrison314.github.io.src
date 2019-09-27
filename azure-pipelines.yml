@@ -52,18 +52,19 @@ stages:
         secureFile: 'AzurePiplineKey'
     
     - script: |
-        rm -rf ../../.git
+        echo "Install deploy key"
         mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+        echo "Cloning page"
         mkdir ../pages
         cd ../pages
         git clone git@github.com:harrison314/harrison314.github.io.git
-        git remote set-url --push origin git@github.com:harrison314/harrison314.github.io.git
+        echo "Copy new page version"
         cp -r ../output/* .
         git add .
         git commit -m "Publishing GitHub Pages $(Build.BuildId)"
-        git push origin master
+        git subtree push --prefix=my/pages origin master
       displayName: 'Publish GitHub Pages'
       workingDirectory: src/output
 
