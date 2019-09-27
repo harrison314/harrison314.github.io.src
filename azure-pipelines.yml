@@ -37,7 +37,7 @@ stages:
       path: sources
 
     - script: wyam
-      workingDirectory: sources/$(currentRepoName)/src
+      workingDirectory: $(currentRepoName)/src
       displayName: 'Build using wyam'
       name: 'WyamBuild'
 
