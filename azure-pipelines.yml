@@ -30,7 +30,10 @@ stages:
         command: custom
         custom: tool
         arguments: 'install -g Wyam.Tool'
-    
+
+    - script: git remote add -f src/pages git@github.com:harrison314/harrison314.github.io.git
+      displayName: 'Add submodule harrison314.github.io'
+
     - script: wyam
       workingDirectory: src
       displayName: 'Build using wyam'
@@ -57,7 +60,6 @@ stages:
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
         echo "Cloning page"
-        git remote add -f src/pages git@github.com:harrison314/harrison314.github.io.git
         cd src/pages
         echo "Copy new page version"
         cp -r ../output/* .
