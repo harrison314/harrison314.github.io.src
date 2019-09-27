@@ -44,12 +44,10 @@ stages:
     - script: |
         git config --local user.name "Azure Pipelines"
         git config --local user.email "azuredevops@microsoft.com"
-        git add .
-        git commit -m "Publishing GitHub Pages  ***NO_CI***"
       displayName: 'Commit pages'
       workingDirectory: src
       
-    - task: DownloadSecureFile@4
+    - task: DownloadSecureFile@6
       inputs:
         secureFile: AzurePiplineKey
         displayName: 'Get the deploy key'
@@ -58,10 +56,16 @@ stages:
         mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
         chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+        mkdir ../pages
+        cd ../pages
         git remote set-url --push origin git@github.com:harrison314/harrison314.github.io.git
+        git pull
+        cp -r ../output/* .
+        git add .
+        git commit -m "Publishing GitHub Pages  ***NO_CI***"
         git push origin HEAD:master
       displayName: 'Publish GitHub Pages'
-      workingDirectory: src
+      workingDirectory: src/output
 
 # - stage: Deploy
 #   dependsOn: Build
