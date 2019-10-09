@@ -25,7 +25,7 @@ steps:
     custom: tool
     arguments: 'install -g Wyam.Tool'
 
-- script: wyam build --verbose
+- script: wyam build
   workingDirectory: src
   displayName: 'Build using wyam'
   name: 'WyamBuild'
