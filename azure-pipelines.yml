@@ -29,15 +29,15 @@ steps:
   workingDirectory: src
   displayName: 'Build using wyam'
   name: 'WyamBuild'
-
 - task: ArchiveFiles@2
-  inputs: $(System.DefaultWorkingDirectory)/src/output
-  includeRootFolder: false
-  archiveType: 'zip'
-  replaceExistingArchive: true
-  archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/BlogContent-$(Build.BuildId).zip'
+  inputs:
+    rootFolderOrFile: 'src/output'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.BuildId)/Blog-$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
-- publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)'
+- publish: '$(Build.BuildId)'
   artifact: BlogContent
   displayName: 'Collect BlogContent artifact'
   name: CollectBlogContentArtifact
