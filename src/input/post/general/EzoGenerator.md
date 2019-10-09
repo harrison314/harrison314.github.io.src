@@ -16,6 +16,6 @@ Podľa výskumov duchovne založený ľudia nedokážu rozlíšiť takéto náho
 guru alebo ezoterického mysliteľa, a to ani veľmi slávnych. Viac sa dočítate v
 [článku od In Vivo magazínu](https://invivomagazin.sk/hlasky-ezoterickeho-gurua-deepaka-chopru-su-neodlisitelne-od-nahodne-generovanych-nezmyslov_392.html).
 
-## Čo s toho vyplýva?
+## Čo z toho vyplýva?
 Vyplýva z toho, že ezoterické frázy a články sú len bezduché texty bez hlbšieho zmyslu.
 Majú v sebe rovnako múdrosti a pravdy ako dokáže vygenerovať generátor náhodných čísiel.

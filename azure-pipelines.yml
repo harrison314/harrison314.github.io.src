@@ -14,52 +14,30 @@ variables:
   buildConfiguration: 'Release'
   currentRepoName: 'harrison314.github.io.src'
 
-stages:
-- stage: Build
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: DotNetCoreInstaller@0
-      inputs:
-        version: '2.1.300'
-    
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: custom
-        custom: tool
-        arguments: 'install -g Wyam.Tool'
+steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.1.300'
 
-    - checkout: self
-      clean: true
-      path: sources
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'install -g Wyam.Tool'
 
-    - script: wyam
-      workingDirectory: src
-      displayName: 'Build using wyam'
-      name: 'WyamBuild'
-      
-    - task: InstallSSHKey@0
-      inputs:
-        knownHostsEntry: 'github.com,140.82.118.4,140.82.118.3 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=='
-        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEQ2FOFS+QM6PDGHCUnJc0KnWDI9KAUIa6x1dip54vtmv+QhsJOMhUJz8KmXiWs/WWyHaGGJkGO/LhZ1FLKT/bHrhzOqym1ecQfprjVpH7eHpvzqF4r1+GqeHjkXoPwaSQhd0PpI7hqBa5PevXRV8Z8gRNFLJOQMV+e9umXGmuBIvU6twZ6Sr/+0Fto78DIlLaFEBhLKa4CqPP1ZjIbz4uZxN1wFFycUEGhhJiJ9uKsgmTeJT8caVGAZVnLvJf5ZCFrwTWs8goL8KuYOHUlWl3YfgSVpnoVLAir7VAyOI1XV/q+iKO6lvfodemppKTWqXdYnM2P/CwoJ6Ks+hNkWRF'
-        sshKeySecureFile: 'AzureRsaDeployKey'
-    
-    - script: |
-        mkdir deploy
-        cd deploy
-        echo "Clone harrison314.github.io.git"
-        git clone git@github.com:harrison314/harrison314.github.io.git . --branch master
-        git config --local user.name "Azure Pipelines"
-        git config --local user.email "azuredevops@microsoft.com"
-        echo "Copy files"
-        cp -r ../sources/src/output/* .
-        echo "Commit files"
-        git add .
-        git commit -m "Publishing GitHub Pages $(Build.BuildId)"
-        echo "Push"
-        git push origin master
-      displayName: 'Update harrison314.github.io'
-      workingDirectory: ..
+- script: wyam build --verbose
+  workingDirectory: src
+  displayName: 'Build using wyam'
+  name: 'WyamBuild'
+
+- task: ArchiveFiles@2
+  inputs: $(System.DefaultWorkingDirectory)/src/output
+  includeRootFolder: false
+  archiveType: 'zip'
+  replaceExistingArchive: true
+  archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/BlogContent-$(Build.BuildId).zip'
+
+- publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)'
+  artifact: BlogContent
+  displayName: 'Collect BlogContent artifact'
+  name: CollectBlogContentArtifact
