@@ -3,5 +3,10 @@
     ViewBag.UseHighiler = content.Contains("</code>");
     ViewBag.UseMathjax = false;
     ViewBag.Title = Metadata["Title"].ToString();
+
+    ViewBag.IssueUrl = string.Concat("https://github.com/harrison314/harrison314.github.io/issues/new?title=",
+    Uri.EscapeDataString(ViewBag.Title),
+    "&body=",
+    Uri.EscapeDataString(Context.GetLink(Metadata["PostFile"].ToString(), true)));
 }
 @Html.Raw(content)
