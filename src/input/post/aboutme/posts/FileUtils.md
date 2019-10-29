@@ -1,6 +1,7 @@
 Published: 28.5.2016
 Title: FileUtils
 Menu: FileUtils
+Description: 'Aplikácia FileUtils pre prácu zo súbormi.'
 ---
 # FileUtils
 

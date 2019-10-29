@@ -2,6 +2,7 @@ Published: 29.8.2019
 Title: Dodatočné zabezpečenie .Net Core
 Menu: Dodatočné zabezpečenie .Net Core
 Cathegory: Dev
+Description: Popis dodatočného zabezpečenia ASP.Net Core aplikácie v prostredí linuxu.
 ---
 # Dodatočné zabezpečenie .Net Core aplikácie na CentOs
 Každá aplikácia môže obsahovať bezpečnostné chyby, preto sa na serveroch zavádzajú dodatočné opatrenia,

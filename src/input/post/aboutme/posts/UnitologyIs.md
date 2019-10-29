@@ -1,6 +1,7 @@
 Published: 1.6.2015
 Title: UnitologyIs
 Menu: UnitologyIs
+Description: Experimentálny informačný systém pre lekárske ambulancie.
 ---
 # UnitologyIs
 

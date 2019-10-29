@@ -3,6 +3,7 @@ Updated: 12.9.2019
 Title: Golang a alternatívy
 Menu: Golang
 Cathegory: Dev
+Description: Go očami dotnet developera.
 ---
 # Golang a alternatívy
 

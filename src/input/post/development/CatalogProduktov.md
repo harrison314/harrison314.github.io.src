@@ -2,6 +2,7 @@ Published: 25.12.2013
 Title: Katalóg produktov v relačnej databáze
 Menu: Katalóg produktov v relačnej DB
 Cathegory: Dev
+Description: Rekapitulácia tvorby dynamickej dátovej štruktúry v databázach z mojich školských čias.
 ---
 # Katalóg produktov v relačnej databáze
 Tvorba katalógov produktov a služieb je veľmi časté, či už na webe alebo v podnikovej sfére. Požiadavkou na takýto systém je aby umožňoval ukladať tovar s rôznymi atribútmi ako rozmery, cena, pri niektorých typoch produktov farba, pri iných výkon. Predstavte si e-shop s elektronikou, pri reproduktoroch je uvedený výkon, rozmery, dostupná farba, no pri stolných počítačoch je tam procesor, veľkosť pamäte, zas pri monitore uhlopriečka...

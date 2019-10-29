@@ -1,6 +1,7 @@
 Published: 2.5.2016
 Title: PerDia2012
 Menu: PerDia2012
+Description: Webová aplikácia ako osobný denník.
 ---
 # PerDia2012
 

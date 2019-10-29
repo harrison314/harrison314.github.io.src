@@ -2,6 +2,7 @@ Published: 20.1.2018
 Title: Optimalizácia výpočtu Levenstainovej vzdialenosti
 Menu: Optimalizácia výpočtu Levenstainovej vzdialenosti
 Cathegory: Dev
+Description: Mikrooptimalizácia výpočtu Levenstainovej vzdialenosti v .Net-e.
 ---
 # Optimalizácia výpočtu Levenstainovej vzdialenosti
 

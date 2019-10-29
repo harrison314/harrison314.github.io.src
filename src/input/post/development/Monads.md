@@ -2,6 +2,7 @@ Published: 16.4.2016
 Title: Monády
 Menu: Monády
 Cathegory: Dev
+Description: Stručný popis monád (nachádzajúcich sa napríklad v Haskelli).
 ---
 # Monády
 Monáda je trojica _(M, return, then)_ pozostávajúca z typového konštruktora _M_ a dvojice polymorfných funkcií.

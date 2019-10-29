@@ -2,6 +2,7 @@ Published: 7.4.2016
 Title: O mne a mojich zálubách
 Menu: O mne
 Cathegory: Aboutme
+Description: Stránka o mne a mojich zálubách.
 ---
 # O mne a mojich zálubách
 

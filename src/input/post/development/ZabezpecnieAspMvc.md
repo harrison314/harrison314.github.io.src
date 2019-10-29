@@ -2,6 +2,7 @@ Published: 15.9.2017
 Title: Zabezpečenie vstupov ASP.NET MVC aplikácie
 Menu: Zabezpečenie ASP.NET MVC
 Cathegory: Dev
+Description: Ako zabezpečiť HTTP vstupy do ASP.NET MVC aplikácie.
 ---
 # Zabezpečenie vstupov ASP.NET MVC aplikácie
 Medzi základné pravidlá zabezpečenia webových aplikácií (na aplikačnej úrovni) patrí kontrola 

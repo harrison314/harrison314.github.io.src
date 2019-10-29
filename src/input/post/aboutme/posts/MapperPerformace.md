@@ -1,6 +1,7 @@
 Published: 24.1.2016
 Title: Mapper Performace
 Menu: Mapper Performace
+Description: Experiment z perfomace mapovania dtabázového resultu na objekty.
 ---
 # Mapper Performace
 

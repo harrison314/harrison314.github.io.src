@@ -2,6 +2,7 @@ Published: 1.12.2013
 Title: Moja tvorba inde
 Menu: Moja tvorba inde
 Cathegory: Aboutme
+Description: Odkazy na moju tvorbu na iných weboch.
 ---
 # Odkazy na moju tvorbu
 Tu uvádzam odkazy na moju tvorbu na iných stránkach a blogoch.

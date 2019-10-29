@@ -2,6 +2,7 @@ Published: 18.9.2013
 Title: Čo robí programátor?
 Menu: Čo robí programátor
 Cathegory: Dev
+Description: Čo vlastne robí programátor pri programovaní?
 ---
 # Čo robí programátor?
 **Občas sa mi stane, že sa ma niekto (najmä príslušníčky nežného pohlavia) spýtajú čo vlastne robím za tým počítačom, dlho som nevedel odpovedať a ukázanie Visual Studia nepomohlo. Preto som z dlhej chvíľky napísal nasledujúci text.**

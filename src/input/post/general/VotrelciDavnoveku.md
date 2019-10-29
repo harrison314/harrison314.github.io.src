@@ -3,6 +3,7 @@ Updated: 31.3.2019
 Title: Votrelci dávnoveku
 Menu: Votrelci dávnoveku
 Cathegory: Generally
+Description: Hlúposti seriálu votrelci dávnoveku.
 ---
 # Votrelci dávnoveku
 

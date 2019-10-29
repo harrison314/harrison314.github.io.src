@@ -2,6 +2,7 @@ Published: 10.4.2016
 Title: Ako používať var a dynamic v C#
 Menu: var a dynamic v C#
 Cathegory: Dev
+Description: Kľúčové slová var a dynamic, ako to vidím ja.
 ---
 # Ako používať var a dynamic v C#
 V poslednej dobe som si všimol, že vývojári píšu *var* úplne všade a potom C\# vyzerá ako JavaScript.

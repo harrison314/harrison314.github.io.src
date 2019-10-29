@@ -2,6 +2,7 @@ Published: 26.4.2016
 Title: Stupne zla Service lokátoru
 Menu: Stupne zla Service lokátoru
 Cathegory: Dev
+Description: Myšlienky okolo Service lokátoru.
 ---
 # Stupne zla Service lokátoru
 O [servise lokátore](http://www.martinfowler.com/articles/injection.html) ako antipatterne bolo toho už popísane veľa,

@@ -2,6 +2,7 @@ Published: 9.3.2019
 Title: Hostovanie .Net Core assembly v natívnej DLL/SO knižnici
 Menu: CoreCrl v natívnej DLL knižnici
 Cathegory: Dev
+Description: Popis hostovania .Net Core aplikácie v natívej knižnici.
 ---
 # Hostovanie .Net Core assembly v natívnej DLL/SO knižnici
 Občas sa vývojár stretne z potrebou implementovať nejaké štandardné rozhranie, plugin, ovládač...

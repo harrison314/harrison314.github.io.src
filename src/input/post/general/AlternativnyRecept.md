@@ -2,6 +2,7 @@ Published: 3.5.2017
 Title: Recept na propagáciu alternatívnej medicíny
 Menu: Propagácia alternatívnej medicíny
 Cathegory: Generally
+Description: Satiricky o tom ako písať články pre alternatívnu medicínu.
 ---
 
 # Recept na propagáciu alternatívnej medicíny

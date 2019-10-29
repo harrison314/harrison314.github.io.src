@@ -2,6 +2,7 @@ Published: 28.3.2019
 Title: Slovenská typografia pre wyam
 Menu: Slovenská typografia pre wyam
 Cathegory: Dev
+Description: Pridanie podpory Slovenskej typografie pre generátor statických stránok Wyam.
 ---
 # Slovenská typografia pre Wyam
 [Wyam](https://wyam.io/) je primárne generátor statických webových stránok napísaných v dotnete (v súčasnosti .Net Core a dostupný ako dotnet global tool), no dá sa použiť aj na mnoho iných vecí ako generovanie e-kníh, generovanie HTML dokumentácie ku knižniciam...

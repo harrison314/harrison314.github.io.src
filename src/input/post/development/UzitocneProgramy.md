@@ -3,6 +3,7 @@ Updated: 9.5.2019
 Title: Užitočné programy
 Menu: Užitočné programy
 Cathegory: Dev
+Description: Zoznam programov užitočných pre Windows a .Net vývojára.
 ---
 # Užitočné programy
 

@@ -13,7 +13,6 @@ Settings[Keys.CleanOutputPath] = true;
 Settings[Keys.Host] = "harrison314.github.io";
 Settings[Keys.LinksUseHttps] = true;
 Settings[Keys.LinkHideExtensions] = false;
-//Settings[Keys.LinkRoot] = "/asasas";
 Settings["GS.UseAbsoluteUrls"] = false;
 
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture  = System.Globalization.CultureInfo.CreateSpecificCulture("sk-SK");

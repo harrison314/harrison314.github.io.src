@@ -2,6 +2,7 @@ Published: 25.12.2013
 Title: Content filter
 Menu: Content filter
 Cathegory: Dev
+Description: Experiment zo strojovím učením na odhalovanie šarlatánskych článkov.
 ---
 # Experiment - Content filter
 Mojím pôvodným zámerom bolo zistiť, či ide strojovo rozlíšiť hodnoverný medicínsky článok od článku propagujúce pochybné liečiteľstvo a medicínsky bulvár, či konšpiračné články a vytvoriť tak niečo ako anti-spamový filter pre tieto články. 

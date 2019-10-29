@@ -3,6 +3,7 @@ Updated: 31.3.2019
 Title: TFS 2015 a číslo verzie assembly
 Menu: TFS 2015 a číslo verzie assembly
 Cathegory: Dev
+Description: Automatická inkrementácia čísla verzie assembly v TFS 2015.
 ---
 # TFS 2015 a číslo verzie assembly
 

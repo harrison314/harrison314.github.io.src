@@ -1,6 +1,7 @@
 Published: 26.2.2019
 Title: SoftHSMv2 (as nuget) for testing
 Menu: SoftHSMv2 (as nuget) for testing
+Description: SoftHSMv2 ako nuget pre testovanie PKCS11 programov v .Net-e.
 ---
 # SoftHSMv2 (as nuget) for testing
 _SoftHSMv2ForTesting_ nuget balík, ktorý zabaľuje [SoftHSMv2](https://github.com/opendnssec/SoftHSMv2)
