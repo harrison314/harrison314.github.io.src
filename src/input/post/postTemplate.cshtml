@@ -11,4 +11,19 @@
     Uri.EscapeDataString(Context.GetLink(Metadata["PostFile"].ToString(), true)));
 
 }
+<h1>@(Metadata.Get<string>("OverrideTitle", Metadata["Title"].ToString()))</h1>
+<div class="publishDate">
+    @(FormatDate(DateTime.Parse((string)Metadata["Published"])))
+</div>
 @Html.Raw(content)
+
+@functions {
+    private static string FormatDate(DateTime date)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendFormat("{0:MMMM yyyy}", date);
+        sb[0] = char.ToUpper(sb[0]);
+
+        return sb.ToString();
+    }
+}

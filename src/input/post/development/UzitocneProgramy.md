@@ -5,8 +5,6 @@ Menu: Užitočné programy
 Cathegory: Dev
 Description: Zoznam programov užitočných pre Windows a .Net vývojára.
 ---
-# Užitočné programy
-
 V tomto článku uvádzam niekoľko jednoduchých užitočných programov pre dotnet vývojára.
 
 ## IL Spy / dotPeek 

@@ -4,8 +4,6 @@ Menu: O mne
 Cathegory: Aboutme
 Description: Stránka o mne a mojich zálubách.
 ---
-# O mne a mojich zálubách
-
 Na tejto stránke sa nachádzajú odkazy na sekciu **O mne**.
 
 * [O mne](OMne.html)

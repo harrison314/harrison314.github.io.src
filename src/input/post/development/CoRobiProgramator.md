@@ -4,7 +4,6 @@ Menu: Čo robí programátor
 Cathegory: Dev
 Description: Čo vlastne robí programátor pri programovaní?
 ---
-# Čo robí programátor?
 **Občas sa mi stane, že sa ma niekto (najmä príslušníčky nežného pohlavia) spýtajú čo vlastne robím za tým počítačom, dlho som nevedel odpovedať a ukázanie Visual Studia nepomohlo. Preto som z dlhej chvíľky napísal nasledujúci text.**
 
 Programátor sa hrá s programátorským legom. Ale s takým, kde sa dá každá skladačka použiť neobmedzene veľakrát, no vždy to je iba tá jedna skladačka. Dokonca aj keď sa z niekoľkých skladačiek poskladá väčia časť, tak tiež sa dá použiť neobmedzene veľakrát.

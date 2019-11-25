@@ -4,9 +4,6 @@ Menu: Propagácia alternatívnej medicíny
 Cathegory: Generally
 Description: Satiricky o tom ako písať články pre alternatívnu medicínu.
 ---
-
-# Recept na propagáciu alternatívnej medicíny
-
 Neviete dokázať že vitamín [B17](https://www.badatel.net/vitamin-b17-najvacsi-utajeny-pripad-v-celej-historii-rakoviny/), pitie priemyselného [bielidla](http://www.uvzsr.sk/docs/info/hv/stanovisko_MMS.pdf) či moču panny 
 lieči všetky druhy rakoviny 1000-krát účinnejšie ako chemoterapia a chcete ho predávať? Nevadí, stačí na to pár jednoduchých krokov.
 

@@ -3,7 +3,6 @@ Title: MassiveDynamic Proxy Generator
 Menu: MassiveDynamic Proxy Generator
 Description: Ľahká knižnica pre generovanie proxy objektov a dekorátorov.
 ---
-# MassiveDynamic Proxy Generator
 _MassiveDynamicProxyGenerator_ je miniatúrna a ľahká knižnica pre dynamické generovanie proxy objektov a dekorátorov.
 
 Generovanie proxy objektov ide využiť napríklad na vytváranie NULL implementácii rozhraní (vzor _Null object_), zakrytie prístupu ku vzdialenej službe (rovnako to robí WCF-ko) napríklad cez JSON-RPC, alebo REST-om. Alebo pre inú automatickú implementáciu rozhraní (logovanie volania, správanie určené mennou konvenciou metód,....).

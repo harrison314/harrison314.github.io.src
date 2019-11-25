@@ -4,7 +4,6 @@ Menu: Podpisovanie PDF v .Net Core
 Cathegory: Dev
 Description: Článok o elektronickom podpisovaní PDF SLovenským eID v .Net Core.
 ---
-# Podpísanie PDF-ka Slovenským eID-čkom
 V tomto článku sa pokúsim v skratke vysvetliť princípy podpisovania dokumentov pomocou 
 _PKCS#11_ a ukážem to a Slovenskom eID-čku, pomocou jednoduchej konzolovej aplikácii v .Net Core.
 

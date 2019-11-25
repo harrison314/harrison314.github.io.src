@@ -5,8 +5,6 @@ Menu: Golang
 Cathegory: Dev
 Description: Go očami dotnet developera.
 ---
-# Golang a alternatívy
-
 Haipovaný jazyk, no len na špeciálne použitie. (Blog je písaný k verzii _Go 1.10_ a hodnotí defaultný jazyk a kompilátor.)
 
 **Výhody:**

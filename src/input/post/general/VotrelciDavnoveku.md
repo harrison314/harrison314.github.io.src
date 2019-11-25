@@ -5,8 +5,6 @@ Menu: Votrelci dávnoveku
 Cathegory: Generally
 Description: Hlúposti seriálu votrelci dávnoveku.
 ---
-# Votrelci dávnoveku
-
 Je úsmevné sledovať *Prima ZOOM*, napríklad, ráno ide dokument 
 o starodávnych vodných kanáloch postavených tak,
 že kamene na seba dolíhajú tak, že medzi ne nezmesti list papiera (podobne ako majú Inkovia v Machu Picchu).

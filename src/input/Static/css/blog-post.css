@@ -15,3 +15,10 @@ footer {
 p {
     text-align:justify;
 }
+
+.publishDate {
+    font-size:90%; 
+    color: #707070; 
+    padding-left: 1em;
+    margin-bottom: 10px;
+}

@@ -5,7 +5,6 @@ Menu: Generátor Ezo textov
 Cathegory: Generally
 Description: O tom aké je ľahké byť železný guru.
 ---
-# Generátor Ezo žvástov
 > Cesta je dôležitejšia, ako cieľ. Jednoducho povedané, skok prináša zázrak. Sme deti našej matky. S Gaiou nás všetkých viaže prepojenie, preto sme šťastní. Predpokladajme, že sila sa stále zlepšuje. Sme deti biosféry. Tam, kde je vedeckými metódami popletený odporca produktov otvorenej mysle, moc používaná aj v tradičnej čínskej medicíne nepríde.
 
 Znie to duchovne, hlboko, ezotericky, no tento text v skutočnosti pochádza z generátora náhodných ezoterických textov,

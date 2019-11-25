@@ -4,7 +4,6 @@ Menu: Ansible a .Net Core
 Cathegory: Dev
 Description: Návod na inštláciu .Net Core 2.1 pomocou Ansible.
 ---
-# Inštalácia .Net Core cez Ansible
 Na testovacích serveroch  používame distribúcie založená na Ubuntu a ako človek,
 čo ma rád Windows, administrácia týchto prostredí mi prišla ako monotónna a otravná činnosť.
 

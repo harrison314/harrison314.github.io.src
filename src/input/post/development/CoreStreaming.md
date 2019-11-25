@@ -4,7 +4,6 @@ Menu: Video straming v ASP.NET Core
 Cathegory: Dev
 Description: Implementácia streamingu videa v ASP.Net Core 2.1 aplikáci do webu.
 ---
-# Video straming v ASP.NET Core
 V tomto článku ponúkam návod ako implementovať video streaming v ASP.NET Core.
 
 Pri tvorbe midllweru som vychádzal z ukážky pre [ASP.NET Web Api](http://www.codeproject.com/Articles/820146/HTTP-Partial-Content-In-ASP-NET-Web-API-Video).

@@ -5,8 +5,6 @@ Menu: TFS 2015 a číslo verzie assembly
 Cathegory: Dev
 Description: Automatická inkrementácia čísla verzie assembly v TFS 2015.
 ---
-# TFS 2015 a číslo verzie assembly
-
 Krátky návod ako nastaviť automatickú úpravu čísla verzie assembly pomocou TFS-ka 2015 pre automatické buildy.
 Skript upravuje posledné dve čisla, kde _Build Number_ je počet dní od zadaného dátumu
 a _Revision_ sekunda buildu vrámci dňa, ide to samozrejme upraviť.

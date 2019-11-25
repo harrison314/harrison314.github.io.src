@@ -4,9 +4,7 @@ Menu: Optimalizácia výpočtu Levenstainovej vzdialenosti
 Cathegory: Dev
 Description: Mikrooptimalizácia výpočtu Levenstainovej vzdialenosti v .Net-e.
 ---
-# Optimalizácia výpočtu Levenstainovej vzdialenosti
-
-V projekte [PerDia2012](Portfolio.html#perdia2012) som sa rozhodol pridať do ku mužnostiam 
+V projekte [PerDia2012](PerDia2012.html) som sa rozhodol pridať do ku mužnostiam 
 fulltext vyhľadávania aj možnosť približného (fuzzy) vyhľadávania, ktoré by bolo odolné 
 aj voči mojim preklepom.
 
