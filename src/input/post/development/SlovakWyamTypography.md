@@ -20,7 +20,7 @@ public class Typography : Wyam.Common.Modules.IModule
 
     public Typography()
     {
-        this.regex = new Regex(@"(\s|^)(z|zo|bez|na|po|od|do|pri|pre|so|miesto|o|v|s|za|a|i|ani|aj|najprv|potom|ešte|ale|no|lež|jednako|alebo|buď|či|že|aby|čo|aký|ktorý|kde|keď|kým|kde|čo|akoby|lebo|pretože|predsa)(\s+)([^\p{Cc}\p{Cf}\p{Z}]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        this.regex = new Regex(@"(\s|^)(z|zo|bez|na|po|od|do|pri|pre|so|miesto|o|v|s|za|a|i|ani|aj|najprv|potom|ešte|ale|no|lež|jednako|alebo|buď|či|že|aby|čo|aký|ktorý|kde|keď|kým|kde|k|ku|čo|akoby|lebo|pretože|predsa)(\s+)([^\p{Cc}\p{Cf}\p{Z}]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     }
 
     public IEnumerable<IDocument> Execute(IReadOnlyList<IDocument> inputs, IExecutionContext context)

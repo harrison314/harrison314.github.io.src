@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title />
+		<link>https://harrison314.github.io/</link>
+		<description />
+		<copyright>2020</copyright>
+		<pubDate>Sun, 19 Jan 2020 11:06:25 GMT</pubDate>
+		<lastBuildDate>Sun, 19 Jan 2020 11:06:25 GMT</lastBuildDate>
+		<item>
+			<title>Ako ma zachránil Blazor</title>
+			<link>https://harrison314.github.io/Blazor.html</link>
+			<description>Ako ma zachránil Blazor pred svetom JavaScriptu.</description>
+			<guid>https://harrison314.github.io/Blazor.html</guid>
+			<pubDate>Mon, 25 Nov 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Dodatočné zabezpečenie .Net Core</title>
+			<link>https://harrison314.github.io/NetCoreSecuring.html</link>
+			<description>Popis dodatočného zabezpečenia ASP.Net Core aplikácie v prostredí linuxu.</description>
+			<guid>https://harrison314.github.io/NetCoreSecuring.html</guid>
+			<pubDate>Thu, 29 Aug 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Slovenská typografia pre wyam</title>
+			<link>https://harrison314.github.io/SlovakWyamTypography.html</link>
+			<description>Pridanie podpory Slovenskej typografie pre generátor statických stránok Wyam.</description>
+			<guid>https://harrison314.github.io/SlovakWyamTypography.html</guid>
+			<pubDate>Thu, 28 Mar 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Hostovanie .Net Core assembly v natívnej DLL/SO knižnici</title>
+			<link>https://harrison314.github.io/HostCoreInDll.html</link>
+			<description>Popis hostovania .Net Core aplikácie v natívej knižnici.</description>
+			<guid>https://harrison314.github.io/HostCoreInDll.html</guid>
+			<pubDate>Sat, 09 Mar 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Generátor Ezo textov</title>
+			<link>https://harrison314.github.io/EzoGenerator.html</link>
+			<description>O tom aké je ľahké byť železný guru.</description>
+			<guid>https://harrison314.github.io/EzoGenerator.html</guid>
+			<pubDate>Mon, 31 Dec 2018 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Podpísanie PDF-ka Slovenským eID-čkom</title>
+			<link>https://harrison314.github.io/SkEidSign.html</link>
+			<description>Článok o elektronickom podpisovaní PDF SLovenským eID v .Net Core.</description>
+			<guid>https://harrison314.github.io/SkEidSign.html</guid>
+			<pubDate>Mon, 30 Jul 2018 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Inštalácia .Net Core cez Ansible</title>
+			<link>https://harrison314.github.io/Ansible.html</link>
+			<description>Návod na inštláciu .Net Core 2.1 pomocou Ansible.</description>
+			<guid>https://harrison314.github.io/Ansible.html</guid>
+			<pubDate>Thu, 19 Jul 2018 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Golang a alternatívy</title>
+			<link>https://harrison314.github.io/GoLang.html</link>
+			<description>Go očami dotnet developera.</description>
+			<guid>https://harrison314.github.io/GoLang.html</guid>
+			<pubDate>Thu, 12 Sep 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Optimalizácia výpočtu Levenstainovej vzdialenosti</title>
+			<link>https://harrison314.github.io/LevenstainOptimalization.html</link>
+			<description>Mikrooptimalizácia výpočtu Levenstainovej vzdialenosti v .Net-e.</description>
+			<guid>https://harrison314.github.io/LevenstainOptimalization.html</guid>
+			<pubDate>Sat, 20 Jan 2018 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Zabezpečenie vstupov ASP.NET MVC aplikácie</title>
+			<link>https://harrison314.github.io/ZabezpecnieAspMvc.html</link>
+			<description>Ako zabezpečiť HTTP vstupy do ASP.NET MVC aplikácie.</description>
+			<guid>https://harrison314.github.io/ZabezpecnieAspMvc.html</guid>
+			<pubDate>Fri, 15 Sep 2017 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Užitočné programy</title>
+			<link>https://harrison314.github.io/UzitocneProgramy.html</link>
+			<description>Zoznam programov užitočných pre Windows a .Net vývojára.</description>
+			<guid>https://harrison314.github.io/UzitocneProgramy.html</guid>
+			<pubDate>Thu, 09 May 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Recept na propagáciu alternatívnej medicíny</title>
+			<link>https://harrison314.github.io/AlternativnyRecept.html</link>
+			<description>Satiricky o tom ako písať články pre alternatívnu medicínu.</description>
+			<guid>https://harrison314.github.io/AlternativnyRecept.html</guid>
+			<pubDate>Wed, 03 May 2017 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Video straming v ASP.NET Core</title>
+			<link>https://harrison314.github.io/CoreStreaming.html</link>
+			<description>Implementácia streamingu videa v ASP.Net Core 2.1 aplikáci do webu.</description>
+			<guid>https://harrison314.github.io/CoreStreaming.html</guid>
+			<pubDate>Thu, 25 Aug 2016 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>TFS 2015 a číslo verzie assembly</title>
+			<link>https://harrison314.github.io/Tfs15AsmVersion.html</link>
+			<description>Automatická inkrementácia čísla verzie assembly v TFS 2015.</description>
+			<guid>https://harrison314.github.io/Tfs15AsmVersion.html</guid>
+			<pubDate>Sun, 31 Mar 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Stupne zla Service lokátoru</title>
+			<link>https://harrison314.github.io/ServiceLocator.html</link>
+			<description>Myšlienky okolo Service lokátoru.</description>
+			<guid>https://harrison314.github.io/ServiceLocator.html</guid>
+			<pubDate>Tue, 26 Apr 2016 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Votrelci dávnoveku</title>
+			<link>https://harrison314.github.io/VotrelciDavnoveku.html</link>
+			<description>Hlúposti seriálu votrelci dávnoveku.</description>
+			<guid>https://harrison314.github.io/VotrelciDavnoveku.html</guid>
+			<pubDate>Sun, 31 Mar 2019 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Monády</title>
+			<link>https://harrison314.github.io/Monads.html</link>
+			<description>Stručný popis monád (nachádzajúcich sa napríklad v Haskelli).</description>
+			<guid>https://harrison314.github.io/Monads.html</guid>
+			<pubDate>Sat, 16 Apr 2016 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Ako používať var a dynamic v C#</title>
+			<link>https://harrison314.github.io/VarAndDynamic.html</link>
+			<description>Kľúčové slová var a dynamic, ako to vidím ja.</description>
+			<guid>https://harrison314.github.io/VarAndDynamic.html</guid>
+			<pubDate>Sun, 10 Apr 2016 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>O mne a mojich zálubách</title>
+			<link>https://harrison314.github.io/OMne.html</link>
+			<description>Stránka o mne a mojich zálubách.</description>
+			<guid>https://harrison314.github.io/OMne.html</guid>
+			<pubDate>Thu, 07 Apr 2016 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Content filter</title>
+			<link>https://harrison314.github.io/ContetFilter.html</link>
+			<description>Experiment zo strojovím učením na odhalovanie šarlatánskych článkov.</description>
+			<guid>https://harrison314.github.io/ContetFilter.html</guid>
+			<pubDate>Wed, 25 Dec 2013 00:00:00 GMT</pubDate>
+		</item>
+	</channel>
+</rss>

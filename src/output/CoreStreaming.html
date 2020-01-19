@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang=sk><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta http-equiv=X-Xss-Protection content="1; mode=block"><meta http-equiv=X-Content-Type-Options content=nosniff><meta name=viewport content="width=device-width, initial-scale=1"><link rel=alternate type=application/rss+xml title="RSS Feed" href=/feed.rss><link rel=alternate type=application/atom+xml title="Atom Feed" href=/feed.atom><meta name=author content=harrison314><title>Video straming v ASP.NET Core</title><meta name=description content="Implementácia streamingu videa v ASP.Net Core 2.1 aplikáci do webu."><link href=css/bootstrap.min.css rel=stylesheet><link href=css/blog-post.css rel=stylesheet><!--[if lt IE 9]><script src=https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js></script><script src=https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js></script><![endif]--><link rel=stylesheet href=css/Highiler/vs.css><style>img{max-width:100%}.img-center{display:block;margin-left:auto;margin-right:auto}</style><body><nav class="navbar navbar-inverse navbar-fixed-top" role=navigation><div class=container><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#bs-example-navbar-collapse-1> <span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span> </button> <a class=navbar-brand href=index.html>harrison314 blog</a></div><div class="collapse navbar-collapse" id=bs-example-navbar-collapse-1><ul class="nav navbar-nav"><li><a href=/All.html>Obsah</a><li><a href=/DevelopingAll.html>Programovanie</a><li><a href=/GeneralAll.html>Všeobecné</a><li><a href=/OMne.html>O mne</a></ul></div></div></nav><div class=container><div class=row><div class="col-lg-8 col-md-8"><h1>Video straming v ASP.NET Core</h1><div class=publishDate>August 2016</div><p>V tomto článku ponúkam návod ako implementovať video streaming v&nbsp;ASP.NET Core.<p>Pri tvorbe midllweru som vychádzal z&nbsp;ukážky pre&nbsp;<a href=http://www.codeproject.com/Articles/820146/HTTP-Partial-Content-In-ASP-NET-Web-API-Video>ASP.NET Web Api</a>.<h2 id=implementacia-v-asp.net-core>Implementácia v&nbsp;ASP.NET Core</h2><p>V prvom rade si vytvoríme rozhranie popisujúce služby nad video súbormi. Prvá metóda vráti zoznam dostupných videí – slúži na&nbsp;ich vyhľadanie v&nbsp;kontrolery (pre zobrazenie používateľského rozhrania), no&nbsp;pre samotný streaming nie je podstatná.<p>Druhá vracia inštanciu rozhrania <em>IVideoFile</em>, pomocou ktorého je možné pristupovať k&nbsp;video súboru, podľa ID-čka. Vracia jeho veľkosť, meno content type, a&nbsp;metódy na&nbsp;zápis jeho obsahu do&nbsp;streamu. Metóda <em>CopyTo</em> s&nbsp;parametrami begin a&nbsp;end skopíruje do&nbsp;streamu iba časť súbor od&nbsp;– do&nbsp;v bajtoch.<pre><code class="language-cs hljs">    <span class=hljs-keyword>public</span> <span class=hljs-keyword>interface</span> <span class=hljs-title>IVideoServices</span>
+    {
+        <span class=hljs-function>List&lt;VideoFileInfo&gt; <span class=hljs-title>FindVideoFiles</span>(<span class=hljs-params></span>)</span>;
+
+        <span class=hljs-function>IVideoFile <span class=hljs-title>GetVideoFile</span>(<span class=hljs-params><span class=hljs-keyword>string</span> id</span>)</span>;
+    }
+
+    <span class=hljs-keyword>public</span> <span class=hljs-keyword>interface</span> <span class=hljs-title>IVideoFile</span>
+    {
+        <span class=hljs-keyword>string</span> ContentType
+        {
+            <span class=hljs-keyword>get</span>;
+        }
+
+        <span class=hljs-keyword>string</span> Name
+        {
+            <span class=hljs-keyword>get</span>;
+        }
+
+        <span class=hljs-keyword>long</span> Size
+        {
+            <span class=hljs-keyword>get</span>;
+        }
+
+        <span class=hljs-function>Task <span class=hljs-title>CopyTo</span>(<span class=hljs-params>Stream outputStream</span>)</span>;
+
+        <span class=hljs-function>Task <span class=hljs-title>CopyTo</span>(<span class=hljs-params>Stream outputStream, <span class=hljs-keyword>long</span> begin, <span class=hljs-keyword>long</span> end</span>)</span>;
+    }
+
+    <span class=hljs-keyword>public</span> <span class=hljs-keyword>class</span> <span class=hljs-title>VideoFileInfo</span>
+    {
+        <span class=hljs-keyword>public</span> <span class=hljs-keyword>string</span> Id
+        {
+            <span class=hljs-keyword>get</span>;
+            <span class=hljs-keyword>internal</span> <span class=hljs-keyword>set</span>;
+        }
+
+        <span class=hljs-keyword>public</span> <span class=hljs-keyword>string</span> DisplayName
+        {
+            <span class=hljs-keyword>get</span>;
+            <span class=hljs-keyword>internal</span> <span class=hljs-keyword>set</span>;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-title>VideoFileInfo</span>(<span class=hljs-params></span>)
+        </span>{
+        }
+    }
+</code></pre><p>Nasledujúci kód predstavuje ukážkovú implementáciu rozhrania <em>IVideoServices</em> pre&nbsp;súborový systém. V&nbsp;konštruktore je uvedená cesta k&nbsp;adresáru s&nbsp;videosúbormi a&nbsp;filter pre&nbsp;ich vyhľadávanie. Podobnú službu ide spraviť napríklad pomocou <a href="https://docs.mongodb.com/manual/core/gridfs/">MongoDb a&nbsp;GridFs</a>.<pre><code class="language-cs hljs">    <span class=hljs-keyword>public</span> <span class=hljs-keyword>class</span> <span class=hljs-title>FileVideoServices</span> : <span class=hljs-title>IVideoServices</span>
+    {
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>readonly</span> <span class=hljs-keyword>string</span> filter;
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>readonly</span> <span class=hljs-keyword>string</span> videoFolderParh;
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-title>FileVideoServices</span>(<span class=hljs-params></span>)
+        </span>{
+            <span class=hljs-comment>//<span class=hljs-doctag>TODO:</span> nacitavanie z&nbsp;konfiguracie</span>
+            <span class=hljs-keyword>this</span>.videoFolderParh = <span class=hljs-string>@"D:\example\video"</span>;
+            <span class=hljs-keyword>this</span>.filter = <span class=hljs-string>"*.mp4"</span>;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> List&lt;VideoFileInfo&gt; <span class=hljs-title>FindVideoFiles</span>(<span class=hljs-params></span>)
+        </span>{
+            DirectoryInfo info = <span class=hljs-keyword>new</span> DirectoryInfo(<span class=hljs-keyword>this</span>.videoFolderParh);
+            List&lt;VideoFileInfo&gt; result = <span class=hljs-keyword>new</span> List&lt;VideoFileInfo&gt;();
+            <span class=hljs-keyword>foreach</span> (FileInfo fie <span class=hljs-keyword>in</span> info.GetFiles(<span class=hljs-string>"*.mp4"</span>))
+            {
+                VideoFileInfo videoFile = <span class=hljs-keyword>new</span> VideoFileInfo()
+                {
+                    DisplayName = fie.Name,
+                    Id = fie.Name
+                };
+                result.Add(videoFile);
+            }
+
+            <span class=hljs-keyword>return</span> result;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> IVideoFile <span class=hljs-title>GetVideoFile</span>(<span class=hljs-params><span class=hljs-keyword>string</span> id</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (id == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(id));
+
+            <span class=hljs-keyword>string</span> path = Path.Combine(<span class=hljs-keyword>this</span>.videoFolderParh, id);
+            FileInfo info = <span class=hljs-keyword>new</span> FileInfo(path);
+            <span class=hljs-keyword>if</span> (info.Exists)
+            {
+                FileVideoFile videoFile = <span class=hljs-keyword>new</span> FileVideoFile(info);
+                <span class=hljs-keyword>return</span> videoFile;
+            }
+            <span class=hljs-keyword>else</span>
+            {
+                <span class=hljs-keyword>return</span> <span class=hljs-literal>null</span>;
+            }
+        }
+    }
+
+    <span class=hljs-keyword>internal</span> <span class=hljs-keyword>class</span> <span class=hljs-title>FileVideoFile</span> : <span class=hljs-title>IVideoFile</span>
+    {
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>const</span> <span class=hljs-keyword>int</span> bufferLenght = <span class=hljs-number>1024</span> * <span class=hljs-number>1024</span>;
+
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>readonly</span> <span class=hljs-keyword>string</span> fullPath;
+
+        <span class=hljs-keyword>public</span> <span class=hljs-keyword>string</span> ContentType
+        {
+            <span class=hljs-keyword>get</span>;
+            <span class=hljs-keyword>protected</span> <span class=hljs-keyword>set</span>;
+        }
+
+        <span class=hljs-keyword>public</span> <span class=hljs-keyword>string</span> Name
+        {
+            <span class=hljs-keyword>get</span>;
+            <span class=hljs-keyword>protected</span> <span class=hljs-keyword>set</span>;
+        }
+
+        <span class=hljs-keyword>public</span> <span class=hljs-keyword>long</span> Size
+        {
+            <span class=hljs-keyword>get</span>;
+            <span class=hljs-keyword>protected</span> <span class=hljs-keyword>set</span>;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-title>FileVideoFile</span>(<span class=hljs-params>FileInfo info</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (info == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(info));
+
+            <span class=hljs-keyword>this</span>.fullPath = info.FullName;
+            <span class=hljs-keyword>this</span>.Name = info.Name;
+            <span class=hljs-keyword>this</span>.Size = info.Length;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-keyword>async</span> Task <span class=hljs-title>CopyTo</span>(<span class=hljs-params>Stream outputStream</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (outputStream == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(outputStream));
+
+            <span class=hljs-keyword>using</span> (FileStream fs = <span class=hljs-keyword>new</span> FileStream(<span class=hljs-keyword>this</span>.fullPath, FileMode.Open))
+            {
+                <span class=hljs-keyword>await</span> fs.CopyToAsync(outputStream);
+            }
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-keyword>async</span> Task <span class=hljs-title>CopyTo</span>(<span class=hljs-params>Stream outputStream, <span class=hljs-keyword>long</span> begin, <span class=hljs-keyword>long</span> end</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (outputStream == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(outputStream));
+
+            <span class=hljs-keyword>long</span> remainingBytes = end - begin + <span class=hljs-number>1</span>;
+            <span class=hljs-keyword>long</span> position = begin;
+            <span class=hljs-keyword>int</span> count;
+            <span class=hljs-keyword>byte</span>[] buffer = <span class=hljs-keyword>new</span> <span class=hljs-keyword>byte</span>[bufferLenght];
+
+            <span class=hljs-keyword>using</span> (FileStream fs = <span class=hljs-keyword>new</span> FileStream(<span class=hljs-keyword>this</span>.fullPath, FileMode.Open, FileAccess.Read))
+            {
+                fs.Seek(begin, SeekOrigin.Begin);
+                <span class=hljs-keyword>do</span>&nbsp;{
+                    <span class=hljs-keyword>if</span> (remainingBytes &gt; bufferLenght)
+                    {
+                        count = <span class=hljs-keyword>await</span> fs.ReadAsync(buffer, <span class=hljs-number>0</span>, bufferLenght).ConfigureAwait(<span class=hljs-literal>false</span>);
+                        <span class=hljs-keyword>await</span> outputStream.WriteAsync(buffer, <span class=hljs-number>0</span>, count).ConfigureAwait(<span class=hljs-literal>false</span>);
+                    }
+                    <span class=hljs-keyword>else</span>
+                    {
+                        count = <span class=hljs-keyword>await</span> fs.ReadAsync(buffer, <span class=hljs-number>0</span>, (<span class=hljs-keyword>int</span>)remainingBytes).ConfigureAwait(<span class=hljs-literal>false</span>);
+                        <span class=hljs-keyword>await</span> outputStream.WriteAsync(buffer, <span class=hljs-number>0</span>, count).ConfigureAwait(<span class=hljs-literal>false</span>);
+                    }
+
+                    position += count;
+                    remainingBytes -= count;
+                }
+                <span class=hljs-keyword>while</span> (position &lt;= end);
+            }
+        }
+</code></pre><h2 id=popis-midllweru>Popis midllweru</h2><p>Ako bolo uvedené v&nbsp;pôvodnom zdroji, tak pokiaľ požadované video neexistuje vráti sa HTTP status kód <em>404 Not Found</em>. Ak existuje ale&nbsp;v hlavičke requestu sa nenachádza hlavička <em>Range</em> vráti sa celý obsah súboru zo&nbsp;statusom <em>200 OK</em> (túto časť je možné vynechať ak chceme zabrániť neoprávnenému sťahovaniu obsahu). Ak sa v&nbsp;ňom nachádza, hlavička <em>Range</em>, tak ju prečíta.<p>Ak sú v&nbsp;nej bytové rozsahy v&nbsp;poriadku vráti HTTP status <em>206 Partial Content</em> a&nbsp;zapíše do&nbsp;výstupného streamu príslušnú časť obsahu, inak vráti HTTP status <em>416 Requested Range Not Satisfiable</em> a&nbsp;ukončí spojenie.<p>Nasledujúci kód predstavuje implementáciu samotného ASP.NET Core midllweru, ktorý&nbsp;sa stará o&nbsp;parciálne servírovanie obsahu videa pomocou <em>HTTP statusu 206</em>.<p>V konštante <em>maxTransfer</em> je hodnota v&nbsp;bajtoch, ktorá určuje maximálnu veľkosť naraz preneseného bloku dát z&nbsp;videa.<pre><code class="language-cs hljs">    <span class=hljs-keyword>public</span> <span class=hljs-keyword>class</span> <span class=hljs-title>VideoStreamMiddleware</span>
+    {
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>readonly</span> IVideoServices videoServices;
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>readonly</span> RequestDelegate next;
+
+        <span class=hljs-keyword>private</span> <span class=hljs-keyword>const</span> <span class=hljs-keyword>long</span> maxTransfer = <span class=hljs-number>1024</span> * <span class=hljs-number>1024</span>;
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-title>VideoStreamMiddleware</span>(<span class=hljs-params>RequestDelegate next, IVideoServices videoServices</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (next == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(next));
+            <span class=hljs-keyword>if</span> (videoServices == <span class=hljs-literal>null</span>) <span class=hljs-keyword>throw</span> <span class=hljs-keyword>new</span> ArgumentNullException(<span class=hljs-keyword>nameof</span>(videoServices));
+
+            <span class=hljs-keyword>this</span>.next = next;
+            <span class=hljs-keyword>this</span>.videoServices = videoServices;
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-keyword>async</span> Task <span class=hljs-title>Invoke</span>(<span class=hljs-params>HttpContext httpContext</span>)
+        </span>{
+            <span class=hljs-keyword>if</span> (!httpContext.Request.Path.StartsWithSegments(<span class=hljs-keyword>new</span> PathString(<span class=hljs-string>"/videostream"</span>)))
+            {
+                <span class=hljs-keyword>await</span> <span class=hljs-keyword>this</span>.next(httpContext);
+                <span class=hljs-keyword>return</span>;
+            }
+
+            <span class=hljs-keyword>string</span> id = httpContext.Request.Query[<span class=hljs-string>"file"</span>];
+            IVideoFile videoFile = <span class=hljs-keyword>this</span>.videoServices.GetVideoFile(id);
+            <span class=hljs-keyword>if</span> (videoFile == <span class=hljs-literal>null</span>)
+            {
+                httpContext.Response.StatusCode = <span class=hljs-number>404</span>;
+                <span class=hljs-keyword>return</span>;
+            }
+
+            <span class=hljs-keyword>string</span> header = httpContext.Request.Headers[<span class=hljs-string>"Range"</span>];
+            <span class=hljs-keyword>long</span> begin, end;
+
+            <span class=hljs-keyword>if</span> (<span class=hljs-keyword>this</span>.TryRangeParse(header, videoFile, <span class=hljs-keyword>out</span> begin, <span class=hljs-keyword>out</span> end))
+            {
+                end = Math.Min(begin + maxTransfer, end);
+
+                <span class=hljs-keyword>if</span> (begin &gt;= videoFile.Size || end &gt; videoFile.Size)
+                {
+                    httpContext.Response.StatusCode = <span class=hljs-number>416</span>;
+                    httpContext.Response.Headers.Add(<span class=hljs-string>"Content-Range"</span>, <span class=hljs-string>$"bytes */<span class=hljs-subst>{videoFile.Size}</span>"</span>);
+                    <span class=hljs-keyword>return</span>;
+                }
+
+                httpContext.Response.StatusCode = <span class=hljs-number>206</span>;
+                <span class=hljs-keyword>string</span> rangeOut = <span class=hljs-string>$"bytes <span class=hljs-subst>{begin}</span>-<span class=hljs-subst>{end}</span>/<span class=hljs-subst>{videoFile.Size}</span>"</span>;
+                httpContext.Response.ContentType = videoFile.ContentType;
+
+                httpContext.Response.Headers.Add(<span class=hljs-string>"Accept-Ranges"</span>, <span class=hljs-string>"bytes"</span>);
+                httpContext.Response.Headers.Add(<span class=hljs-string>"Content-Range"</span>, <span class=hljs-keyword>new</span> Microsoft.Extensions.Primitives.StringValues(rangeOut));
+                httpContext.Response.Headers.Add(<span class=hljs-string>"Cache-Control"</span>, <span class=hljs-string>"no-cache"</span>);
+
+                <span class=hljs-keyword>await</span> videoFile.CopyTo(httpContext.Response.Body, begin, end);
+            }
+            <span class=hljs-keyword>else</span>
+            {
+                httpContext.Response.ContentType = videoFile.ContentType;
+                httpContext.Response.Headers.Add(<span class=hljs-string>"Accept-Ranges"</span>, <span class=hljs-string>"bytes"</span>);
+                httpContext.Response.Headers.Add(<span class=hljs-string>"Cache-Control"</span>, <span class=hljs-string>"no-cache"</span>);
+
+                <span class=hljs-keyword>await</span> videoFile.CopyTo(httpContext.Response.Body);
+            }
+        }
+
+        <span class=hljs-function><span class=hljs-keyword>private</span> <span class=hljs-keyword>bool</span> <span class=hljs-title>TryRangeParse</span>(<span class=hljs-params><span class=hljs-keyword>string</span> range, IVideoFile videoFile, <span class=hljs-keyword>out</span> <span class=hljs-keyword>long</span> begin, <span class=hljs-keyword>out</span> <span class=hljs-keyword>long</span> end</span>)
+        </span>{
+            <span class=hljs-keyword>const</span> <span class=hljs-keyword>string</span> bytesPrefix = <span class=hljs-string>"bytes="</span>;
+            begin = <span class=hljs-number>0</span>L;
+            end = <span class=hljs-number>0</span>L;
+
+            <span class=hljs-keyword>if</span> (<span class=hljs-keyword>string</span>.IsNullOrEmpty(range) || !range.StartsWith(bytesPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                <span class=hljs-keyword>return</span> <span class=hljs-literal>false</span>;
+            }
+
+            <span class=hljs-keyword>string</span> rangeValues = range.Substring(bytesPrefix.Length);
+            <span class=hljs-keyword>int</span> delimiterIndex = rangeValues.IndexOf(&amp;<span class=hljs-meta>#39;-&amp;#39;);</span>
+
+            <span class=hljs-keyword>if</span> (!<span class=hljs-keyword>long</span>.TryParse(rangeValues.Substring(<span class=hljs-number>0</span>, delimiterIndex), <span class=hljs-keyword>out</span> begin))
+            {
+                begin = <span class=hljs-number>0</span>L;
+            }
+            <span class=hljs-keyword>if</span> (!<span class=hljs-keyword>long</span>.TryParse(rangeValues.Substring(delimiterIndex + <span class=hljs-number>1</span>), <span class=hljs-keyword>out</span> end))
+            {
+                end = videoFile.Size - <span class=hljs-number>1</span>;
+            }
+
+            <span class=hljs-keyword>return</span> <span class=hljs-literal>true</span>;
+        }
+    }
+</code></pre><h2 id=prehravanie-videa>Prehrávanie videa</h2><p>Video je možné jednoducho prehrať cez HTML5 tag <em><a href=http://www.w3schools.com/html/html5_video.asp>video</a></em>, ktorý&nbsp;pomocou elementu <em>sourse</em> dostane adresu videa.<p>Napríklad pre&nbsp;video s&nbsp;názvom <em>sample.mp4</em> to bude <em>/videostream?file=sample.mp4</em>. Video je možné ľubovoľne prehrávať a&nbsp;posúvať.<pre><code class="language-html hljs"> <span class=hljs-tag>&lt;<span class=hljs-name>video</span> <span class=hljs-attr>id</span>=<span class=hljs-string>"mainPlayer"</span> <span class=hljs-attr>width</span>=<span class=hljs-string>"640"</span> <span class=hljs-attr>height</span>=<span class=hljs-string>"360"</span>
+     <span class=hljs-attr>autoplay</span>=<span class=hljs-string>"autoplay"</span> <span class=hljs-attr>controls</span>=<span class=hljs-string>"controls"</span> <span class=hljs-attr>onloadeddata</span>=<span class=hljs-string>"onLoad()"</span>&gt;</span>
+         <span class=hljs-tag>&lt;<span class=hljs-name>source</span> <span class=hljs-attr>src</span>=<span class=hljs-string>"@Model.VideoUrl"</span> /&gt;</span>
+         <span class=hljs-tag>&lt;<span class=hljs-name>p</span>&gt;</span>This user agents that do&nbsp;not support the video tag.<span class=hljs-tag>&lt;/<span class=hljs-name>p</span>&gt;</span>
+ <span class=hljs-tag>&lt;/<span class=hljs-name>video</span>&gt;</span>
+ <span class=hljs-tag>&lt;<span class=hljs-name>script</span> <span class=hljs-attr>type</span>=<span class=hljs-string>"text/javascript"</span>&gt;</span><span class=javascript>
+     <span class=hljs-comment>//&lt;![CDATA[</span>
+     <span class=hljs-function><span class=hljs-keyword>function</span> <span class=hljs-title>onLoad</span>(<span class=hljs-params></span>) </span>{
+         <span class=hljs-keyword>var</span> sec = <span class=hljs-built_in>parseInt</span>(<span class=hljs-built_in>document</span>.location.search.substr(<span class=hljs-number>1</span>));
+         <span class=hljs-keyword>if</span> (!<span class=hljs-built_in>isNaN</span>(sec)) {
+             mainPlayer.currentTime = sec;
+         }
+     }
+     <span class=hljs-comment>//]]&gt;</span>
+ </span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre><h2 id=zaver>Záver</h2><p>Pri testovaní je potrebné v&nbsp;triede Startu ASP.NET MVC Core projektu pridať midllwer na&nbsp;video straming do&nbsp;pipline a&nbsp;zaregistrovať príslušnú službu. Pri&nbsp;praktickom nasadení je ešte&nbsp;potrebné zabrániť neoprávnenému sťahovaniu obsahu.<h2 id=zdroje>Zdroje</h2><ol><li><a href=http://www.codeproject.com/Articles/820146/HTTP-Partial-Content-In-ASP-NET-Web-API-Video>http://www.codeproject.com/Articles/820146/HTTP-Partial-Content-In-ASP-NET-Web-API-Video</a><li><a href=http://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js>http://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js</a><li><a href=https://docs.asp.net/en/latest/fundamentals/middleware.html>https://docs.asp.net/en/latest/fundamentals/middleware.html</a><li><a href=http://www.asp.net/aspnet/samples/owin-katana>http://www.asp.net/aspnet/samples/owin-katana</a><li><a href=https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a></ol></div><div class="col-lg-4 col-md-4 hidden-xs hidden-sm"><div class=well><h4>Vývoj</h4><div class=row><div class=col-lg-12><ul class=list-unstyled><li><a href=/Blazor.html>Ako ma zachránil Blazor</a><li><a href=/NetCoreSecuring.html>Dodatočné zabezpečenie .Net Core</a><li><a href=/SlovakWyamTypography.html>Slovenská typografia pre wyam</a><li><a href=/HostCoreInDll.html>CoreCrl v natívnej DLL knižnici</a><li><a href=/SkEidSign.html>Podpisovanie PDF v .Net Core</a><li><a href=/Ansible.html>Ansible a .Net Core</a><li><a href=/GoLang.html>Golang</a><li><a href=/LevenstainOptimalization.html>Optimalizácia výpočtu Levenstainovej vzdialenosti</a><li><a href=/ZabezpecnieAspMvc.html>Zabezpečenie ASP.NET MVC</a><li><a href=/UzitocneProgramy.html>Užitočné programy</a></ul></div></div></div><div class=well><h4>Všeobecné</h4><div class=row><div class=col-lg-12><ul class=list-unstyled><li><a href=/EzoGenerator.html>Generátor Ezo textov</a><li><a href=/AlternativnyRecept.html>Propagácia alternatívnej medicíny</a><li><a href=/VotrelciDavnoveku.html>Votrelci dávnoveku</a></ul></div></div></div><div class=well><h4>O mne</h4><div class=row><div class=col-lg-12><ul class=list-unstyled><li><a href=/OMne.html>O mne</a><li><a href=/OMneOdkazy.html>Moja tvorba inde</a><li><a href=/Portfolio.html>Portólio</a></ul></div></div></div></div></div><hr><footer><div class=row><div class="col-lg-8 col-sm-8"><div class=well><h4>Našli ste chybu, alebo chcete niečo doplniť?</h4><p>Ak ste našli chybu v článu, chcete niečo dopniť, alebo sa vyjadriť k téme, môžete na <a href="https://github.com/harrison314/harrison314.github.io/issues/new?title=Video%20straming%20v%20ASP.NET%20Core&amp;body=https%3A%2F%2Fharrison314.github.io%2FCoreStreaming.html" target=_blank>Githube otvoriť issue</a>.</div></div></div><div class=row><div class=col-lg-12><p>Copyright © harrison314 2013</div></div></footer></div><script src=js/jquery.js></script><script src=js/bootstrap.min.js></script>
