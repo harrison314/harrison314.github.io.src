@@ -2,9 +2,9 @@ Published: 12.2.2020
 Title: Elektronické voľby
 Menu: Elektronické voľby
 Cathegory: Dev
-Description: Prečo sú elektronické voľby v súčasnosti zlý nápad, hoci nám internet banking funguje?
+Description: Prečo sú elektronické voľby v súčasnosti zlý nápad, hoci nám internetbanking funguje?
 ---
-**Prečo sú elektronické voľby v súčasnosti zlý nápad, hoci nám internet banking funguje?**
+**Prečo sú elektronické voľby v súčasnosti zlý nápad, hoci nám internetbanking funguje?**
 
 _Aby to nebolo veľmi dlhé preskočím reči, čo to voľby sú, aký majú význam pre demokraciu._
 
@@ -26,7 +26,7 @@ kybernetickej bezpečnosti a elektronického podpisu (zakrúžkovaný kandidát 
 [ECDSA](https://sk.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm),
 [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard),
 [blind signing](https://en.wikipedia.org/wiki/Blind_signature),
-[end-to-end šifrovanie](https://en.wikipedia.org/wiki/End-to-end_encryption)),
+[end-to-end šifrovanie](https://en.wikipedia.org/wiki/End-to-end_encryption), penetračné testy,...),
 * bežný programátori nemajú na to aby to spravili dobre, alebo aby v ňom našli chybu ([bežný programátor ani nevie, ako bezpečne pracovať s heslom](https://net.cs.uni-bonn.de/fileadmin/user_upload/naiakshi/Naiakshina_Password_Study.pdf)).
 
 No hlavným problémom je samotný koncept, ako spraviť elektronické voľby dobre:
@@ -37,8 +37,8 @@ kvôli možnému zneužitiu tejto informácie (od znevýhodnenie pri vybavovaní
 
 A práve tento rozpor, že **volebný systém musí a zároveň nesmie vedieť, ako hlasoval ktorý občan, nie je v súčasnosti uspokojivo vyriešený**.
 
-### Máme internet banking, prečo teda nie elektronické voľby?
-Internet banking a elektronické voľby sú diametrálne odlišné veci, s odlišnými požiadavkami, rizikami a prostredím.
+### Máme internetbanking, prečo teda nie elektronické voľby?
+Internetbanking a elektronické voľby sú diametrálne odlišné veci s odlišnými požiadavkami, rizikami a prostredím.
 
 ### Ale veď elektronické voľby v Estónsku fungujú
 Áno, fungujú paralelene s papierovými. No spomínaný problém s anonymitou voľby nie je vyriešený uspokojivo.
@@ -50,12 +50,12 @@ Pri sčítaní hlasov z nich „autentifikačný“ server odstráni podpisy a z
 Tu je problém v zapečení tajnej voľby, lebo stojí len na tom, že sa nespoja dáta „autentifikačného“ a počítacieho serveru.
 No to nestačí.
 
-_(Jestvujú aj sofistikovanejšie volebné protokoly, no ich náročnosť implementácie je výrazne vyššia.)_
+_(Jestvujú aj sofistikovanejšie volebné schémy napr. [Schémy s využitím homomorfného šifrovania](http://www.dcs.fmph.uniba.sk/diplomovky/obhajene/getfile.php/Danko_DP.pdf?id=334&fid=575&type=application%2Fpdf), no ich náročnosť implementácie je výrazne vyššia.)_
 
 ### Dáme tam blockchain
 Ľudia radi používajú termíny, ktorým nerozumejú. Blockchain nerieši ani jedenu požiadavku na elektronické voľby spomínané vyššie.
 
 ## Záver
-TLDR: Elektronické voľby ešte nie sú vyriešený problém.
+Elektronické voľby ešte nie sú vyriešený problém.
 
-No v budúcnosti sa možno objaví volebný protokol, ktorý bude riešiť súčasné problémy elektronických volieb pomocou tvrdých matematických a teoretických princípov, podobne ako v súčastnosti funguje elektronický podpis. 
+No v budúcnosti sa možno objaví volebná schéma, ktorý bude riešiť súčasné problémy elektronických volieb pomocou tvrdých matematických a teoretických princípov, podobne ako v súčastnosti funguje elektronický podpis. 
