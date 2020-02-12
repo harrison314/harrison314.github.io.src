@@ -50,7 +50,8 @@ Pri sčítaní hlasov z nich „autentifikačný“ server odstráni podpisy a z
 Tu je problém v zapečení tajnej voľby, lebo stojí len na tom, že sa nespoja dáta „autentifikačného“ a počítacieho serveru.
 No to nestačí.
 
-_(Jestvujú aj sofistikovanejšie volebné schémy napr. [Schémy s využitím homomorfného šifrovania](http://www.dcs.fmph.uniba.sk/diplomovky/obhajene/getfile.php/Danko_DP.pdf?id=334&fid=575&type=application%2Fpdf), no ich náročnosť implementácie je výrazne vyššia.)_
+_Jestvujú aj sofistikovanejšie volebné schémy (napr. [Schémy s využitím homomorfného šifrovania alebo slepých podpisoch](http://www.dcs.fmph.uniba.sk/diplomovky/obhajene/getfile.php/Danko_DP.pdf?id=334&fid=575&type=application%2Fpdf)),
+no ich náročnosť implementácie je výrazne vyššia._
 
 ### Dáme tam blockchain
 Ľudia radi používajú termíny, ktorým nerozumejú. Blockchain nerieši ani jedenu požiadavku na elektronické voľby spomínané vyššie.
