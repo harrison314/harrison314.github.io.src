@@ -83,6 +83,9 @@ var allDocs = Documents["Posts"].OrderByDescending(x => DateTime.Parse((string)x
                 {
                   <li><a href="@Context.GetLink(doc["PostFile"].ToString(), (bool)Context.Settings["GS.UseAbsoluteUrls"])">@doc["Menu"]</a></li>
                 }
+                <li>
+                     <a href="@Context.GetLink("DevelopingAll.html", (bool)Context.Settings["GS.UseAbsoluteUrls"])">&#8230;</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -97,6 +100,9 @@ var allDocs = Documents["Posts"].OrderByDescending(x => DateTime.Parse((string)x
             {
                <li><a href="@Context.GetLink(doc["PostFile"].ToString(), (bool)Context.Settings["GS.UseAbsoluteUrls"])">@doc["Menu"]</a></li>
             }
+            <li>
+                <a href="@Context.GetLink("GeneralAll.html", (bool)Context.Settings["GS.UseAbsoluteUrls"])">&#8230;</a>
+            </li>
             </ul>
         </div>
     </div>
