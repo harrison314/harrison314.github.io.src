@@ -1,5 +1,8 @@
 # Build statuc page using Wyam.io
 
+pool:
+  vmImage: 'windows-latest'
+
 trigger:
   branches:
     include:
