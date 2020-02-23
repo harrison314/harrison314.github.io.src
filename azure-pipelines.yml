@@ -37,6 +37,16 @@ steps:
     archiveFile: '$(Build.BuildId)/Blog-$(Build.BuildId).zip'
     replaceExistingArchive: true
 
+- task: GitHubPagesPublish@1
+  inputs:
+    docPath: '$(System.DefaultWorkingDirectory)/src/output'
+    githubusername: '$(gitUserName)'
+    githubemail: '$(gitUserEmail)'
+    githubaccesstoken: '$(gitToken)'
+    repositoryname: 'harrison314.github.io'
+    branchname: 'master'
+    commitmessage: 'Automated Release $(Release.ReleaseId)'
+
 - publish: '$(Build.BuildId)'
   artifact: BlogContent
   displayName: 'Collect BlogContent artifact'
