@@ -1,4 +1,5 @@
 Published: 12.2.2020
+Updated: 26.5.2019
 Title: Elektronické voľby
 Menu: Elektronické voľby
 Cathegory: Dev
@@ -11,7 +12,8 @@ _Aby to nebolo veľmi dlhé preskočím reči, čo to voľby sú, aký majú vý
 Na voľby alebo referendá sú kladené nasledujúce požiadavky:
 * voliť by mal len právoplatný volič,
 * občan musí mať možnosť voliť slobodne (nesmie byt donútený k voľbe),
-* voľba musí byť tajná (aby neskôr nemohol byť človek perzekuovaný totalitným režimom za svoju voľbu).
+* voľba musí byť tajná (aby neskôr nemohol byť človek perzekuovaný totalitným režimom za svoju voľbu),
+* volebné hlasy musia byť spätne prepočítatelné (hlavne v prípade nezrovnalostí).
 
 Tieto body spĺňajú papierové voľby krúžkovaním, plentou, volebnou komisiu jednoduchým a pochopiteľným spôsobom
 a to aj pre bežného človeka.
