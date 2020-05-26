@@ -8,10 +8,10 @@ _PkcsExtensions_ je malá knižnica pridávajúca extensions metódy a typy, kto
 Táto knižnica vznikla pre to, lebo som sa často stretával s opakujúcimi sa úlohami. Napríklad bezpečný prevod _SecureString_ na pole bajtov, generátor náhodných čísiel, ktorý dokáže zbierať entropiu, zistenie, či je certifikát možné použiť pri podpisovaní dokumentu,...
 
 Plno z tohto rieši _BauncyCastle_, ale to je okolo dva megabajty veľká knižnica,
-ktorá sa nedá dobre linkovať (IL Linking), lebo takmer každá trieda súvisí s každou.
+ktorá sa nedá dobre linkovať ([IL Linking](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/blazor/configure-linker?view=aspnetcore-3.1)), lebo takmer každá trieda súvisí s každou.
 Preto som sa inšpiroval knižnicu _SecurityDriven.Inferno_, ktorá pridáva len tenkú vrstvu a rozšírenia nad štandardné _dotnet_ API.
 
-Mojim cieľom bolo vytvoriť malú knižnicu, vhodnú pre AOT kompiláciu, IL Linking a teda aby šla dobre použiť v malých programoch a Blazore.
+Mojim cieľom bolo vytvoriť malú knižnicu, vhodnú pre [AOT kompiláciu](https://github.com/dotnet/designs/blob/master/accepted/2020/single-file/design.md), IL Linking a teda aby šla dobre použiť v malých programoch a Blazore.
 
 _PkcsExtensions_ poskytuje funkcionalitu pre:
 - export RSA, ECDsa, certifikátu do BER/DER formátu,
