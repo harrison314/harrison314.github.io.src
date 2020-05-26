@@ -35,12 +35,12 @@ Táto knižnica umožňuje:
 - generovať náhodné pole bajtov pomocou _WebCrypto_,
 - generovať RSA kľúče pomocou _WebCrypto_,
 - generovať  EC kľúče pomocou _WebCrypto_,
-- Diffieho–Hellmanovu výmenu kľúčov a ECIES pomocou _WebCrypto_,
+- Diffie–Hellmanovu výmenu kľúčov a ECIES pomocou _WebCrypto_,
 - exportovať RSA kľúče,
 - podporu JsonWebKey,
 - ...
 
-Táto knižnica zámerne nerobí interop na _WebCrypto_ pre hash funkcie, HMAC, šifrovanie a podpisovanie, pretože ich implementácie a podpora sa môže líšiť medzi prehliadačmi a operačnými systémami, navyše WebCrypto neumožňuje podpísať hash. Preto v súčasnosti považujem za lepšiu alternatívu použiť _dotnet/Blazor_ implementáciu týchto algoritmov.
+Táto knižnica zámerne nerobí interop na _WebCrypto_ pre hash funkcie, HMAC, šifrovanie a podpisovanie, pretože ich implementácie a podpora sa môže líšiť medzi prehliadačmi a operačnými systémami, navyše WebCrypto neumožňuje podpísať hash. Preto v súčasnosti považujem za lepšiu alternatívu použiť _dotnet/Blazor_ implementáciu týchto funcionalít.
 
 Vytvorený [Nuget balíček](https://www.nuget.org/packages/PkcsExtensions.Blazor/).
 
