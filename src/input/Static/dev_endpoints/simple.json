@@ -1,0 +1,25 @@
+{
+    "name": "simple json",
+    "enabled": false,
+    "status": 302,
+    "status_description": "security redirect",
+    "signature": "LDwktzFvo5BWSA0LUg+L4Vgeo+Zqarl93nSPnSn8CBU=",
+    "locks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+    ],
+    "zeros": null,
+    "eventId": "e8b378ab-020c-4106-8e20-e914f6580f8c",
+    "content": {
+        "perm": "rwx",
+        "lens": 12.3,
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eu neque condimentum, accumsan ipsum ac, iaculis diam. Vivamus dictum convallis metus, tempus imperdiet orci laoreet egestas."
+    }
+}

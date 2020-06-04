@@ -1,0 +1,15 @@
+{
+    "leds":
+    [
+        {"r": true, "g": false, "b":false, "delay": 1200 },
+        {"r": false, "g": false, "b":true, "delay": 500 },
+        {"r": false, "g": false, "b":false, "delay": 500 },
+        {"r": false, "g": true, "b":false, "delay": 1200 },
+        {"r": false, "g": true, "b":true, "delay": 1200 }
+    ],
+    "state": 1,
+    "nextState": 45,
+    "device": "azure-sphere-49",
+    "signatureMode": "HMACSHA256",
+    "signature": "LDwktzFvo5BWSA0LUg+L4Vgeo+Zqarl93nSPnSn8CBU="
+}
