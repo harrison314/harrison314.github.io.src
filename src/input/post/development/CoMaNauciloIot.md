@@ -1,4 +1,5 @@
 Published: 13.7.2020
+Updated: 14.7.2020
 Title: Čo ma naučilo IoT
 Menu: Čo ma naučilo IoT
 Cathegory: Dev
@@ -10,7 +11,7 @@ ako bežne robím v práci. Je iné mať k dispozícii 8GB a iné 80KB RAM.
 
 Pôvodne som rozmýšľal o tom zadovážiť si _Raspberry Pi_ a vyrobiť si meteostanicu,
 ale odradili ma veci ako absencia obvod reálneho času, komplikovanejšie pripojenie snímačov,
-SD karta (rady odchádzajú kvôli zápisom Linuxu).
+SD karta (radi odchádzajú kvôli zápisom Linuxu).
 Ale náhodou som narazil na vývojovú sadu _ESP-201_ osadenú modulom _[ESP8266](https://en.wikipedia.org/wiki/ESP8266)_.
 
 S _ESP8266_ sa začínalo ľahko, najskôr v _Arduino IDE_ (rozhodne to nie je IDE),
@@ -27,14 +28,14 @@ O asi dva roky sa mi dostala do rúk vývojová doska [Avnet MT3620 Starter Kit]
 _Azure Sphere_ je systém na čipe vyvinutý Microsoftom pre moderné IoT aplikácie a snaží sa pomôcť riešiť ich najpálčivejšie problémy.
 Po technickej stránke obsahuje jadro _ARM Cortex-A7_ a dve jadrá _Cortex-M4_. No hlavný rozdiel s pohľadu vývoja je, že _Azure Sphere_ je pripravený pre priemyselné použitie.
 
+![Avnet MT3620 Starter Kit](images/CoMaNauciloIot/azure-sphere.jpg){.img-center}
+
 Na _Azure Sphere_ je možné požiť dva procesory, jeden klasický, na ktorom beží malý Linux a druhý pre realtime proces (ak chceme využiť realtime proccesor, tak sa nasadzujúd dva programy - jeden bežiaci pod OS na jednom procesore a druhý pre realtime procesor, tieto programi môžu kominukovať pomocou zasielania správ).
 Samozrejmosťou je aj vyriešená podpora aktualizácií, certificate pinning,... No najviac ma zaujalo, že s aplikáciou sa nasazduje manifest, ktorý funguje ako firewall – definujú sa na ňom, na aké domény môže doska pristupovať, ktoré hardvérové piny idú na čo použiť,...
 To celé posúva bezpečnosť tejto dosky niekde úplne inde, ako je v IoT zvykom.
 
 ![Azure Sphere](images/CoMaNauciloIot/graphic-mcu.png){.img-center}  
 (Zdroj: <https://docs.microsoft.com/en-us/azure-sphere/product-overview/what-is-azure-sphere>)
-
-![Avnet MT3620 Starter Kit](images/CoMaNauciloIot/azure-sphere.jpg){.img-center}
 
 ## Čo ma naučilo IoT?
 
