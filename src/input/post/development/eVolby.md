@@ -1,5 +1,5 @@
 Published: 12.2.2020
-Updated: 26.5.2019
+Updated: 25.7.2020
 Title: Elektronické voľby
 Menu: Elektronické voľby
 Cathegory: Dev
@@ -62,3 +62,5 @@ no ich náročnosť implementácie je výrazne vyššia._
 Elektronické voľby ešte nie sú vyriešený problém.
 
 No v budúcnosti sa možno objaví volebná schéma, ktorý bude riešiť súčasné problémy elektronických volieb pomocou tvrdých matematických a teoretických princípov, podobne ako v súčastnosti funguje elektronický podpis. 
+
+**Edit**: Pripájam obsiahlejší [článok o elektronických voľboach](https://www.altair.blog/2020/07/evolby) od _Altaira Valáška_.
