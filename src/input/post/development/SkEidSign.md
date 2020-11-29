@@ -50,14 +50,14 @@ ako príslušný certifikát. Na eID-čku sa dá ZEP/KEP privátny kľúč a cer
 ale na to som sa v aplikácii nechcel spoliehať.
 
 Podpísanie PDF-ka má a starosti knižnica [iTextSharp](https://www.nuget.org/packages/itext7/), 
-program implementuje rozhranie [IExternalSignature](https://github.com/harrison314/SlovakEidSignTool/blob/master/src/SlovakEidSignTool/Pkcs11ExternalSignature.cs), 
+program implementuje rozhranie [IExternalSignature](https://github.com/harrison314/SlovakEidSignTool/blob/master/src/SlovakEidSignTool/Pdf/Pkcs11ExternalSignature.cs), 
 v ktorom prebieha samotné podpísanie PDF-dokumentu.
 Na vstup dostane dáta z PDF-ka, z ktorých sa vytvorí SHA-256 hash. 
 Z neho sa vytvorí _PKCS#1 digest info_ (_ASN.1_ dátová štruktúra, ktorá je vhodná na podpísanie RSA kľúčom). 
 
 Samotný podpis musí byť v prípade eID-čka autentifikovaný ZEP PIN-om,
 ten sa zadáva po inicializácii podpisovania. Čip v eID-čku podpíše hash a vráti podpis.
-Ten vráti v metóde rozhrania [IExternalSignature](https://github.com/harrison314/SlovakEidSignTool/blob/master/src/SlovakEidSignTool/Pkcs11ExternalSignature.cs) a _iTextSharp_ dokončí podpisovanie a uloží PDF-ko na disk.
+Ten vráti v metóde rozhrania [IExternalSignature](https://github.com/harrison314/SlovakEidSignTool/blob/master/src/SlovakEidSignTool/Pdf/Pkcs11ExternalSignature.cs) a _iTextSharp_ dokončí podpisovanie a uloží PDF-ko na disk.
 
 ## Záver
 Princíp realizácie podpisu pomocou slovenského eID je podobný ako podpisovanie inými krypto zariadeniami, ku ktorým sa pristupuje pomocou štandardu _PKCS#11_.
