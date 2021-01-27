@@ -10,6 +10,15 @@
     "&body=",
     Uri.EscapeDataString(Context.GetLink(Metadata["PostFile"].ToString(), true)));
 
+    ViewBag.OgUrl = Context.GetLink(Metadata["PostFile"].ToString(), true);
+    ViewBag.OgImage = null;
+
+    var ogImage = Metadata.Get<string>("OgImage", null);
+    if(!string.IsNullOrEmpty(ogImage))
+    {
+       ViewBag.OgImage = Context.GetLink(Metadata["OgImage"].ToString(), true);
+    }
+
 }
 <h1>@(Metadata.Get<string>("OverrideTitle", Metadata["Title"].ToString()))</h1>
 <div class="publishDate">

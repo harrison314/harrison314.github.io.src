@@ -4,6 +4,7 @@ OverrideTitle: Experiment - Content filter
 Menu: Content filter
 Cathegory: Dev
 Description: Experiment zo strojovím učením na odhalovanie šarlatánskych článkov.
+OgImage: images/ContentFilter/svm.png
 ---
 Mojím pôvodným zámerom bolo zistiť, či ide strojovo rozlíšiť hodnoverný medicínsky článok od článku propagujúce pochybné liečiteľstvo a medicínsky bulvár, či konšpiračné články a vytvoriť tak niečo ako anti-spamový filter pre tieto články. 
 Podarilo sa mi zhromaždiť 101 unikátnych pochybných článkov a po veľkej námahe 68 serióznych článkov.

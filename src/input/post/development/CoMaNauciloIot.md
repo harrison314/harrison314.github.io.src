@@ -4,6 +4,7 @@ Title: Čo ma naučilo IoT
 Menu: Čo ma naučilo IoT
 Cathegory: Dev
 Description: Blog o tom, čo som sa naučil pri hraní s IoT.
+OgImage: images/CoMaNauciloIot/esp8266.jpg
 ---
 
 Medzi moje koníčky patrí aj IoT. Predovštekým som sa pomocou neho chcel zlepšiť v C/C++ a vyskúšať si iné programovanie,

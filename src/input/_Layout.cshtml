@@ -12,6 +12,15 @@
     <meta name="author" content="harrison314" />
 
     <title>@ViewBag.Title</title>
+
+    <meta property="og:title" content="@ViewBag.Title" />
+    <meta property="og:description" content="@ViewBag.Description" />
+    <meta property="og:url" content="@ViewBag.OgUrl" />
+    @if (ViewBag.OgImage != null)
+    {
+    <meta property="og:image" content="@ViewBag.OgImage" />
+    }
+
     <meta name="description" content="@ViewBag.Description" />
 
     <!-- Bootstrap Core CSS -->
