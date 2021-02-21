@@ -1,4 +1,5 @@
 Published: 27.1.2021
+Updated: 21.2.2021
 Title: Experiment s In-Memory OLTP
 OverrideTitle: Experiment s In-Memory OLTP pre high performance registráciu
 Menu: Experiment s In-Memory OLTP
@@ -17,8 +18,8 @@ Preťaženie vyvolala okamžitá reakcia ľudí na tlačovú konferenciu o celop
 V Česku mali podobné problémy zo systémom na registráciu očkovania ([problémy s Chytrou karanténou](https://twitter.com/ChytraKarantena/status/1349983604571582466)).
 
 Nechcem tu rozoberať problémy štátneho IT (zhrnutie je možné pozrieť si [tu](https://tech.ihned.cz/c7-66870010-psms7-e882c2115d7c68a)).
-No je jasné, že ak službu dizajnujete pre stovky až tisíce aktívnych používateľov a zrazu sa ich tam nahrnie 150-ktát viac,
-tak to proste padne. Jednou z chýb bolo to, že NCZI na danú situáciu nebolo ani len upozornené a nemalo čas zareagovať.
+No je jasné, že ak službu dizajnujete pre stovky až tisíce aktívnych používateľov, a zrazu sa ich tam nahrnie 150-ktát viac,
+tak to proste padne. Jednou z chýb bolo to, že NCZI na danú situáciu nebolo ani len upozornené, a nemalo čas zareagovať.
 Toto sa nestáva len v štátnom IT.
 Niečo podobné sa stalo len pár dní predtým _Signalu_. Aplikácia _WatsApp_ zmenila podmienky používania a ochrany súkromia,
 čo spôsobilo odliv používateľov k _Signalu_ a spôsobili mu [výpadky](https://zive.aktuality.sk/clanok/150597/signal-mal-v-noci-velky-vypadok-problemy-mozu-pretrvavat/).
@@ -28,10 +29,10 @@ Následne som v diskusiách a článkoch na internete hľadal, ako tento problé
 Podstatnú časť odpovedí tvorilo _„dať to do cloudu“_.
 Áno sila desiatok serverov znesie veľa, no jestvujú dosť pádne dôvody,
 prečo štát nedáva citlivé zdravotnícke dáta na počítače niekoho iného
-a k tomu v jurisdikcii iného štátu. Plno ďalších odpovedí bolo tam dať proste silné železo, no to zas treba vysúťažiť...
+a k tomu v jurisdikcii iného štátu. Plno ďalších odpovedí bolo dokúpiť silné železo, no to zas treba vysúťažiť...
 
-Tak som sa začal zamýšľať, ako navrhnúť architektúru niečoho ako systém na objednávanie na testy alebo očkovanie tak,
-aby som neodovzdával citlivé dáta tretej strane a vystačil si s klasickými servermi.
+Tak som sa začal zamýšľať, ako navrhnúť architektúru niečoho, ako systém na objednávanie na testy alebo očkovanie tak,
+aby som neodovzdával citlivé dáta tretej strane, a vystačil si s klasickými servermi.
 
 ## Návrh
 Prvé čo treba povedať je, že samotný proces registrácie treba navrhnúť tak,
@@ -179,3 +180,25 @@ Takže vo výsledku by na strane aplikácie tých requetsov bolo spracovaných m
 
 Do pozornosti ešte dávam prednášku o tom, ako spracovávať Big Data v MS SQL - <https://wug.cz/zaznamy/503-SQL-Server-Bootcamp-2018-Zpracovavejte-velka-data-v-SQL-Serveru-rychlosti-blesku>
 a architektúru [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs).
+
+### Neskoršia optimalizácia
+Po napísaní tohto blogu (január 2021) som sa k problematike o mesiac vrátil. Skúšal som iné optimalizácie, niektoré úspešne
+a iné menej úspešne. Uvádzam ich takto mimo hlavného obsahu,
+lebo nespĺňajú požiadavky zadefinované v úvode.
+
+Menej úspešne dopadol pokus o použitie prístupu _Event store_, hlavne pre to,
+že kvôli požiadavkám som musel obchádzať niektoré jeho princípy a taktiež som naň nevedel rýchlo napísať vhodné transakčné úložisko a notifikáciu používateľa.  
+(Mal som obmedzený čas a databázu [EventStore](https://www.eventstore.com/) som neskúšal.)
+
+Priamy zápis údajov do Redis-u cez ASP.NET kontroller mi dal približne 14&nbsp;500 requetsov za sekundu.
+
+Priamy zápis do Redis-u cez vlastný ASP.NET middleware, ktorý zastupoval REST endpoint, dokázal spracovať približne 36&nbsp;000 requestov za sekundu.
+
+Priamy zápis do Redisu pomocou natívnej aplikácii napísanej v Rust-e pomocou frameworku 
+[Actix](https://actix.rs/)
+a knižnici [actix-storage-redis](https://github.com/pooyamb/actix-storage/) mi dokázalo spracovať tiež okolo 36&nbsp;000 requestov za sekundu.
+Rust bol rýchlejší o niekoľko málo stoviek requestov.
+
+Priamy zápis do MS SQL In-Memory OLTP tabuľky cez vlastný ASP.NET middleware, ktorý zastupoval REST endpoint, dokázal spracovať 15&nbsp;000 requestov za sekundu.
+To je v tomto prípade o _50%_ viac ako cez kontroller. A ako jediné riešenie z tejto kapitoly spĺňa požiadavky zadefinované v úvode,
+no nevýhoda je, že sa takýto endpoint neobjaví v OpenAPI špecifikácii.
