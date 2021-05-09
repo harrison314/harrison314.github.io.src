@@ -1,0 +1,27 @@
+Title: Obsah
+Description: Obsah stránky harrison314.gighub.io
+---
+@{
+    var groups = Context.Outputs.FromPipeline("BlogPipeline")
+        .Where(t => t.GetString("Published") != null)
+        .GroupBy(t => DateTime.Parse(t.GetString("Published")).ToString("MMMM yyyy"))
+        .OrderByDescending(t => DateTime.Parse(t.First().GetString("Published")))
+        .ToList();
+}
+<h1>Obsah</h1>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        @foreach (var itemGroup in groups)
+        {
+            <h5>@itemGroup.Key</h5>
+            <ul class="list-unstyled" style="padding-left: 1em;">
+                @foreach (var item in itemGroup.OrderByDescending(t => DateTime.Parse(t.GetString("Published"))))
+                {
+                    <li>
+                        <a href="@Context.GetLink(item.GetString("Destination"), Model.GetBool("GS.UseAbsoluteUrls"))">@item.GetString("Menu")</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

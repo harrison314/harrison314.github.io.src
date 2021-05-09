@@ -1,0 +1,25 @@
+<h1>@(Model.GetString("OverrideTitle", Model.GetString("Title")))</h1>
+<div class="publishDate">
+    @(TransformDate(Model.GetString("Published")))
+</div>
+
+@functions {
+    private static string FormatDate(DateTime date)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendFormat("{0:MMMM yyyy}", date);
+        sb[0] = char.ToUpper(sb[0]);
+
+        return sb.ToString();
+    }
+
+    private static string TransformDate(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        return FormatDate(DateTime.Parse(value));
+    }
+}

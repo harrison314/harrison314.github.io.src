@@ -1,0 +1,32 @@
+Title: Portfólio
+Description: Programátorské portfólio.
+---
+@{
+    var allDocs = this.Context.Outputs.FromPipeline("BlogPipeline")
+        .Where(x => x.GetString("Published") != null)
+        .Where(t => "Portfolio" == Convert.ToString(t.GetString("Cathegory")))
+        .OrderByDescending(x => DateTime.Parse(x.GetString("Published")))
+        .ToList();
+}
+<h1>Portfólio</h1>
+<div class="publishDate">
+    Jún 2015
+</div>
+<div class="row">
+    <p class="col-sm-12">
+    <p>Na tejto stránke uvádzam zoznam niektorých mojich zaujímavých projektov, ktoré som sa rozhodol zverejniť.</p>
+    </p>
+</div>
+
+<div class="row">
+    <p class="col-sm-12">
+        <ul class="list-unstyled">
+            @foreach (var doc in allDocs)
+            {
+                <li>
+                    <a href="@Context.GetLink(doc.GetString("Destination"), Model.GetBool("GS.UseAbsoluteUrls"))">@doc.GetString("Menu")</a>
+                </li>
+            }
+        </ul>
+    </p>
+</div>

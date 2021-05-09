@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Statiq.App" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Feeds" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Markdown" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Minification" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Razor" Version="1.0.0-beta.41" />
+		<PackageReference Include="Statiq.Yaml" Version="1.0.0-beta.41" />
+	</ItemGroup>
+
+</Project>
