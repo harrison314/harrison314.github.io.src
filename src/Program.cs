@@ -1,9 +1,12 @@
-﻿using Statiq.App;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Statiq.App;
 using Statiq.Common;
 using Statiq.Feeds;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Statiq.Razor;
+using Harrison314.Serve;
 
 namespace Harrison314Blog
 {
@@ -17,10 +20,15 @@ namespace Harrison314Blog
                 .Factory.Create(args)
                 .AddDefaultShortcodes()
                 .AddGlobCommands()
-                .AddDefaults(DefaultFeatures.BuildCommands | DefaultFeatures.Logging| DefaultFeatures.Pipelines/* | DefaultFeatures.CustomCommands | DefaultFeatures.GlobCommands*/)
+                .ConfigureServices(services =>
+                {
+                    services.AddRazor();
+                })
+                .AddDefaults(DefaultFeatures.BuildCommands | DefaultFeatures.Logging| DefaultFeatures.Pipelines  /* | DefaultFeatures.CustomCommands | DefaultFeatures.GlobCommands*/)
                 .AddPipeline<Pipelines.AssertPipeline>()
                 .AddPipeline<Pipelines.RazorPipeline>()
                 .AddPipeline<Pipelines.BlogPipeline>()
+                .AddServeCommand()
                 .AddSetting(Keys.LinkLowercase, false)
                 .AddSetting(Keys.LinksUseHttps, true)
                 .AddSetting(Keys.LinkHideExtensions, false)

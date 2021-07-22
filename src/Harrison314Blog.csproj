@@ -6,13 +6,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Statiq.App" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Feeds" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Markdown" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Minification" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Razor" Version="1.0.0-beta.43" />
-		<PackageReference Include="Statiq.Yaml" Version="1.0.0-beta.43" />
+		<PackageReference Include="Statiq.App" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Feeds" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Markdown" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Minification" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Razor" Version="1.0.0-beta.47" />
+		<PackageReference Include="Statiq.Yaml" Version="1.0.0-beta.47" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Harrison314.Serve\Harrison314.Serve.csproj" />
 	</ItemGroup>
 
 </Project>
