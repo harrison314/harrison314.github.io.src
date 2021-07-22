@@ -30,7 +30,7 @@ namespace Harrison314Blog.Pipelines
 
             this.PostProcessModules = new ModuleList()
             {
-                new RenderRazor(),
+                new RenderRazor().WithLayout("_Layout.cshtml"),
                 new ExecuteIf(BlogKeys.MinifyOutput,
                     new Statiq.Minification.MinifyHtml())
             };

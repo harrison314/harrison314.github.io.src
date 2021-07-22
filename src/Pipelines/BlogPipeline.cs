@@ -43,8 +43,10 @@ namespace Harrison314Blog.Pipelines
                 new ProcessShortcodes(),
                 new  Statiq.Highlight.HighlightCode()
                         .WithMissingLanguageWarning(true),
-                new ExecuteIf(BlogKeys.MinifyOutput,
-                    new Statiq.Minification.MinifyHtml())
+
+                // TODO: Fix minification
+                //new ExecuteIf(BlogKeys.MinifyOutput,
+                //    new Statiq.Minification.MinifyHtml())
             };
 
             this.OutputModules = new ModuleList()
