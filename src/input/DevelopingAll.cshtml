@@ -15,6 +15,7 @@ Description: Zoznam vývojárskych tém na blogu.
     @{
         var index = 0;
     }
+
     @foreach (var gItem in ToIndex().GroupBy(t => index++ / 3))
     {
         <div class="row">
