@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,13 +14,13 @@ namespace Harrison314.Serve
     internal class Server : IDisposable
     {
         private string path;
-        private readonly int port;
+        private readonly ServerOptions serverOptions;
         private IWebHost webHost;
 
-        public Server(string path, int port)
+        public Server(string path, ServerOptions serverOptions)
         {
             this.path = path;
-            this.port = port;
+            this.serverOptions = serverOptions;
         }
 
         public void Dispose()
@@ -65,7 +66,7 @@ namespace Harrison314.Serve
                     //}
                 })
                 .UseKestrel()
-                .ConfigureKestrel(x => x.ListenAnyIP(this.port))
+                .ConfigureKestrel(x => x.ListenAnyIP(this.serverOptions.Port))
                 .ConfigureServices(this.ConfigureServices)
                 .Configure(this.ConfigureApp)
                 .Build();
@@ -75,8 +76,24 @@ namespace Harrison314.Serve
 
         private void ConfigureApp(IApplicationBuilder app)
         {
-            app.UseStaticFiles();
+            if (!string.IsNullOrEmpty(this.serverOptions.BasePath)
+                && string.Equals(this.serverOptions.BasePath, "/", StringComparison.Ordinal))
+            {
+                app.UsePathBase(this.serverOptions.BasePath);
+            }
+
+            if (!string.IsNullOrEmpty(this.serverOptions.Http404Path))
+            {
+                app.UseStatusCodePagesWithRedirects(this.serverOptions.Http404Path);
+            }
+
+            if (this.serverOptions.LinkHideExtensions)
+            {
+                throw new NotSupportedException("Settings Keys.LinkHideExtensions = true is not supported in serve command");
+            }
+
             app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
 
         private void ConfigureServices(IServiceCollection services)

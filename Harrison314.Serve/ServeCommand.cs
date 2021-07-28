@@ -16,7 +16,7 @@ namespace Harrison314.Serve
 {
     // See: https://github.com/duracellko/Statiq.Framework/tree/serve/src/core/Statiq.Hosting
 
-    [Description("Serve command.")]
+    [Description("Simple serve command.")]
     public class ServeCommand : InteractiveCommand<ServeCommandSettings>
     {
         private FileSystemWatcher inputFileWatcher;
@@ -45,11 +45,18 @@ namespace Harrison314.Serve
 
             this.inputFileWatcher.EnableRaisingEvents = true;
 
-            this.server = new Server(outputDirectory.Path.FullPath, commandSettings.Port);
+            ServerOptions serverOptions = new ServerOptions()
+            {
+                Http404Path = engineManager.Engine.Settings.GetString(ServeKeys.Http404Path, null),
+                BasePath = engineManager.Engine.Settings.GetString(Keys.LinkRoot, null),
+                Port = commandSettings.Port,
+                LinkHideExtensions = engineManager.Engine.Settings.GetBool(Keys.LinkHideExtensions, false)
+            };
+
+            this.server = new Server(outputDirectory.Path.FullPath, serverOptions);
 
             await this.server.Start();
             logger.LogInformation("Start server on {0}", $"http://localhost:{commandSettings.Port}/ ");
-
         }
 
         protected override async Task ExitingAsync(CommandContext commandContext, ServeCommandSettings commandSettings, IEngineManager engineManager)
