@@ -1,5 +1,5 @@
 Published: 27.1.2021
-Updated: 21.2.2021
+Updated: 17.8.2021
 Title: Experiment s In-Memory OLTP
 OverrideTitle: Experiment s In-Memory OLTP pre high performance registráciu
 Menu: Experiment s In-Memory OLTP
@@ -60,7 +60,7 @@ Nasleduje load balancer (napríklad [HAProxy](https://en.wikipedia.org/wiki/HAPr
 ktorý rozdeľuje requesty na jednotlivé aplikačné inštancie Web API aplikácií, takisto stráži rate limit aby nedošlo k preťaženiu Web API inštancií a korektne vracať http status _429_. 
 (Poprípade je možné _HAProxy_ doplniť o [Consul](https://learn.hashicorp.com/tutorials/consul/load-balancing-haproxy).)
 
-Inštancie Web API slúžia na spracovanie registrácií a obsahujú aplikačnú logiku (v mojom prípade ASP.NET 5.0).
+Inštancie Web API slúžia na spracovanie registrácií a obsahujú aplikačnú logiku (v mojom prípade ASP.NET Core 5.0).
 
 Databáza (MS SQL 2019) do ktorej sa ukladajú registrácie.
 Pričom tabuľka pre uloženie termínu je duplikovaná na dve – klasická tabuľka a in-memory tabuľka
@@ -81,7 +81,7 @@ aby som porovnal priamočiaru implementáciu, ktorú si človek zvolí, keď rie
 voči implementácii s In-Memory OLTP tabuľkou.
 Zameral som sa hlavne na databázovú časť, preto aplikačná logika zostala bez optimalizácií.
 
-Aplikačný server je Web API realizované pomocou _ASP.NET 5.0_.
+Aplikačný server je Web API realizované pomocou _ASP.NET Core 5.0_.
 Aplikačná logika je implementovaná pomocou _Entity Framewrk Core 5.0_ a v prípade In-Memory OLTP tabuľky je volaná jednoduchá stored procedúra cez SQL klienta,
 implementácia je priamo v kontroleroch.
 Inak je použitá defaultná šablóna pre vytvorenie projektu, takže neboli robené žiadne iné optimalizácie na strane aplikácie. A na Web API boli vyvedené ešte metódy na generovanie testovacích dát (knižnicou [Bogus](https://github.com/bchavez/Bogus)).
@@ -190,15 +190,15 @@ Menej úspešne dopadol pokus o použitie prístupu _Event store_, hlavne pre to
 že kvôli požiadavkám som musel obchádzať niektoré jeho princípy a taktiež som naň nevedel rýchlo napísať vhodné transakčné úložisko a notifikáciu používateľa.  
 (Mal som obmedzený čas a databázu [EventStore](https://www.eventstore.com/) som neskúšal.)
 
-Priamy zápis údajov do Redis-u cez ASP.NET kontroller mi dal približne 14&nbsp;500 requetsov za sekundu.
+Priamy zápis údajov do Redis-u cez ASP.NET Core kontroller mi dal približne 14&nbsp;500 requetsov za sekundu.
 
-Priamy zápis do Redis-u cez vlastný ASP.NET middleware, ktorý zastupoval REST endpoint, dokázal spracovať približne 36&nbsp;000 requestov za sekundu.
+Priamy zápis do Redis-u cez vlastný ASP.NET Core middleware, ktorý zastupoval REST endpoint, dokázal spracovať približne 36&nbsp;000 requestov za sekundu.
 
 Priamy zápis do Redisu pomocou natívnej aplikácii napísanej v Rust-e pomocou frameworku 
 [Actix](https://actix.rs/)
 a knižnici [actix-storage-redis](https://github.com/pooyamb/actix-storage/) mi dokázalo spracovať tiež okolo 36&nbsp;000 requestov za sekundu.
 Rust bol rýchlejší o niekoľko málo stoviek requestov.
 
-Priamy zápis do MS SQL In-Memory OLTP tabuľky cez vlastný ASP.NET middleware, ktorý zastupoval REST endpoint, dokázal spracovať 15&nbsp;000 requestov za sekundu.
+Priamy zápis do MS SQL In-Memory OLTP tabuľky cez vlastný ASP.NET Core middleware, ktorý zastupoval REST endpoint, dokázal spracovať 15&nbsp;000 requestov za sekundu.
 To je v tomto prípade o _50%_ viac ako cez kontroller. A ako jediné riešenie z tejto kapitoly spĺňa požiadavky zadefinované v úvode,
 no nevýhoda je, že sa takýto endpoint neobjaví v OpenAPI špecifikácii.
