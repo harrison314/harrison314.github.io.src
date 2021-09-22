@@ -1,5 +1,5 @@
 Published: 20.5.2018
-Updated: 12.9.2019
+Updated: 22.9.2021
 Title: Golang a alternatívy
 Menu: Golang
 Cathegory: Dev
@@ -75,15 +75,21 @@ Mono umožňuje cross-kompiláciu do natívneho kódu s tým, že možné všetk
 ### .Net Core
 .Net Core umožňuje korss-kompiláciu pre jednotlivé platformy s pribalením všetkých závislostí (nie je potrebné inštalovať runtime). S výkonom sa ide pohrať cez _unsafe_ kód. Nevýhodou je, že aj ku konzolovej aplikácii s HTTP klientom pribalí 30 až 50 MB (podľa výslednej platformy), čo pri serveri nevadí, no pri utilitke pre bežných ľudí hej.
 
-**Edit**: Aj .Net Core ide kompilovať do natívnej binárky, ktorá má obdobnú veľkosť ako program v _Go_ pomocou
+**Edit**: Aj _.Net Core (< 3.0)_ ide kompilovať do natívnej binárky, ktorá má obdobnú veľkosť ako program v _Go_ pomocou
 * [ILCompoler-u](https://github.com/dotnet/corert/blob/master/Documentation/how-to-build-and-run-ilcompiler-in-console-shell-prompt.md),
 * [oficiálneho nástroja crossgen](http://www.jackdermody.net/article/Compiling_NET_Core_to_Native),
 * [návodu na blogu Secana](https://secanablog.wordpress.com/2018/06/08/compile-a-net-core-app-to-a-single-native-binary/).
 
-**Edit**: Od .Net Core 3.0 ide kompilovať projekt do natívnej jednosúborovej optimalizovanej natívnej binárky.
+**Edit**: Od _.Net Core 3.0_ ide kompilovať projekt do natívnej jednosúborovej optimalizovanej natívnej binárky.
 Viac sa dozviete na [blogu Scotta Hanselmana](https://www.hanselman.com/blog/MakingATinyNETCore30EntirelySelfcontainedSingleExecutable.aspx).
 Napríklad pre Windows 10 stačí spraviť publish s parametrami:
 `dotnet publish -c Release -r win10-x64 -p:PublishTrimmed=true -p:PublishSingleFile=true`.
+
+### Rust
+_Rust_ je kompilovaný, staticky typový jazyk bez behového prostredia a garbage collectora.
+Je multparadigmový s výrazným ovplyvnením funkcionálnymi jazykmi. Podľa môjho názoru lepšie vyriešil všetky problémy, ktoré tu spomínam o Golangu.
+
+Preto _Rust_ považujem za najlepší náhradu Golangu, či už v malých utilitách alebo mikroslužbách.
 
 ## Záver
 _Go_ je veľmi primitívny jazyk, jeho syntax a premisy sa človek naučí zvládnuť za niekoľko hodín a za pár dní dokáže v ňom písať programy. Ale z charakteru jazyka, by som v ňom nepísal veľké systémy, skôr sa hodí na malé utilitky, mirkoslužby (ktoré sú ale fakt mikro) alebo pre použitie v _Raspberry Pi_.

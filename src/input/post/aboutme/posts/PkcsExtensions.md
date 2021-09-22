@@ -1,4 +1,5 @@
 Published: 20.5.2020
+Updated: 22.9.2021
 Title: PkcsExtensions
 Menu: PkcsExtensions
 Description: 'Malá knižnica pridávajúca chýbajúce veci do .Net-u v oblasti PKCS a PKI.'
@@ -41,6 +42,9 @@ Táto knižnica umožňuje:
 - ...
 
 Táto knižnica zámerne nerobí interop na _WebCrypto_ pre hash funkcie, HMAC, šifrovanie a podpisovanie, pretože ich implementácie a podpora sa môže líšiť medzi prehliadačmi a operačnými systémami, navyše WebCrypto neumožňuje podpísať hash. Preto v súčasnosti považujem za lepšiu alternatívu použiť _dotnet/Blazor_ implementáciu týchto funcionalít.
+
+**Poznámka:** To, ktoré kryptografické API v _Blazor WebAssembly_ funguje záleží od jeho verzie.
+Preto aj táto knižnica môže poskytovať rôznu časť funkcionality v závislosti od toho, akú verziu Blazoru používate.
 
 Vytvorený [Nuget balíček](https://www.nuget.org/packages/PkcsExtensions.Blazor/).
 
