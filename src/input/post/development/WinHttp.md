@@ -1,5 +1,5 @@
 Published: 6.8.2022
-Title: Volanie http requestu so 16kB binárky
+Title: Volanie HTTP requestu so 16kB binárky
 Menu: Použitie WinHTTP
 Cathegory: Dev
 Description: Jednoduchý príklad ako použiť WinHTTP na volanie HTTP endpointu s minimálnou binárkou.
