@@ -1,4 +1,4 @@
-Published: 25.8.2022
+Published: 26.8.2022
 Title: MongoDB vs. RavenDB
 Menu: MongoDB vs. RavenDB
 Cathegory: Dev
@@ -8,7 +8,7 @@ OgImage: images/MongoDbVsRavenDb/media.png
 
 **Keď robia dvaja to isté, tak to môže byť vo výsledku úplne iné.**
 
-V tomto článku popisujem to ako som sa dostal k MongoDB a RavenDB,
+V tomto článku popisujem to, ako som sa dostal k MongoDB a RavenDB,
 moje skúsenosti s týmito dokumentovými databázami na malom reálnom projekte s reálnymi dátami.
 Tiež sa snažím zhrnúť rozdiely v prístupoch pri implementácii a problémy, ktoré som musel riešiť.
 
@@ -18,24 +18,24 @@ Taktiež predpokladám, že v ďalších verziách sa veci môžu zmeniť.
 
 ## Zoznámenie sa s NoSQL
 Od strednej školy som sa venoval PHP a MySQL. Neskôr som na vysokej škole v týchto technológiách pokračoval
-a aj pracoval (v práci som narážať na limity MySQL). 
+a aj pracoval (v práci som začal narážať na limity MySQL). 
 Následne som sa na inžinierskom štúdiu v rámci tímového projektu  dostal ku MS SQL a pri práci som zistil,
 aké bolo MySQL neschopené a hlavne pomalé.
 
-O rok na to (2013) v mojom okolí začal byť hype okolo NoSQL databáz a začali sa používať aj tam, kde sa nemali.
-Prednášky o prechode na MongoDB sa ale vždy niesli v duchu: použili sme najpomalšiu databázu aká jestvuje (MySQL)
-s najpomalším frameworkom v Pythone alebo Ruby on Rails a je to (prekvapivo) pomalé.
+O rok na to (2013) v mojom okolí začal byť hype okolo NoSQL databáz a začali sa používať aj tam, kde by sa nemali.
+Prednášky o prechode na MongoDB sa vždy niesli v duchu: "_použili sme najpomalšiu databázu aká jestvuje (MySQL),
+s najpomalším frameworkom v Pythone alebo Ruby on Rails a je to (prekvapivo) pomalé._"
 A potom sme prešli na MongoDB a je to rýchlejšie. Lenže bolo by to rýchlejšie, keby použijú čokoľvek iné.
 
-Medzičasom sa s MongoDB stal symbol NoSQL sveta.
+Medzičasom sa z MongoDB stal symbol NoSQL sveta.
 
 **Poznámka:** Pri materiáloch o MySQL sa dočítate, že treba byť s JOIN-ami opatrní, lebo sú veľmi pomalé.
 Pri materiáloch o MS SQL sa dočítate, že sa nemáte báť JOIN-u, lebo je to najrýchlejšia relačná operácia.
 
 Neskôr som si robil nejaké súkromné projekty na MongoDB, lebo ma táto databáza niečím fascinovala
-(možno začiatočníckou jednoduchosťou alebo BigData).
+(možno začiatočníckou jednoduchosťou alebo BigData pátosom).
 No zisťoval som, že na rovnakom HW je pomalšia ako MS SQL, a to aj pri bežných dopytoch tak aj pri gespatial operáciách.
-(Asi najextrémnejší rozdiel som pocítil na databáze importovanej s [Geonames](https://download.geonames.org/export/zip/),
+(Asi najextrémnejší rozdiel som pocítil na databáze importovanej z [Geonames](https://download.geonames.org/export/zip/),
 kde som počítal konvexnú obálku bodov pre Slovenské mestá – pomocou map-reduce v Mongu som sa údajom dostal za 4 minúty,
 keď som na to isté použil MS SQL 2016 tak to trvalo 230 ms.)
 
@@ -44,22 +44,22 @@ O RavenDB som sa dozvedel dávnejšie (2016), ale odradili ma mýty, ktoré okol
 (že je pomalá, žerie veľa RAM, že všetky dokumenty sú v jednej kolekcii,...).
 
 Neskôr sa mi dostala do povedomia cez prednášky o performace .Net Frameworku a problémoch,
-ktoré museli prekonať aby dosiahli požadovanú rýchlosť.
+ktoré museli prekonať, aby dosiahli požadovanú rýchlosť.
 
 A keď som sa k RavenDB konečne dostal a čítal si o nej, tak som nechápal, prečo by to niekto používal,
 veď MongoDB má tie isté featury...
 
-No to bol len prvý pohľad, keď som sa ponoril hlbšie a hlavne si vyskúšal indexy,tak som to pochopil v čom sú hlavné výhody RavenDB.
+No to bol len prvý pohľad, keď som sa ponoril hlbšie a hlavne si vyskúšal indexy, tak som to pochopil v čom sú hlavné výhody RavenDB.
 A vyskúšal som si ju na niekoľkých projektov.
 
 V ďalšom texte zhrňujem niektoré zaujímavé featurey tejto databázy
-a porovnávam ju s MongoDB na jednom konkrétnom projekte [Area52](https://github.com/harrison314/Area52).
+a porovnávam ju s MongoDB na jednom konkrétnom projekte - [Area52](https://github.com/harrison314/Area52).
 
 ## Čo je to RavenDB
-RavenDB je open-source dokumentová NoSQL databáza, ktorá je od svojho vzniku (2010) podporuje transakcie a je na stavaná.
+RavenDB je open-source, dokumentová, distribuovaná, NoSQL databáza, ktorá je od svojho vzniku (2010) podporuje transakcie a je na stavaná.
 Taktiež podporuje master-to-master replikáciu. Je vyvíjaná spoločnosťou _Hibernating Rhinos Ltd_.
 
-To asi veľa nepovedalo. Tak skúsim opísať jej principiálne fungovanie (implementačné detaily sa môžu líšiť).
+To asi nepovedalo veľa, tak skúsim opísať jej principiálne fungovanie (implementačné detaily sa môžu líšiť).
 
 RavenDB má v jadre key-value databázu nazývanú [Voron](https://ravendb.net/docs/article-page/5.3/csharp/server/storage/storage-engine), kde kľuč je ID dokumentu a hodnota je JSON dokument.
 Táto databáza je full ACID a MVCC. Taktiež je vďaka časovým značkám ku hodnotám veľmi ľahko distribuovateľná a replikovateľná aj pri výpadkoch spojenia.
@@ -71,17 +71,17 @@ Takže v indexe ide robiť filtrovanie, transformácie, výpočty (jeden dokumen
 A to nie je všetko, keďže RavenDB sa tvári ako keby všetky dokumenty sú v jednej kolekcii,
 tak je do jedného indexu možné vytiahnuť dokumenty s viacerých kolekcií, v rámci indexu robiť niečo ako JOIN.
 Je možné použiť map-reduce indexy.
-A keďže sa ako indexovací engin používa Lucene, tak RavenDB má k dispozícii funkcionlitu podobnú ako _ElasticSerach_.
+A keďže sa ako indexovací engin používa _Lucene.Net_, tak RavenDB má k dispozícii funkcionlitu podobnú ako _ElasticSerach_.
 
-No tu treba upozorniť, na to, že ACID správanie majú samotné uložené dokumenty, takže všetky operácie nad dokumentmi
-(insert, update, delete, modifikácia a vyhľadanie podľa ID), no indexy sú len eventuálne konzistentné,
-respektíve môžeme to považovať za implementáciu CQRS (ale cez API je možné zistiť ich stav).
+No tu treba upozorniť na to, že všetky operácie nad dokumentmi (insert, update, delete, modifikácia a vyhľadanie podľa ID,...) majú garantované ACID správanie,
+no indexy sú len eventuálne konzistentné,
+respektíve môžeme to považovať za implementáciu CQRS (ale cez API je možné zistiť stav indexu a výsledkov).
 
-Nad tým vtekám je ešte query procesor, processing engine a _RavenDB Studio_.
+Nad tým všetkým je ešte query procesor, processing engine a _RavenDB Studio_.
 
 RavenDB ďalej poskytuje podporu časových sérií, distributed counters, geospatial index, subscriptions, súborové prílohy dokumentov,
 revízie dokumentov, hromadné patche, atomické operácie, substcribtions, notifications, možnosť použiť embedded verziu,
-priamo databáza obsahuje administračné GUI, v ktorom je naozaj všetko,... a mnohé mnohé ďalšie funkcionality a integrácie.
+priamo databáza obsahuje administračné GUI, v ktorom je naozaj všetko,... a mnohé mnohé ďalšie funkcionality a integrácie (na Kafku, RabbitMQ, Graphanu, SQL databázy,...).
 
 ## MongoDB vs. RavenDB na reálnom projekte
 MongoDB a RavenDB som si chcel vyskúšať na niečom reálnom (a hlavne vhodnom pre dokumentovú databázu).
@@ -95,7 +95,7 @@ Tak vznikol projekt [Area52](https://github.com/harrison314/Area52).
 Area52 umožňuje vyhľadávať v štruktúrovaných logoch pomocou vlastného dopytovacieho jazyka,
 ktorý sa prekladá do dopytovacieho jazyku príslušnej databázy.
 
-Časové rady, ktoré podporujú obe databázy šlo použiť pri vykresľovaní grafov rôznych udalostí alebo metrík
+Časové rady, ktoré podporujú obe databázy, šlo použiť pri vykresľovaní grafov rôznych udalostí alebo metrík
 z logov (napríklad počet chýb za deň, priemerného času odpovede servera, tržby,...).
 
 V nasledujúcich podkapitolách ukážem rozdiely pri práci s týmito dvoma databázami
@@ -103,9 +103,9 @@ V nasledujúcich podkapitolách ukážem rozdiely pri práci s týmito dvoma dat
 
 ### Ukladanie dokumentov
 Prvý najviac očividný rozdiel je to, že v MongoDB musí mať každý dokument svoje ID priamo v sebe.
-V RavenDB dokument nemusí obsahovať svoje ID (interne ho neobsahuje). 
+V RavenDB dokument nemusí obsahovať svoje ID (interne ho neobsahuje ani keď je v modeli). 
 
-Klient RavenDB používa _Unit of Work_ patern a preto ide napríklad zistiť ID dokumentu ešte pred tým,
+Klient RavenDB používa _Unit of Work_ pattern a preto ide napríklad zistiť ID dokumentu ešte pred tým,
 ako sa uloží (keď chceme ukladať súvisiace dokumenty v transakcii).
 
 Tu celkovo MongoDB ťahá za kratší koniec, lebo som musel denormalizovať denormalizovaný dokument,
@@ -120,7 +120,7 @@ RavenDB nemá maximálny limit pre dokumenty ale technicky sú to _2GB_ (no neod
 
 **Príklad v projekte:** V projekte Area52 do RavenDB ukladám priamo doménový objekt pre štruktúrovaný log. 
 Zatiaľ, čo v prípade MongoDB som musel implementovať databázové modely, lebo potrebovali dodatočné filedy
-(field pre text pre fulltext vyhľadávanie, fieldy pre hodnoty pre case insesnitive vyhľadávanie,...), verziu a ID.
+(field pre fulltext vyhľadávanie, fieldy pre hodnoty pre case insesnitive vyhľadávanie,...), verziu a ID.
 Podobné to bolo pri ostatných doménových objektoch. 
 
 Čo sa týka zabraného miesta na disku, tak obe databázy boli vo výsledku na tom rádovo rovnako.
@@ -128,7 +128,7 @@ Podobné to bolo pri ostatných doménových objektoch.
 ### Transakcie
 Ako som už spomínal RavenDB je od začiatku navrhnutá s podporou transakcií, v API sa používajú implicitne a fungujú vždy a všade.
 
-MongoDB už multi-dokumentové transakcie už má. No cesta k nim bola tŕnistá, nejakú podporu transakcií má Mongo od verzie 3.4,
+MongoDB už multi-dokumentové transakcie už má, no cesta k nim bola tŕnistá. Nejakú podporu transakcií má Mongo od verzie 3.4,
 no nie vždy fungovali v rámci clastru a dlho mali obmedzenie na _16MB_ dát (do verzie 4.2).
 Takisto sa v čase menilo správanie transakcií a aj v kombinácii s nastavením serveru (podľa toho,
 čo som čítal bolo potrebné mať na serveri nastavené potvrdzovanie zápisov aby fungovali spoľahlivo,
@@ -160,20 +160,20 @@ Indexy sa definujú deklaratívnym kódom, umožňujú:
 * podpora indexovania countrov, časových sérií a príloh v rámci dokumentu,
 * pre výpočty a spracovanie dát v indexoch použiť vlastný kód a knižnice (C# a JavaScript),
 * ukladať hodnoty do indexov,
-* dynamické indexy (indexovanie dopredu neznámej štruktúry),
+* dynamické indexy (dynamické vytváranie položiek v indexe),
 * geospatial indexy,
-* indexovanie dokumentov s viacerých kolekcií do jedného indexu,
+* indexovanie dokumentov z viacerých kolekcií do jedného indexu,
 * samostatný fulltext s rôznym nastavením pre jednotlivé fieldy,
 * map-reduce indexy...
 
 Samozrejme tieto všetky vlastnosti idú kombinovať.
-Indexy sa dopočítavajú asynchrónne (na štýl CQRS) takže nespomaľujú operácie s dokumentmi, to má ale aj nevýhodu v tom, že nie je možné vytvoriť uniq constraint (čo naopak MongoDB umožňuje).
+Indexy sa dopočítavajú asynchrónne (na štýl CQRS), takže nespomaľujú operácie s dokumentmi, to má ale aj nevýhodu v tom, že nie je možné vytvoriť uniq constraint (čo naopak MongoDB umožňuje).
 Možnosti indexovania sú v RavenDB naozaj ohromné a ako som spomínal indexy tu skôr pripomínajú materializované pohľady.
 
 Pár príkladov:
 * Pekný príklad je _„CASCADE DELETE“_ – Mongo niečo také nepodporuje a človek si musí dané dokumenty načítať, vytiahnuť interpretovať a vytiahnuť si súvisiace dokumenty a následne to zmazať. V RavenDB je na to možné použiť multimap index a mazať priamo podľa neho. 
 * Univerzálne fulltext vyhľadávanie - vďaka multimap indexom je možné vytvoriť vyhľadávanie cez viaceré kolekcie (napr: používatelia, články a komentáre).
-* Map-reduce indexy -  nahradzujú klasický map-reduce a agregácie, len s tým, že výsledky sú prepočítané a indexované dopredu, takže vyhľadávanie v nich je rýchle a o aktuálnosť sa stará databáza.
+* Map-reduce indexy -  nahradzujú klasický map-reduce a agregácie, len s tým, že výsledky sú predpočítané a indexované dopredu, takže vyhľadávanie v nich je rýchle a o aktuálnosť sa stará databáza.
 
 Možnosti indexov v RavenDB majú vplyv aj na to ako vyzerá databázová schéma.
 V štandardnej dokumentovej databáze je potrebné ukladať dáta na viackrát do rôznych kolekcií,
@@ -186,8 +186,8 @@ Takže komplexitu schémy a aplikačnej logiky sa dá preniesť na plecia deklar
 
 **Poznámka:** To, že je bezschémová databáza agilnejšia, respektíve dokumentová databáza je agilnejšia ako relačná považujem za veľmi rozšírený mýtus.
 Pretože jednak schéma databázy je v aplikácii a s dátami neznámej schémy sa nedá dobre pracovať.
-Druhá vec je, že pri návrhu schémy treba vedieť aké dopyty budú použité (a to tvrdia priamo ľudia s Monga – <https://www.youtube.com/watch?v=2cZpC94P2Pw>).
-Zatiaľ, čo pri relačnom modely sa prosto začne s normalizovaným modelom a následne je možné sa dopytovať na akékoľvek dáta.
+Druhá vec je, že pri návrhu schémy treba vedieť dopredu, aké dopyty budú použité (a to tvrdia priamo ľudia z Monga – <https://www.youtube.com/watch?v=2cZpC94P2Pw>).
+Zatiaľ čo pri relačnom modely sa prosto začne s normalizovaným modelom a následne je možné sa dopytovať na akékoľvek dáta.
 
 **Príklad v projekte:** Pre kolekciu logov mám v projekte 6 samostatných indexov pre MongoDB, navyše sa preň musia v aplikácii dopočítavať dodatočné filedy pre vyhľadávanie.
 V RavenDB je to riešené jediným indexom.
@@ -272,15 +272,15 @@ Asi najvýraznejší rozdiel medzi MongoDB a RavenDB je v dopytovanom jazyku.
 
 MongoDB má tri spôsoby ako sa dopytovať do databázy:
 * vyhľadanie a projekcia dokumentov z kolekcie (find + projection),
-* agregačný framewrok (postup krokov skladajúcich sa s krokov s filtrovaním, projekciou a grupovanim)
+* agregačný framewrok (postup krokov skladajúcich sa z krokov s filtrovaním, projekciou a grupovanim)
 * map-reduce (ako javascript funkcie, no dnes je už preferovaný agregačný framework).
 
 Budem sa tu venovať prvým dvom spôsobom získavania dát. Prvý je jednoduché filtrovanie s voliteľnou projekciou.
 Druhý je agregačný framewrok, v ktorom je možné veľmi flexibilne kombinovať kroky, čo má svoje výkonové dopady,
 ale zas veľkú vyjadrovaciu silu.
 
-V oboch prípadoch sa na definíciu dopytovania, grupovania a projekcií používajú Bson dokumenty.
-Čo nie je príliš pekné ani krátke, lebo ide o kombináciu stringov, Bson dokumentov a polí, ktoré sa zahorujú do seba.
+V oboch prípadoch sa na definíciu dopytovania, grupovania a projekcií používajú BSON dokumenty.
+Čo nie je príliš pekné ani krátke, lebo ide o kombináciu stringov, BSON dokumentov a polí, ktoré sa zanorujú do seba.
 V javascripte je tento zápis relatívne stručný. Napríklad:
 
 ```js
@@ -291,10 +291,10 @@ No v typových jazykoch nepríjemne rastie a stáva sa neprehľadný so zvyšuj�
 
 Tiež tu máme to nepríjemné obmedzenie veľkosti spracovaných dokumentov na výstupe a v medzi-krokoch.
 
-RavenDB používa jazyk RQL, ktorý sa najviac podobá _LINQ-u_ (a ten sa podobá SQL-ku),
+RavenDB používa jazyk _RQL_, ktorý sa najviac podobá _LINQ-u_ (a ten sa podobá SQL-ku),
 umožňuje jednoducho vyjadriť filtrovanie a projekcie.
-Pre mňa je tento jazyk oveľa jednoduchší a intuitívnejší ako skladanie BSON dokumentov.
-Navyše RavenDB klient má silnú podporu LINQ-u v C# takže človek sa jednoducho dopytuje v typovom jazyku
+Pre mňa je tento jazyk oveľa jednoduchší a intuitívnejší, ako skladanie vnorených BSON dokumentov.
+Navyše RavenDB klient má silnú podporu LINQ-u v C#, takže človek sa jednoducho dopytuje v typovom jazyku
 (ostatné drivre pre iné jazyky majú k tomu svoju alternatívu).
 
 Predchádzajúci príklad by mal v RQL takúto alternatívu (s indexom pre `status` a `qty`):
@@ -304,14 +304,14 @@ from index 'Inventory/Base'
 where status = 'A' or qty < 30
 ```
 
-Pri dopytovaní ale treba povedať to, že v RavenDB sa dopytuje a triedi vždy cez index (takže sa Ad-hoc dopytmi to nie je také jednoduché).
+Pri dopytovaní treba poznamenať, že v RavenDB sa dopytuje a triedi vždy cez index (takže sa Ad-hoc dopytmi to nie je také jednoduché).
 Ak sa v C# klientovi (v defaultnom nastavení) pokúsite dopytovať priamo na fieldy dokumentov, tak dostanete výnimku s tým,
 že sa máte dopytovať na index. RavenDB ale dokáže pri prvom dopyte vytvoriť potrebný index a použiť ho,
 ale nie je to odporúčané (hlavne nie v produkcii). Navyše tým, že sa explicitne uvedie index, máte istotu, že sa použije.
 
 Trošku komplikovanejšie je to agregáciami, tie v RavenDB ide použiť len cez map-reduce index, alebo cez facet-y.
 
-Viac o rozdieloch v dopytovaní (so zameraním na agregácie) je možné nájsť tu <https://www.youtube.com/watch?v=1g-6XocHG6U>.
+Viac o rozdieloch v dopytovaní (MongoDb vs. RavenDB so zameraním na agregácie) je možné nájsť tu <https://www.youtube.com/watch?v=1g-6XocHG6U>.
 
 **Príklad v projekte:** Na nasledujúcom obrázku je príklad dopytu v MogoDb (naľavo) a RavenDB (napravo) pre zistenie podielu aplikácií v logoch. Dopyty sú na tie isté štruktúry a obe majú indexy.
 
@@ -334,11 +334,11 @@ Taktiež časové okno šlo určiť presne, zatiaľ čo v Mongu to bol vždy len
 (rozumej granularita len na hodinu, minútu, sekundu, deň, mesiac,...).
 
 ### Subscriptions
-V tejto podkapitole je porovnaný mechanizmus umožňujúci sledovať zmeny v kolekcii s klientskej aplikácie a reagovať na ne.
+V tejto podkapitole je porovnaný mechanizmus umožňujúci sledovať zmeny v kolekcii z klientskej aplikácie a reagovať na ne.
 Ide pomocou neho implementovať napríklad background processing.
 
-V MongoDB nazývané Changed streams slúžia pre informovanie aplikácií o zmenách dokumentov v kolekcii. No má viac formu notifikácií.
-V je možné použiť token pre pokračovanie v sledovaní pri výpadku aplikácie ale o jeho ukladanie
+V MongoDB nazývané _Changed streams_ slúžia pre informovanie aplikácií o zmenách dokumentov v kolekcii. No majú viac formu notifikácií.
+Je v nich možné použiť token pre pokračovanie v sledovaní pri výpadku aplikácie ale o jeho ukladanie
 a použitie si musí aplikácia riešiť sama.
 
 V RavenDB sa toto celé rieši na strane serveru a spracovanie dokumentov aj pri subsripcii je transakčné, zabezpečuje, že rovnakú zmenu nezachytia dve aplikácie.
@@ -347,7 +347,7 @@ V RavenDB sa toto celé rieši na strane serveru a spracovanie dokumentov aj pri
 kde som ju používal pre spracovávanie novo pridaných textových dokumentov (MS Office dokumenty a PDF-ka).
 
 ## Zhrnutie databáz
-V tejto kapitole uvádzam krátke subjektívne zhrnutie týchto dvoch databáz a pridávam veci, ktoré som nespomínal vyššie.
+V tejto kapitole uvádzam krátke subjektívne zhrnutie týchto dvoch databáz a pridávam nejaké postrehy.
 
 ### MongoDB
 MongoDB za svoju existenciu ubehlo dlhú cestu a zlepšuje sa
@@ -357,33 +357,33 @@ MongoDB za svoju existenciu ubehlo dlhú cestu a zlepšuje sa
 * Dokumentácia. 
 * Veľká komunita vďaka rozšírenosti.
 * Verzia zadarmo má minimálne obmedzenia (no nejaké sú) a nelimituje výkon.
-* GridFS (MongoDB je vhodnejšia databáza na ukladanie binárnych dát).
+* _GridFS_ (MongoDB je vhodnejšia databáza na ukladanie binárnych dát).
 
 Čo sa mi nepáči:
 * Komplikovaný dopytovaní (ne)jazyk.
 * Chýbajú elementárne operácie so stringami.
-* Ku reálnym transakciám sa dá veľmi ťažko dopracovať.
-* Vlastnosti a správanie featúr sa veľmi menili medzi verziami, s čoho vzniká chaos pri radách, článkoch a best practice.
+* Ku reálnym transakciám sa dá veľmi ťažko dopracovať a to aj za cenu poklesu výkonu.
+* Vlastnosti a správanie featúr sa veľmi menili medzi verziami, z čoho vzniká chaos pri radách, článkoch a _best practice_.
 * Nemožnosť master-master replikácie.
-* GridFS nepodporuje transakcie.
+* _GridFS_ nepodporuje transakcie.
 * Veľmi slabé administračné GUI, kde nejde prakticky nič nastaviť alebo si pozrieť.
 * MongoDB klame, v administračnom GUI sa dozviem, že dáta v databáze majú s indexami _16MB_ ale na disku majú _370MB_.
 * C# driver vie serilizovať štruktúry ale už ich nevie deserializovať.
 
 ### RavenDB
 RavenDB na mňa pôsobí veľmi solídnym dojmom, kde kombinuje zaujímavé koncepty.
-Vyžaduje trochu iný prístup, na aký sú programátori zvyknutý. Taktiež sa o nej menej hovorí a vie.
+Vyžaduje trochu iný prístup, na aký sú programátori zvyknutý. Taktiež sa o nej menej hovorí a vie, čo je podľa mňa veľká škoda.
 
 Čo sa mi páči:
-* Transakcie.
-* Indexy, indexy, indexy.
+* Reálne transakcie a ACID.
 * Atomické commandy.
+* Indexy, indexy, indexy.
 * Lazy queries (mechanizmus umožňujúci odoslať viac dopytov na server v jednej dávke a tým znížiť celkový čas odozvy a priepustnosť).
 * Podpora integračného testovania.
 * Dokumentácia.
 * Spracovanie textu (v podstate vie nahradiť funkcionalitu _ElasticSerach_).
-* Rýchlosť (napriek verzii obmedzenej na tri jadrá a _6GB RAM_, bola RavenDB rýchlejšia pre niektoré dopyty a inserty ako MongoDB na  ôsmich jadrách a _16GB RAM_, cítiť to bolo hlavne pri agregáciách).
-* Priamo súčasťou databázy je perfektné administračné GUI (obrázky nižšie), v ktorom ide nastaviť všetko, od vlastností databázy až po cluster. Je v ňom možné prezrieť stav úložiska, dokonca vliezť do indexov a pozrieť sa ako sú zaindexované hodnoty a ako vyzerá zvnútra, či si vizualizovať vnútornosti map-reduce indexu, backupy, performace hinty a mnoho mnoho ďalšieho. A toto GUI neklame, keď máte na disku _300MB_ databázu, tak sa to dozviete aj s GUI.
+* Rýchlosť. Napriek verzii obmedzenej na tri jadrá a _6GB RAM_, bola RavenDB rýchlejšia pre niektoré dopyty a inserty ako MongoDB na  ôsmich jadrách a _16GB RAM_, cítiť to bolo hlavne pri agregáciách.
+* Priamo súčasťou databázy je perfektné administračné GUI (obrázky nižšie), v ktorom ide nastaviť všetko, od vlastností databázy až po cluster. Je v ňom možné prezrieť stav úložiska, dokonca vliezť do indexov a pozrieť sa ako sú zaindexované hodnoty a ako vyzerá zvnútra, či si vizualizovať vnútornosti map-reduce indexu, backupy, performace hinty a mnoho mnoho ďalšieho. A toto GUI neklame, keď máte na disku _300MB_ databázu, tak sa to dozviete aj z GUI.
 * Otvorenosť. A to nemyslím len otvorenosť zdrojových kódov. Ale to, že tvorcovia RavenDB vo svojich blogoch a prednáškach opisujú, ako fungujú vnútornosti databázy a hlavne prečo sa rozhodli veci riešiť tak ako sa rozhodli. K tejto otvorenosti prispieva aj spomínané administračné GUI.
 * Jednoduchší dopytovací jazyk, priateľskejší klient pre C#.
 * Mám pocit, že celé to má nejaký koncept a smer, že tvorcovia nad RavenDB a jej použitím rozmýšľajú.
@@ -404,6 +404,9 @@ RavenDB Studio - Zobrazenie hodnôt v indexe.{: .text-center .font-italic}
 ![RavenDB Studio - Ukážka dokumentu.](images/MongoDbVsRavenDb/RavenStudio3.png){.img-center}
 RavenDB Studio – Zobrazenie dokumentu s rozkliknutými časovými radmi.{: .text-center .font-italic}
 
+![RavenDB Studio - Map-Reduce index.](images/MongoDbVsRavenDb/RavenStudio4.png){.img-center}
+RavenDB Studio – Vizualizácia map-reduce indexu.{: .text-center .font-italic}
+
 ## Zhodnotenie
 Na začiatku som opisoval moje skúsenosti s relačnými databázami,
 lebo mi príde, že MongoDB je MySQL dokumentových databáz -  veľmi rozšírená, obľúbená databáza,
@@ -411,11 +414,11 @@ ktorá sa stala defakto štandardom a každý po nej siahne, lebo o nej počul. 
 no pôsobia nedokončene a polovičato. 
 Pričom RavenDB by som prirovnal k MS SQL, síce platená, ale s premyslenými featurami, ktoré fungujú.
 Má k dispozícii plnohodnotný administračný nástroj, v ktorom ide spravovať databázu, kontrolovať a ladiť výkon,...
-a to bez toho aby sa človek musel v konzole písať komandy, alebo nastavovať konfiguračné súbory v proprietárnom formáte.
+a to bez toho, aby sa človek musel v konzole písať komandy, alebo nastavovať konfiguračné súbory v proprietárnom formáte.
 
 **MongoDB** by som uprednostnil v prípadoch, keď na ACID vlastnostiach až tak nezáleží, a v prípadoch, ak je potrebné len úložisko dát.
 
-**RavenDB** by som uprednostnil tam, kde ide o peniaze a o zdravie – ACID, tam, kde je potrebné viac pracovať s dátami (hlavne s rôznych zdrojov) a tam, kde ide o vyhľadávanie a spracovanie textu.
+**RavenDB** by som uprednostnil tam, kde ide o peniaze a o zdravie – ACID, tam, kde je potrebné viac pracovať s dátami (hlavne z rôznych zdrojov), tam, kde ide o vyhľadávanie a spracovanie textu alebo sa hodí CQRS architektúra kvôli výkonu,...
 
 MongoDB bola láska na prvý pohľad, je to zaujímavá databáza, ale RavenDB je zaujímavejšia.
 
@@ -428,4 +431,8 @@ MongoDB bola láska na prvý pohľad, je to zaujímavá databáza, ale RavenDB j
 1. <https://www.youtube.com/watch?v=5ZXBR3croMA> - MongoDB vs RavenDB: Which Document Database Conquers ACID?
 1. <https://www.youtube.com/watch?v=Jd1vYmhwpAQ> - Migrating from RavenDB 2.5 to 4.0 in 36,000 Locations
 1. <https://www.youtube.com/watch?v=qeWY1RuIlaE> - ExDav proj - MongoDB, CosmosDB, CalDAV, MS Graph [M. Melena, HAVIT Vzdělávací okénko, 23.2.2022]
-
+1. <https://ayende.com/blog/> - Oren Eini aka Ayende Rahien (blog CEO _Hibernating Rhinos_)
+1. <https://ravendb.net/docs/article-page/5.4/csharp> - RavenDB dokumentácia
+1. <https://alex-klaus.com/ravendb-pain-and-joy/> - RavenDB. Two years of pain and joy
+1. <https://www.mongodb.com/docs/> - MongoDB dokumentácia
+1. <https://analyticsindiamag.com/the-good-the-bad-and-the-ugly-the-story-of-mongodb/> - The good, the bad and the ugly – the story of MongoDB
