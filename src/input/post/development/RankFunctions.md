@@ -170,7 +170,7 @@ WHERE [Rank] = 1
 ```
 
 ## Iné triky
-Window funkcie umožňujú „naporcovať“ skúmané dáta podobne ako pri grupovaní, ale týmto spôsobom je možné vytiahnuť aj iné údaje v riadkoch a „porcoať“ ich podľa rôznych kritérií.
+Window funkcie umožňujú „naporcovať“ skúmané dáta podobne ako pri grupovaní, ale týmto spôsobom je možné vytiahnuť aj iné údaje v riadkoch a „porcovať“ ich podľa rôznych kritérií.
 
 Nasledujúci selekt vráti medián bodov a počet súťažiacich pre kategórie.
 Window funkcie sa zvyčajne používajú s `DISTINCT` kvôli opakujúcim sa riadkom vo výsledkoch.
