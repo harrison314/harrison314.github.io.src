@@ -13,8 +13,9 @@ Všetky tieto implementácie umožňujú nájsť veľmi rýchlo nasledujúci kľ
 a to je v mnohých nasledujúcich riešeniach potrebné. 
 Databázy založené na _hash mapách_ túto možnosť zvyčajne nemajú.
 
-_V nasledujúcom texte používam syntax, kde `key => value` znamená kľúčový pár, zátvorky znamenajú N-ticu
-(binárne serilzovanú N-ticu hodnôt, kde `(a, b, c)` má prefix `(a, b)`) a v jednoduchých úvodzovkách sú konštanty._
+_V nasledujúcom texte používam syntax, kde `key => value` znamená kľúčový pár, ktorý sa uloží v databáze, zátvorky znamenajú N-ticu
+(binárne serilzovanú N-ticu hodnôt, kde `(a, b, c)` má prefix `(a, b)`) a v jednoduchých úvodzovkách sú konštanty.
+Nasledujúci text vyžaduje aj základné znalosti z relačných databáz._
 
 ## Použitie prefixov
 Použitie prefixov kľúčov je základný koncept na oddeľovanie logických celkov v key-value databázach napríklad na určenie typu záznamu,
@@ -60,18 +61,18 @@ Buď ho uložíme serializovaný alebo po jednotlivých hodnotách, aby s nimi b
 A druhá varianta.
 
 ```handlebars
-('vector', vector_name, idm index_i) => value_i
+('vector', vector_name, id, index_i) => value_i
 ```
 
 ## Modelovanie grafu
-Graf sa skladá z vrcholov a hrán medzi vrcholmi. V key-value databáze sa modelujú tak, že vrcholy sú klasické hodnoty zo svojim _id_.
+Graf sa skladá z vrcholov a hrán medzi vrcholmi. V key-value databáze sa modelujú tak, že vrcholy sú klasické hodnoty so svojim _id_.
 
 ```handlebars
 ('graph', graph_id, 'edge', edge_id) => edge data
 
 ```
 
-Orientované hrany majú v kľúči _id_ vrcholu s ktorého vychádzajú do, ktorého vchádzajú a váhy majú v hodnote.
+Orientované hrany majú v kľúči _id_ vrcholu z ktorého vychádzajú do, ktorého vchádzajú a váhy majú v hodnote.
 
 ```handlebars
 ('graph', graph_id, 'vertice', edge_from_id, edge_to_id) => vertice data
@@ -117,7 +118,7 @@ Poprípade vytvoriť zložený index, kde sa indexujú viaceré hodnoty.
 
 ```
 
-Takýto zložený index má rovnaké obmedzenie ako v relačných databázach a to, že samostatne ide vyhľadávať podľa prvej hodnoty, ale podľa druhej hodnoty už nie.
+Takýto zložený index má rovnaké obmedzenie ako v relačných databázach a to, že samostatne ide vyhľadávať iba podľa prvej hodnoty, ale podľa druhej hodnoty samostatne už nie.
 
 ## Modelovanie časových radov
 
