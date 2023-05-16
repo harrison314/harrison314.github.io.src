@@ -31,7 +31,7 @@ Následne je možné vymazať všetky údaje k danému používateľovi podľa p
 Samozrejme veľkosť kľúča je vhodné udržiavať v rozumnej miere.
 
 ## Modelovanie tabuliek 
-Tabuľky (alebo aj _column family_ prístup) ide riešiť dvoma spôsobmi. Prvý je taký, že sa použije primárny kľúč ako kľúč, a riadok tabuľky sa serializuje a uloží,
+Tabuľky (alebo aj _column family_ či _wide-column_ prístup) ide riešiť dvoma spôsobmi. Prvý je taký, že sa použije primárny kľúč ako kľúč, a riadok tabuľky sa serializuje a uloží,
 ako binárna hodnota.
 
 ```handlebars
