@@ -3,6 +3,7 @@ Title: Ako na Key-Value databázu
 Menu: Ako na Key-Value databázu
 Cathegory: Dev
 Description: Ukážka modelovania v key-value databázach.
+OgImage: images/KeyValueDB/media.png
 ---
 Už nejakú dobu sa zaoberám databázami a nejaký čas som riešil aj vlastné nerelačné úložisko. V tomto blogu chcem zosumarizovať postupy,
 ako vyriešiť niektoré úlohy pomocou generickej key-value databázy,
