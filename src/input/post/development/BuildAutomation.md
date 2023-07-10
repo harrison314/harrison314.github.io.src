@@ -1,4 +1,5 @@
 Published: 8.7.2023
+Updated: 10.7.2023
 Title: Prečo používať build automation
 Menu: Prečo používať build automation
 Cathegory: Dev
@@ -13,7 +14,7 @@ Späť by som sa už nevrátil. Prečo? **Lebo tieto nástroje šetria čas a ne
 
 ## Čo je to build automation tool
 Pri vytvorení artefaktov projektu nejde len o to niečo skompilovať, treba s tým spraviť plno iných drobných vecí.
-To zahŕňa kompiláciu závislých projektov, podpísanie binárok, konverziu dokumentácie do vhodného formátu,
+To zahŕňa odstránenie starých artefaktov, kompiláciu závislých projektov, podpísanie binárok, konverziu dokumentácie do vhodného formátu,
 pridanie ďalších súborov do projektu (licencie, vygenerované SQL migrácie, konfiguráciu,...)
 a nakoniec vytvorenie balíčkov pre inštaláciu (_zip_, _msi_, _deb_,...) a nezabudnúť ju správne pomenovať.
 
@@ -22,6 +23,9 @@ K tomu celému je často v projekte viac výsledných inštalačných balíkov a
 
 
 A práve tieto úlohy dokáže automatizovať build automation tool. Nie je to kompilátor, je o úroveň vyššie.
+
+![Znázornenie targetov v NUKE.](images/BuildAutomation/plan.png){.img-center} 
+Znázornenie závislostí medzi úlohami - NUKE ([zdroj](https://ithrowexceptions.com/2020/06/05/reusable-build-components-with-interface-default-implementations.html)).{: .text-center .font-italic}
 
 ## Prečo používať build automation
 ... pre .NET (aj v porovnaní so štandardami CI/CD pipelinami):
@@ -46,12 +50,13 @@ Oba viac menej dokážu to isté a podobným spôsobom.
 * pre inicializáciu používajú .NET gloval tool,
 * sú multiplatformové,
 * majú slušnú komunitu,
-* ide o DSL nad jazykom C# (závislosti, úlohy, buildovanie, práca so súbormi, globing,...),
+* ide o DSL nad jazykom C# (závislosti, úlohy, cleanup, buildovanie, práca so súbormi, globing, version control, notifikácie,...),
 * vedia buildovať aj iné ako .NET projekty,
-* orientujú sa na úlohy (tasky/targety) so závislosťami,
+* orientujú sa na úlohy (tasky/targety) so vzájomnými závislosťami,
 * ich funkcionalita ide rozšíriť pomocou nugetov (stále je to C#),
 * zdieľanie kódu je tiež možné pomocou nugetov,
 * majú podporu najznámejších test runnerov,
+* dokážu artefakty deploynúť a nasadiť (to sa často nepoužíva),
 * majú širokú podporu rozšírení a toolov (_dotnet_, _MS Build_, _node.js_, _EsLint_, _upack_, _Docker_, _OpenCover_, _Sonarqube_, _git_, _Wix_, _Yarn_,...),
 * majú dobre vyriešené logovanie.
 
@@ -123,10 +128,13 @@ _NUKE_ je viac deklaratívne, tým ma človek ľahší začiatok a pokiaľ netre
 Taktiež je príjemné mať intelisense vďaka tomu, že ide o konzolovú aplikáciu v rámci soliution.
 
 _Cake_ je viac imperatívne, osobne ho používam o dosť dlhšie
-a možno aj pre to mi príde trochu univerzálnejšie navyše vyhráva v počte integrácii na trojstranné služby a programy.
+a možno aj pre to mi príde trochu univerzálnejšie, navyše vyhráva v počte integrácii na trojstranné služby a programy.
 
 ## Záver
 Myslím, že keď si človek vyberie hociktorý nástroj (_Cake_, _NUKE_), tak na začiatku nespraví chybu.
 Navyše kód pre build automation nebýva dlhý, tak to ide ľahko prepísať.
 
 A ako som spomínal, už len samotné použitie takéhoto nástroja šetrí čas a nervy.
+
+Osobne mi tieto nástroje priniesli hlavne to, že si viem buildy rýchlo odladiť lokálne.
+A keď som na dovolenke, tak mi nemusí nik volať ohľadom buidlovania knižnice XY, ktorú nutne potrebuje na vyriešenie bagu.
