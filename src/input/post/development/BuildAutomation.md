@@ -137,4 +137,4 @@ Navyše kód pre build automation nebýva dlhý, tak to ide ľahko prepísať.
 A ako som spomínal, už len samotné použitie takéhoto nástroja šetrí čas a nervy.
 
 Osobne mi tieto nástroje priniesli hlavne to, že si viem buildy rýchlo odladiť lokálne.
-A keď som na dovolenke, tak mi nemusí nik volať ohľadom buidlovania knižnice XY, ktorú nutne potrebuje na vyriešenie bagu.
+A keď som na dovolenke, tak mi nemusí nik volať ohľadom buidlovania knižnice XY, ktorú nutne potrebuje na vyriešenie bugu.
