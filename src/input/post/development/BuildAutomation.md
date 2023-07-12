@@ -1,5 +1,5 @@
 Published: 8.7.2023
-Updated: 10.7.2023
+Updated: 12.7.2023
 Title: Prečo používať build automation
 Menu: Prečo používať build automation
 Cathegory: Dev
@@ -30,7 +30,7 @@ Znázornenie závislostí medzi úlohami - NUKE ([zdroj](https://ithrowexception
 ## Prečo používať build automation
 ... pre .NET (aj v porovnaní so štandardami CI/CD pipelinami):
 
-* zdieranie vedomostí v tíme a zastupiteľnosť kolegov,
+* zdieľanie vedomostí v tíme a zastupiteľnosť kolegov,
 * build všetkých projektov sa spúšťa rovnako,
 * build funguje rovnako lokálne u vývojára ako na build serveri,
 * proces buildovania je možné odladiť lokálne (v gite nebude tisíc komitov pre úpravu YAML definície pipeline – do YAML proste breakpoint nedáš) ,
@@ -47,7 +47,7 @@ _Cake_ (C# Make) a _NUKE_ sú oba build automation tooly pre .NET a MS Build.
 Oba viac menej dokážu to isté a podobným spôsobom.
 
 Čo majú spoločné:
-* pre inicializáciu používajú .NET gloval tool,
+* pre inicializáciu používajú .NET global tool,
 * sú multiplatformové,
 * majú slušnú komunitu,
 * ide o DSL nad jazykom C# (závislosti, úlohy, cleanup, buildovanie, práca so súbormi, globing, version control, notifikácie,...),
@@ -62,7 +62,7 @@ Oba viac menej dokážu to isté a podobným spôsobom.
 
 Čo majú rozdielne:
 * _Cake_ je napísaný ako „skript“ (v _.cake_ súbore – vie s ním pracovať _Visual Studio Code_, plus je na to plugin),
-* _NUKE_ používa .NET projekt priamo v soliution (takže natívna podpora IDE),
+* _NUKE_ používa .NET projekt priamo v solution (takže natívna podpora IDE),
 * ku rozšíriteľnosti pristupujú trochu inak,
 * príde mi, že _Cake_ má viac extrených toolov/addonov,
 * _Cake_ je vhodnejšie aj pre projekty s _.Net Frameworkom_,
@@ -87,8 +87,12 @@ Oba viac menej dokážu to isté a podobným spôsobom.
   <td class="col-md-8"><a href="https://github.com/cake-build/cake" target="_blank">https://github.com/cake-build/cake</a></td>
 </td>
 <tr>
-  <td class="col-md-4">Integrácia na trojstranné baličky</td>
+  <td class="col-md-4">Integrácia na treťostranné baličky</td>
   <td class="col-md-8"><a href="https://cakebuild.net/extensions/" target="_blank">https://cakebuild.net/extensions/</a></td>
+</td>
+<tr>
+  <td class="col-md-4">Ukážka použitia</td>
+  <td class="col-md-8"><a href="https://github.com/harrison314/PkcsExtensions/blob/master/build/build.cake" target="_blank">https://github.com/harrison314/PkcsExtensions/blob/master/build/build.cake</a></td>
 </td>
 </tbody>
 </table>
@@ -110,8 +114,12 @@ Oba viac menej dokážu to isté a podobným spôsobom.
   <td class="col-md-8"><a href="https://github.com/nuke-build/nuke" target="_blank">https://github.com/nuke-build/nuke</a></td>
 </td>
 <tr>
-  <td class="col-md-4">Integrácia na trojstranné baličky</td>
+  <td class="col-md-4">Integrácia na treťostranné baličky</td>
   <td class="col-md-8"><a href="https://nuke.build/docs/common/cli-tools/" target="_blank">https://nuke.build/docs/common/cli-tools/</a></td>
+</td>
+<tr>
+  <td class="col-md-4">Ukážka použitia</td>
+  <td class="col-md-8"><a href="https://github.com/harrison314/Area52/blob/main/build/BuildProject/Build.cs" target="_blank">https://github.com/harrison314/Area52/blob/main/build/BuildProject/Build.cs</a></td>
 </td>
 </tbody>
 </table>
@@ -125,10 +133,10 @@ Oba tieto tooly sú dobré a dokážu podobné veci trochu iným prístupom.
 Čokoľvek, čo ide spraviť v C# ide spraviť aj pomocou týchto nástrojov.
 
 _NUKE_ je viac deklaratívne, tým ma človek ľahší začiatok a pokiaľ netreba naozaj špeciálne veci tak bohate stačí.
-Taktiež je príjemné mať intelisense vďaka tomu, že ide o konzolovú aplikáciu v rámci soliution.
+Taktiež je príjemné mať intellisense vďaka tomu, že ide o konzolovú aplikáciu v rámci solution.
 
 _Cake_ je viac imperatívne, osobne ho používam o dosť dlhšie
-a možno aj pre to mi príde trochu univerzálnejšie, navyše vyhráva v počte integrácii na trojstranné služby a programy.
+a možno aj pre to mi príde trochu univerzálnejšie, navyše vyhráva v počte integrácii na treťostranné služby a programy.
 
 ## Záver
 Myslím, že keď si človek vyberie hociktorý nástroj (_Cake_, _NUKE_), tak na začiatku nespraví chybu.
@@ -137,4 +145,4 @@ Navyše kód pre build automation nebýva dlhý, tak to ide ľahko prepísať.
 A ako som spomínal, už len samotné použitie takéhoto nástroja šetrí čas a nervy.
 
 Osobne mi tieto nástroje priniesli hlavne to, že si viem buildy rýchlo odladiť lokálne.
-A keď som na dovolenke, tak mi nemusí nik volať ohľadom buidlovania knižnice XY, ktorú nutne potrebuje na vyriešenie bagu.
+A keď som na dovolenke, tak mi nemusí nik volať ohľadom buidlovania knižnice _XY_, ktorú nutne potrebuje na vyriešenie bagu.
