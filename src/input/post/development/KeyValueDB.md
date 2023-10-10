@@ -144,7 +144,7 @@ tak si timestamp rozdelíme na „ľudské“ údaje ako rok, kvartál, mesiac, 
 ('timeserie', timeserie_name,  year, month, day, hout, minute, sec, milisec) => (values,...)
 ```
 
-Tento model počíta s tým, že v rovnakom čase bude zaznamenaný len jedna hodnota. Ak ich chceme viac musíme kľúč nejakým spôsobom zunikátniť,
+Tento model počíta s tým, že v rovnakom čase bude zaznamenaný len jedna hodnota. Ak ich chceme viac musíme kľúč nejakým spôsobom zunikátniť (napríklad priďať za čas náhodné dáta).
 
 ## Ukladanie BLOB-ov
 _BLOB_ (_Binary large object data_) je proste hocaký blok binárnych dát alebo súbor.

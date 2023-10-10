@@ -341,6 +341,8 @@ V MongoDB nazývané _Changed streams_ slúžia pre informovanie aplikácií o z
 Je v nich možné použiť token pre pokračovanie v sledovaní pri výpadku aplikácie ale o jeho ukladanie
 a použitie si musí aplikácia riešiť sama.
 
+**Poznámka:** _Changed streams_ v MongoDB funguje len keď je spustený ako _replica set_.
+
 V RavenDB sa toto celé rieši na strane serveru a spracovanie dokumentov aj pri subsripcii je transakčné, zabezpečuje, že rovnakú zmenu nezachytia dve aplikácie.
 
 **Príklad v projekte:** Túto vlastnosť som nepoužil v Area52, ale v inom projekte,
