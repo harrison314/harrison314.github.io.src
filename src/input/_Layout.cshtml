@@ -140,9 +140,9 @@ var allDocs = Documents["Posts"].OrderByDescending(x => DateTime.Parse((string)x
 
         <!-- Footer -->
         <footer>
-            @if(ViewBag.IssueUrl!=null)
+            @if (ViewBag.IssueUrl != null)
             {
-             <div class="row">
+             <div class="row no-print">
                 <div class="col-lg-8 col-sm-8">
                     <div class="well">
                         <h4>Našli ste chybu, alebo chcete niečo doplniť?</h4>
@@ -156,7 +156,7 @@ var allDocs = Documents["Posts"].OrderByDescending(x => DateTime.Parse((string)x
             }
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; harrison314 2013</p>
+                    <p>Copyright &copy; harrison314 2013<span class="on-print"> - https://harrison314.github.io/</span></p>
                 </div>
             </div>
             <!-- /.row -->

@@ -13,7 +13,7 @@ footer {
 }
 
 p {
-    text-align:justify;
+    text-align: justify;
 }
 
 .publishDate {
@@ -26,3 +26,16 @@ p {
 .font-italic {
     font-style: italic;
 }
+
+@media print {    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+@media screen {
+    .on-print {
+        display: none;
+    }
+ }
