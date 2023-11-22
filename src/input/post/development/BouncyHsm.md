@@ -1,4 +1,5 @@
 Published: 21.11.2023
+Updated: 22.11.2023
 Title: Ako som robil BouncyHsm
 Menu: Ako som robil BouncyHsm
 Cathegory: Dev
@@ -168,11 +169,11 @@ Pri výbere úložiska som postupoval tak, že najskôr som si ho implementoval 
 _LiteDB_ je embeded dokumentová databáza napísaná v manažovanom C# kóde, kde API vychádza z _MongoDb_. Podporuje indexy, LINQ dopytovanie, GridFs API a transakcie. Viac som nepotreboval.  Výhoda je, že databázu tvorí jediný súbor, takže ide ľahko prenášať medzi inštanciami. Dobrá vec je aj to, že LiteDB má priamo od tvorcov [administračný nástroj](https://github.com/mbdavid/LiteDB.Studio).
 
 ### Výber technológie administračného GUI
-Ako som už spomínal, kvôli tomu, aby bolo administračné GUI dostupné aj pri práci na serveri som sa rozhodol ho spraviť webové.
+Ako som už spomínal, kvôli tomu, aby bolo administračné GUI dostupné aj pri práci na serveri som sa ho rozhodol spraviť webové.
 
-Aby bola aplikácia postavená na rozšírených technológiách som chcel využiť _Vue3_, s ktorým mám dobré skúposti a ľahko sa s ním pracuje.
+Aby bola aplikácia postavená na rozšírených technológiách, tak som chcel využiť _Vue3_, s ktorým mám dobré skúposti a ľahko sa s ním pracuje.
 
-No počas prípravnej fázy som v práci dostal úlohu v Angularovom projekte zmeniť dva stringy. Ale mal som novší nodejs ako bol na projekte, tak som sa pustil do upgradu projektu. Návod z oficiálnej stránky nefungoval, lebo som mal príliš nové nodejs. Takže bolo potrebné  všetko spraviť ručne, zdvihnúť Angular, všetky závislosti zo svojím dependecny hell, typescript,... A tak sa z úlohy, čo mala trvať päť minút stalo dvojtýždňové trápenie. Preto som si povedal „████ node“ a rozhodol sa, že si nebudem robiť zle, administračné GUI proste spravím v Blazor Webassembly.
+No počas prípravnej fázy som v práci dostal úlohu v Angularovom projekte zmeniť dva stringy. Ale mal som novší nodejs ako bol na projekte, tak som sa pustil do upgradu projektu. Návod z oficiálnej stránky nefungoval, lebo som mal príliš nové nodejs. Takže bolo potrebné  všetko spraviť ručne, zdvihnúť Angular, všetky závislosti zo svojím dependecny hell, typescript,... A tak sa z úlohy, čo mala trvať päť minút stalo dvojtýždňové trápenie. Preto som si povedal „████&nbsp;node“ a rozhodol sa, že si nebudem robiť zle, administračné GUI proste spravím v Blazor Webassembly.
 
 Frondend je nakoniec postavený na [Blazor WebAssembly](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor), REST-ovom API, [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr) a [Bootstrape](https://getbootstrap.com/).
 
@@ -184,10 +185,10 @@ Do budúcna uvažujem aj s ďalšou funkcionalitou, ak sa ukáže, že bude potr
 
 Napríklad:
 * nuget pre integračné testovanie aplikácií (pre _MS Test v2_, _xUnit_),
-* proxy, ktorá prevedie TCP RPC na HTTPS REST-ove volania na server,
+* proxy, ktorá prevedie TCP RPC na HTTPS volania na server,
 * podpora zadávania PIN-u cez _„protected path“_, to znamená, že BouncyHsm zobrazí okno, do ktorého sa zadá PIN (podobne ako _Slovenské eID_),
 * možnosť vytiahnuť token zo slotu,
-* podpora novšieho štandardu PKCS#11, keď bude podporovaný reálnym hardvérom (v súčasnosti sa objavujú len niektoré algoritmy ako _ED25519_),
+* podpora novšieho štandardu PKCS#11, keď bude podporovaný reálnym hardvérom (v súčasnosti sa objavujú len niektoré mechanizmy okolo _ED25519_),
 * možnosť pridať profily so zakázanými/povolenými mechanizmami a určiť maximálnu veľkosť úložiska, pre simuláciu konkrétnych typov HSM/kariet,
 * implementácia iných úložísk ako LiteDb napríklad nejakej relačnej databázy.
 
