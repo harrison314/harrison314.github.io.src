@@ -11,11 +11,11 @@ Tento blog má byť taký malý praktický ťahák ku post-kvantovej kryptografi
 ## Post-kvantová kryptografia
 Post-kvantová kryptografia je klasická kryptografia, ktorá je odolná voči útokom kvantových počítačov.
 
-Momentálne máme vymyslené algoritmy pre kvantové počítače, ktoré dokážu lámať asymetrickú kryptografiu - teda RSA a EC (eliptické krivky dokonca z trikrát ľahšou námahou ako RSA rovnakej bitovej bezpečnosti). Pre to sa už dlhšiu dobu vymýšľajú algoritmy asymetrickej kryptografie založené na iných problémoch ako faktorizácia prvočísiel alebo problém diskrétneho logaritmu. 
+Momentálne máme vymyslené algoritmy pre kvantové počítače, ktoré dokážu lámať asymetrickú kryptografiu - teda RSA a EC (eliptické krivky dokonca z trikrát menšou námahou ako RSA rovnakej bitovej bezpečnosti). Pre to sa už dlhšiu dobu vymýšľajú algoritmy asymetrickej kryptografie založené na iných problémoch ako faktorizácia prvočísiel alebo problém diskrétneho logaritmu. 
 
 Štandardné algoritmy symetrického šifrovania a kryptografických hashov ako _AES_ (256), _SHA2_, _SHA3_, _PBKDF2_,... sa zatiaľ zdajú odolné voči útokom pomocou kvantových počítačov.
 
-## Algoritmy pre enakapsuláciu
+## Algoritmy pre enakapsuláciu (KEM)
 Tieto algoritmy sa používajú ako náhrada za asymetrické šifrovanie (RSA) alebo Diffie–Hellmanovu výmenu kľúčov (_ECDH_),
 no fungujú trochu inak. Pomocou verejného kľúča ide vytvoriť náhodné tajomstvo a jeho zašifrovanú podobu, ktorá ide rozšifrovať verejným kľúčom.
 
@@ -173,9 +173,9 @@ private static string PrintData(byte[] bytes)
 ```
 
 ## Upozornenie
-Nie som odborník na interné fungovanie týchto algoritmov a ako pri inej kryptografii sa treba riadiť odporúčaním svetových organizácií. Takže použitie na vlastné riziko.
+Nie som odborník na interné fungovanie týchto algoritmov a ako pri inej kryptografii, treba sa riadiť odporúčaním organizácií venujúcim sa kryptografii. Takže použitie na vlastné riziko.
 
-BouncyCastle má zatiaľ experimentálne implementácie _CRYSTALS-Dilithium_, _CRYSTALS-Kyber_, _Falcon_, _SPHINCS+_, _Classic&nbsp;McEliece_, _FrodoKEM_, _NTRU_, _NTRU Prime_, _Picnic_, _Saber_, _BIKE_ a _SIKE_. Pričom algoritmus _SIKE_ bude odstránený.
+_BouncyCastle_ má zatiaľ experimentálne implementácie _CRYSTALS-Dilithium_, _CRYSTALS-Kyber_, _Falcon_, _SPHINCS+_, _Classic&nbsp;McEliece_, _FrodoKEM_, _NTRU_, _NTRU Prime_, _Picnic_, _Saber_, _BIKE_ a _SIKE_. Pričom algoritmus _SIKE_ bude odstránený.
 
 Pre ďalšie čítanie odporúčam nasledujúce zdroje.
 
@@ -185,3 +185,4 @@ Pre ďalšie čítanie odporúčam nasledujúce zdroje.
 1. <https://www.strathweb.com/2023/02/post-quantum-cryptography-in-net/>
 1. <https://medium.com/asecuritysite-when-bob-met-alice/goodbye-ecdh-and-hello-to-kyber-46415ef23d30>
 1. <https://github.com/filipw?tab=repositories&q=&type=source&language=c%23&sort=>
+1. <https://www.youtube.com/watch?v=JcfcSmwlFZ0>
