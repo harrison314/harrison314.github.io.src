@@ -1,4 +1,5 @@
 Published: 18.9.2013
+Updated: 4.4.2024
 Title: Čo robí programátor?
 Menu: Čo robí programátor
 Cathegory: Dev
@@ -26,3 +27,6 @@ Takže, čo môže si môže bežný smrteľník odniesť zo znalosti programova
 * Schopnosť empatie - pri tejto práci si človek musí často predstaviť, že je niekto iný.
 * Logické myslenie a racionalita - počítače sú hlúpe stroje, ktoré vedia vykonávať program, vedia sa rozhodovať iba podľa logických pravidiel, ktoré do nič programátor zapísal. Dokonca aj nelogické a iracionálne správanie je im potrebné povedať ako postupnosť logických krokov.
 * Výstižné vyjadrovanie myšlienok - vychádza aj s predchádzajúceho, programátor musí veľmi presne formulovať, čo chce aby počítač spravil.
+
+## Po desiatich rokoch v práci
+Čo robí programátor? **Rieši problémy.** - to je tá najlepšia definícia.
