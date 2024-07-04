@@ -1,5 +1,5 @@
 Published: 27.1.2021
-Updated: 17.8.2021
+Updated: 4.7.2024
 Title: Experiment s In-Memory OLTP
 OverrideTitle: Experiment s In-Memory OLTP pre high performance registráciu
 Menu: Experiment s In-Memory OLTP
@@ -13,7 +13,7 @@ Rozmýšľal som, ako navrhnúť systém na registráciu termínov, ktorý odol�
 Po preskúmaní rôznych možností a databáz som sa to pokúsil vyriešiť pomocou technológie _In-Memory OLTP_ v _MS SQL_.
 
 ## Inšpirácia
-17.1.2012 bol na Slovensku preťažený systém na objednávanie sa na antigénové testy.
+17.1.2021 bol na Slovensku preťažený systém na objednávanie sa na antigénové testy.
 Preťaženie vyvolala okamžitá reakcia ľudí na tlačovú konferenciu o celoplošnom skríningu (viac [tu](https://zive.aktuality.sk/clanok/150616/skrining-objednanie-antigenove-testy-testovanie-termin/)).
 V Česku mali podobné problémy zo systémom na registráciu očkovania ([problémy s Chytrou karanténou](https://twitter.com/ChytraKarantena/status/1349983604571582466)).
 
