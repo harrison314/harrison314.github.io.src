@@ -8,14 +8,15 @@
     Jún 2015
 </div>
 <div class="row">
-    <p class="col-sm-12">
-    <p>Na tejto stránke uvádzam zoznam niektorých mojich zaujímavých projektov, ktoré som sa rozhodol zverejniť.</p>
-    </p>
+    <div class="col-sm-12">
+        <p>Na tejto stránke uvádzam zoznam niektorých mojich zaujímavých projektov, ktoré som sa rozhodol zverejniť.</p>
+    </div>
 </div>
 
 <div class="row">
     <p class="col-sm-12">
         <ul class="list-unstyled">
+            <li><a href="/md/BouncyHsm.md">BouncyHsm</a></li>
             @foreach (var doc in this.GetPortfolioItems())
             {
                 <li><a href="/md/@doc.MarkdawnFile">@doc.Properties[CommonProperties.Menu]</a></li>

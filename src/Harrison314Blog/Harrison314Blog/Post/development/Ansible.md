@@ -20,7 +20,7 @@ je niekde medzi, ale na inštaláciu prerequizít a počiatočné nastavenie ser
 ## Inštalácia .Net Core 2.1
 Pre inštaláciu .Net Core sa dá použiť nasledujúci Ansible playbook (je v Yaml formáte).
 
-```yaml
+```
 # Ensure ASP.NET Core 2.1
 ---
 - hosts: local
@@ -72,7 +72,7 @@ Spúšťa sa pomocou `ansible-playbook aspnetcore.yml`.
 
 Rovnakým spôsobom ide nainštalovať aj _powershell_, stačí zmeniť posledný krok _"Ensure Net Core 2.1"_ na:
 
-```yaml
+```
     - name: Ensure Powershell
       apt:
           name: powershell

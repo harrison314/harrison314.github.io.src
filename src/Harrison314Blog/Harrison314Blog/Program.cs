@@ -2,6 +2,7 @@ using AspNetStatic;
 using AspNetStaticContrib.AspNetStatic;
 using Harrison314Blog.Components;
 using Microsoft.Extensions.FileProviders;
+using WebMarkupMin.Core;
 
 namespace Harrison314Blog;
 
@@ -20,8 +21,19 @@ public class Program
             new StaticResourcesInfoProvider()
             .AddContent()
             .AddMarkdawns(out IPostDictionary postDictionary)
-            .AddAllWebRootContent(builder.Environment)); 
+            .AddAllWebRootContent(builder.Environment));
         builder.Services.AddSingleton<IPostDictionary>(postDictionary);
+
+        builder.Services.AddSingleton(sp => new HtmlMinificationSettings()
+        {
+            RemoveHtmlComments = true,
+            RemoveCdataSectionsFromScriptsAndStyles = true
+        });
+        builder.Services.AddSingleton(sp => new XhtmlMinificationSettings()
+        {
+            RemoveHtmlComments = true
+        });
+
 
         WebApplication app = builder.Build();
 
@@ -59,12 +71,12 @@ public class Program
             FeedEndpoint.RegisterRss(app);
             FeedEndpoint.RegisterSitemap(app);
 
-          
+
             bool exitingArg = args.HasExitWhenDoneArg();
             Directory.CreateDirectory(outPath);
-            app.GenerateStaticContent(outPath, exitWhenDone: exitingArg);
+            app.GenerateStaticContent(outPath, exitWhenDone: exitingArg, dontOptimizeContent: false);
         }
-        
+
         app.Run();
     }
 }

@@ -38,7 +38,7 @@ internal static class StaticResourcesInfoProviderExtensions
             provider.Add(new PageResource("/md/" + fileName)
             {
                 OutFile = htmlName,
-                LastModified = new DateTime(info.LastModified, new TimeOnly(0, 0), DateTimeKind.Utc),
+                LastModified = new DateTime(info.LastModified, new TimeOnly(0, 0), DateTimeKind.Utc)
             });
         }
 
