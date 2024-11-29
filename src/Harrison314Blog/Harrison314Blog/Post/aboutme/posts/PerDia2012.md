@@ -3,6 +3,7 @@ Updated: 22.9.2021
 Title: PerDia2012
 Menu: PerDia2012
 Description: Webová aplikácia ako osobný denník.
+Cathegory: Portofolio
 ---
 PerDia2012 je jednoduchá webová aplikácia, ktorá ma slúžiť 
 ako denník a organizátor pre poznámky a pripomienky s možnosťou fulltextového vyhľadávania,

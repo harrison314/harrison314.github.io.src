@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<Navbar />
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-8">
+            @Body
+        </div>
+        <div class="col-lg-4 col-md-4 hidden-xs hidden-sm">
+            <WellMenu Title="Vývoj" Cathegory="Dev">
+                <li><a href="/DevelopingAll">&#8230;</a></li>
+            </WellMenu>
+            <WellMenu Title="Všeobecné" Cathegory="Generally">
+                <li><a href="/GeneralAll">&#8230;</a></li>
+            </WellMenu>
+            <WellMenu Title="O mne" Cathegory="Aboutme">
+                <li><a href="/Portfolio">Portólio</a></li>
+            </WellMenu>
+        </div>
+    </div>
+    <hr />
+
+    <Footer />
+</div>

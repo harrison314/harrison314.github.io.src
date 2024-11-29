@@ -3,6 +3,7 @@ Updated: 22.9.2021
 Title: PkcsExtensions
 Menu: PkcsExtensions
 Description: 'Malá knižnica pridávajúca chýbajúce veci do .Net-u v oblasti PKCS a PKI.'
+Cathegory: Portofolio
 ---
 _PkcsExtensions_ je malá knižnica pridávajúca extensions metódy a typy, ktoré chýbajú v dotnete (_.net core 3.1_) v oblasti PKCS.
 

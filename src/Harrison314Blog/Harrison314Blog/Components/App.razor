@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-Xss-Protection" content="1; mode=block" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss" />
+    <meta name="author" content="harrison314" />
+    <meta name="generator" content="AspNetStatic" />
+
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: true)" />
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/blog-post.css" rel="stylesheet" />
+
+    @*TODO: matjax*@
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <link rel="stylesheet" href="css/Highiler/vs.css" />
+
+    <style>
+        img {
+            max-width: 100%;
+        }
+
+        .img-center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender: true)" />
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

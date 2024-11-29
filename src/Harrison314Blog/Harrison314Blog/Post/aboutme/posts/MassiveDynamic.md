@@ -2,6 +2,7 @@ Published: 14.8.2016
 Title: MassiveDynamic Proxy Generator
 Menu: MassiveDynamic Proxy Generator
 Description: Ľahká knižnica pre generovanie proxy objektov a dekorátorov.
+Cathegory: Portofolio
 ---
 _MassiveDynamicProxyGenerator_ je miniatúrna a ľahká knižnica pre dynamické generovanie proxy objektov a dekorátorov.
 

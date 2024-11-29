@@ -2,6 +2,7 @@ Published: 24.1.2016
 Title: Mapper Performace
 Menu: Mapper Performace
 Description: Experiment z perfomace mapovania dtabázového resultu na objekty.
+Cathegory: Portofolio
 ---
 MapperPerfomace je jednoduchý projekt pre porovnanie výkonnosti mapovania databázového resultu 
 na aplikačné POCO objekty. Porovnávam ručné mapovanie pomocou SqlDarareaderu, mikro ORM Dapper, 

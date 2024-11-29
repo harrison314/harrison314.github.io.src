@@ -1,0 +1,85 @@
+﻿@page "/md/{FileName}"
+@using Microsoft.AspNetCore.Components.Sections
+@inject IPostDictionary PostDirectory
+@inject IUrlManager UriManager
+
+<PageTitle>@this.GetTitle()</PageTitle>
+
+<HeadContent>
+    <meta property="og:title" content="@this.Info.Properties[CommonProperties.Title]" />
+    <meta property="og:description" content="@this.Info.Properties[CommonProperties.Description]" />
+    <meta property="og:url" content="@this.UriManager.GetAbsolute(this.Info.HtmlName)" />
+    @if (this.Info.Properties.ContainsKey(CommonProperties.OgImage))
+    {
+        <meta property="og:image" content="@this.UriManager.GetAbsolute(this.Info.Properties[CommonProperties.OgImage])" />
+    }
+
+    <meta name="description" content="@this.Info.Properties[CommonProperties.Description]" />
+</HeadContent>
+
+<h1>@this.GetTitle()</h1>
+<div class="publishDate">
+    @(FormatDate(this.Info.Published))
+</div>
+
+<Harrison314Blog.Components.Shared.MarkdawnContent Content="@this.PostDirectory.ReadContent(this.FileName)" />
+
+<SectionContent SectionName="footer-content">
+    <div class="row no-print">
+        <div class="col-lg-8 col-sm-8">
+            <div class="well">
+                <h4>Našli ste chybu, alebo chcete niečo doplniť?</h4>
+                <p>
+                    Ak ste našli chybu v článu, chcete niečo dopniť, alebo sa vyjadriť k téme,
+                    môžete na <a href="@this.GetIssueUrl()" target="_blank">Githube otvoriť issue</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</SectionContent>
+
+
+@code {
+    [Parameter]
+    public string FileName
+    {
+        get;
+        set;
+    } = default!;
+
+    private PostInfo Info
+    {
+        get;
+        set;
+    } = default!;
+
+    protected override void OnInitialized()
+    {
+        this.Info = this.PostDirectory.GetPostInfo(this.FileName);
+    }
+
+    private static string FormatDate(DateOnly date)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendFormat("{0:MMMM yyyy}", date);
+        sb[0] = char.ToUpper(sb[0]);
+
+        return sb.ToString();
+    }
+
+    private string GetTitle()
+    {
+        return this.Info.Properties.ContainsKey(CommonProperties.OverrideTitle)
+        ? this.Info.Properties[CommonProperties.OverrideTitle]
+        : this.Info.Properties[CommonProperties.Title];
+    }
+
+    private string GetIssueUrl()
+    {
+
+      return string.Concat("https://github.com/harrison314/harrison314.github.io/issues/new?title=",
+      Uri.EscapeDataString(this.Info.Properties[CommonProperties.Title]),
+      "&body=",
+      Uri.EscapeDataString(this.UriManager.GetAbsolute(this.Info.HtmlName)));
+    }
+}

@@ -2,6 +2,7 @@ Published: 1.6.2015
 Title: UnitologyIs
 Menu: UnitologyIs
 Description: Experimentálny informačný systém pre lekárske ambulancie.
+Cathegory: Portofolio
 ---
 _UnitologyIs_ je jednoduchý informačný systém určený pre ambulancie. Pôvodne bol vyvíjaný ako prostriedok na precvičenie technológií vo WPF a vývoj rozsiahlej desktopovej aplikácie.
 

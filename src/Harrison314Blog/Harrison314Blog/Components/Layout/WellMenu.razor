@@ -1,0 +1,44 @@
+﻿@inject IPostDictionary PostDirectory
+
+<div class="well">
+    <h4>@this.Title</h4>
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="list-unstyled">
+                @foreach (var info in this.PostDirectory
+                .GetAll()
+                .Where(t => t.Properties.ContainsKey(CommonProperties.Cathegory) && t.Properties[CommonProperties.Cathegory] == this.Cathegory)
+                .OrderByDescending(t=>t.Published)
+                .Take(10))
+                {
+                    <li><a href="/md/@info.MarkdawnFile">@info.Properties[CommonProperties.Menu]</a></li>
+                }
+
+                @this.ChildContent
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title
+    {
+        get;
+        set;
+    } = default!;
+
+    [Parameter, EditorRequired]
+    public string Cathegory
+    {
+        get;
+        set;
+    } = default!;
+
+    [Parameter]
+    public RenderFragment ChildContent
+    {
+        get;
+        set;
+    } = default!;
+}

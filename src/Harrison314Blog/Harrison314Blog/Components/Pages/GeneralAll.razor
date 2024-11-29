@@ -1,0 +1,85 @@
+﻿@page "/GeneralAll"
+@inject IPostDictionary PostDirectory
+
+<PageTitle>Všeobecné</PageTitle>
+<h1>Všeobecné</h1>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <p>
+            Na tejto stránke sa nachádza zoznnam článkov, ktoré sa týkajú všeobecných tém.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    @{
+        var index = 0;
+    }
+    @foreach (var gItem in ToIndex().GroupBy(t => index++ / 3))
+    {
+        <div class="row">
+            @foreach (var item in gItem)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    @if (item.Items.Count() > 0)
+                    {
+                        <p><b>@item.Title</b></p>
+                    }
+                    else
+                    {
+                        <p>@item.Title</p>
+                    }
+                    <ul>
+                        @foreach (var m in item.Items)
+                        {
+                            <li>
+                                <a href="@m.Link">@m.Menu</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+@code {
+    public class MenuItem
+    {
+        public string Title { get; set; } = default!;
+        public List<MenuGeneralItem> Items { get; set; } = default!;
+    }
+    public class MenuGeneralItem
+    {
+        public string Menu { get; set; }
+        public string Link { get; set; }
+
+        public MenuGeneralItem(string menu, string link)
+        {
+            this.Menu = menu;
+            this.Link = link;
+        }
+    }
+
+    public List<MenuItem> ToIndex()
+    {
+        List<MenuItem> items = new List<MenuItem>();
+        for (char c = 'a'; c <= 'z'; c++)
+        {
+            string letter = c.ToString();
+            MenuItem item = new MenuItem();
+            item.Title = string.Format("{0}, {1}", letter.ToUpper(), letter);
+
+            item.Items = PostDirectory.GetAll().Where(t => t.Properties.ContainsKey(CommonProperties.Cathegory) && t.Properties[CommonProperties.Cathegory] == "Generally")
+                .Where(t => ((string)t.Properties[CommonProperties.Menu]).RemoveDiacritics().ToLower().StartsWith(letter))
+                .OrderBy(t => (string)t.Properties[CommonProperties.Menu], StringComparer.CurrentCultureIgnoreCase)
+                .Select(t => new MenuGeneralItem((string)t.Properties[CommonProperties.Menu], "/md/" + t.MarkdawnFile))
+                .ToList();
+
+            items.Add(item);
+
+        }
+        return items;
+    }
+}

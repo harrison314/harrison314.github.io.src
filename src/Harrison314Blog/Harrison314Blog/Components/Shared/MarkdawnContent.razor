@@ -1,0 +1,30 @@
+﻿@using Markdig
+@using Markdig.SyntaxHighlighting
+
+@((MarkupString)this.Render())
+
+@code {
+    [Parameter, EditorRequired]
+    public string Content
+    {
+        get;
+        set;
+    } = default!;
+
+    private string Render()
+    {
+        var pipeline = new MarkdownPipelineBuilder()
+        .UsePipeTables()
+        .UseCitations()
+        .UseMathematics()
+        .UseAdvancedExtensions()
+        .UseSyntaxHighlighting()
+        .Build();
+
+        string html = Markdown.ToHtml(this.Content, pipeline);
+        html = TypographyModule.UseTypography(html);
+        html = html.Replace("<table>", "<table class=\"table table-bordered\">");
+
+        return html;
+    }
+}

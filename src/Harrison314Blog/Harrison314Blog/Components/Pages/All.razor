@@ -1,0 +1,30 @@
+﻿@page "/All"
+@inject IPostDictionary PostDirectory
+
+<PageTitle>Obsah</PageTitle>
+<h1>Obsah</h1>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        @foreach (var itemGroup in this.GetGroups())
+        {
+            <h5>@itemGroup.Key</h5>
+            <ul class="list-unstyled" style="padding-left: 1em;">
+                @foreach (var item in itemGroup.OrderByDescending(t => t.Published))
+                {
+                    <li><a href="/md/@item.MarkdawnFile">@item.Properties[CommonProperties.Menu]</a></li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+
+@code {
+    private IOrderedEnumerable<IGrouping<string, PostInfo>> GetGroups()
+    {
+        return this.PostDirectory.GetAll()
+        .GroupBy(t => t.Published.ToString("MMMM yyyy"))
+        .OrderByDescending(t => t.First().Published);
+    }
+}

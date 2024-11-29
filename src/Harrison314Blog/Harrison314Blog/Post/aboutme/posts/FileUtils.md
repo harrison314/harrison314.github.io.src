@@ -2,6 +2,7 @@ Published: 28.5.2016
 Title: FileUtils
 Menu: FileUtils
 Description: 'Aplikácia FileUtils pre prácu zo súbormi.'
+Cathegory: Portofolio
 ---
 _FileUtils_ je jednoduchá aplikácia, ktorej hlavnou funkcionalitou je hľadanie duplicitných súborov
 na disku podľa ich obsahu. Je vhodná pri veľkom množstve PDF-iek alebo fotiek na disku. Medzi ďalšie 
