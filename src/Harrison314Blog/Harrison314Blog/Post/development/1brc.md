@@ -2,7 +2,7 @@ Published: 1.12.2024
 Title: Riešenie The One Billion Rows Challenge
 Menu: One Billion Rows Challenge
 Cathegory: Dev
-OgImage: 1brc/media.png
+OgImage: images/1brc/media.png
 Description: Riešenie The One Billion Rows Challenge v .NET-e, predstavenie nástrojov na perfomace tuning a rôzne kroky pri riešení tejto úlohy.
 ---
 Nedávno som objavil [The One Billion Rows Challenge](https://1brc.dev/).
@@ -34,7 +34,7 @@ Tak v čom je tá výzva? V počte riadkov, je ich 10^9^ a testovací súbor v m
 
 Pôvodne táto výzva vznikla pre Javu, keďže sa pri nej naplno prejaví _garbage collector_, ale postupne sa stala obľúbenou aj pre iné jazyky (C#, Rust, Zig, SQL, awk, PHP,...).
 
-Samozrejme na každom stroji budú tie časy iné, dokonca aj niektoré optimalizácie kvôli iným diskom, zberniciam, cache a procesorom. Mo myslím, že pri tejto výzve je dôležitejšia cesta ako cieľ.
+Samozrejme na každom stroji budú tie časy iné, dokonca aj niektoré optimalizácie kvôli iným diskom, zberniciam, cache a procesorom. Mo myslím, že pri tejto výzve je dôležitejšia cesta, ako cieľ.
 
 ## Nastavenie prostredia a nástroje
 Začal som tým, že som si vytvoril implementáciu pomocou asynchrónneho čítania súboru, proste žiadna optimalizácia.
@@ -45,8 +45,8 @@ Uvedené programy mi pomáhali skôr orientačne, pretože _The One Billion Rows
 ### BenchmarkDotNet
 <https://benchmarkdotnet.org/index.html>
 
-Na performace testy som použil _BenchmarkDotNet_ a súbor s _10 000_ riadkami. Na základnú orientáciu stačil, no neskôr sa ukázal ako málo presný pri komplexných programoch.
-Nie je to chyba _BenchmarkDotNet_, ale toho ako som túto knižnicu použil, je vhodná na mikro-benchmarking, v čom je aj presná,
+Na performace testy som použil _BenchmarkDotNet_ a súbor s _10&nbsp;000_ riadkami. Na základnú orientáciu stačil, no neskôr sa ukázal, ako málo presný pri komplexných programoch.
+Nie je to chyba _BenchmarkDotNet_, ale toho, ako som túto knižnicu použil, je vhodná na mikro-benchmarking, v čom je aj presná,
 no ja som ju použil na beh tela celého programu.
 
 Ku koncu sa mi stalo, že zmena, ktorá vo výsledku na testovacom súbore s 10^9^ riadkami ušetrila 6 sekúnd bola pri použití _BenchmarkDotNet_ pod štatistickou chybou.
@@ -101,7 +101,7 @@ Aplikácia zvláda aj .NET Framework, ale je určená len pre Windows.
 ### ultra
 <https://github.com/xoofx/ultra>
 
-_ultra_ je cmd profiler pre Windows dostupný ako .NET tool. Rieši aj JIT, alokácie a GC. Má bohatší výstup ako _dotnet-trace_,
+_ultra_ je cmd profiler pre Windows dostupný vo forme .NET toolu. Rieši aj JIT, alokácie a GC. Má bohatší výstup ako _dotnet-trace_,
 a svoju vizualizáciu rieši cez <https://profiler.firefox.com/>.
 
 
@@ -176,7 +176,7 @@ _ReadyToRun_ – výsledný beh programu bol pomalší ako AOT skompilovaného p
 _[CommunityToolkit.HighPerformance](https://www.nuget.org/packages/CommunityToolkit.HighPerformance)_ – `StringPool` – myslel som, že mi zníži alokácie, čo aj urobil ale pamäť som vymenil za procesorový čas na dodatočné počítanie hashu a lookap do dictionary `StringPoo`-lu.
 
 ## Záver
-Bolo zaujímavé rozmýšľať o tak jednoduchej úlohe z hľadiska optimalizácie. Bral som to skôr ako precvičenie práce s nástrojmi naladenie výkonu a nástrojov na optimalizáciu v dotnete.
+Bolo zaujímavé rozmýšľať o tak jednoduchej úlohe z hľadiska optimalizácie. Bral som to skôr, ako precvičenie práce s nástrojmi naladenie výkonu a nástrojov na optimalizáciu v dotnete.
 
 Pri spracovaní _13GB_ súboru som sa dostal z času _3 minúty 40 sekúnd_ na _17 sekúnd_.
 
