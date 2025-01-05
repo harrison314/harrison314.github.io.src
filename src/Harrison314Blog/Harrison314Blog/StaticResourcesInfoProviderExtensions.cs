@@ -1,4 +1,5 @@
 ﻿using AspNetStatic;
+using AspNetStatic.Optimizer;
 using System.IO;
 
 namespace Harrison314Blog;
@@ -14,8 +15,8 @@ internal static class StaticResourcesInfoProviderExtensions
         provider.Add(new PageResource("/Portfolio") { OutFile = "Portfolio.html", LastModified = DateTime.UtcNow });
 
 
-        provider.Add(new BinResource("/feed.rss") { OptimizerType = OptimizerType.None });
-        provider.Add(new BinResource("/sitemap.xml") { OptimizerType = OptimizerType.None });
+        provider.Add(new BinResource("/feed.rss") { OptimizationType = OptimizationType.None });
+        provider.Add(new BinResource("/sitemap.xml") { OptimizationType = OptimizationType.None });
         return provider;
     }
 
