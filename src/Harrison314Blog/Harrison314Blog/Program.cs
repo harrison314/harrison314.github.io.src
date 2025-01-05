@@ -1,4 +1,5 @@
 using AspNetStatic;
+using AspNetStatic.Optimizer;
 using AspNetStaticContrib.AspNetStatic;
 using Harrison314Blog.Components;
 using Microsoft.Extensions.FileProviders;
@@ -33,6 +34,10 @@ public class Program
         {
             RemoveHtmlComments = true
         });
+
+
+        builder.Services.AddSingleton<IMarkupOptimizer, ContentOptimizer>();
+        builder.Services.AddDefaultOptimizers();
 
 
         WebApplication app = builder.Build();
