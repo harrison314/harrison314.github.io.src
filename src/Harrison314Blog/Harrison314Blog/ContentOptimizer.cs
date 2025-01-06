@@ -16,21 +16,12 @@ internal partial class ContentOptimizer : IMarkupOptimizer
         this.defaultMarkupOptimizer = defaultMarkupOptimizer;
     }
 
-
-    //public MarkupOptimizerResult Execute(string content, PageResource resource, string outFilePathname)
-    //{
-    //    MarkupOptimizerResult result = this.defaultMarkupOptimizer.Execute(content, resource, outFilePathname);
-    //    result.OptimizedContent = this.ExecuteCustomOptimization(result.OptimizedContent);
-
-    //    return result;
-    //}
-
     public MarkupOptimizerResult Execute(string content, PageResource resource, string outFilePathname)
     {
         MarkupOptimizerResult result = this.defaultMarkupOptimizer.Execute(content, resource, outFilePathname);
-        string opContent = this.ExecuteCustomOptimization(result.OptimizedContent);
+        result.OptimizedContent = this.ExecuteCustomOptimization(result.OptimizedContent);
 
-        return new MarkupOptimizerResult(opContent, result.Errors.ToArray(), result.Warnings.ToArray());
+        return result;
     }
 
     private string ExecuteCustomOptimization(string content)
