@@ -36,8 +36,8 @@ public class Program
         });
 
 
-        builder.Services.AddSingleton<IMarkupOptimizer, ContentOptimizer>();
         builder.Services.AddDefaultOptimizers();
+        builder.Services.AddSingleton<IMarkupOptimizer, ContentOptimizer>();
 
 
         WebApplication app = builder.Build();
