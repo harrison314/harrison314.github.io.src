@@ -1,4 +1,5 @@
 Published: 15.3.2024
+Updated: 28.3.2025
 Title: Post-kvantová kryptografia v C#
 Menu: Post-kvantová kryptografia v C#
 Cathegory: Dev
@@ -19,16 +20,16 @@ Momentálne máme vymyslené algoritmy pre kvantové počítače, ktoré dokáž
 Tieto algoritmy sa používajú ako náhrada za asymetrické šifrovanie (RSA) alebo Diffie–Hellmanovu výmenu kľúčov (_ECDH_),
 no fungujú trochu inak. Pomocou verejného kľúča ide vytvoriť náhodné tajomstvo a jeho zašifrovanú podobu, ktorá ide rozšifrovať verejným kľúčom.
 
-Momentálne je organizáciou _NIST_ schválený algoritmus _Kyber_ (_CRYSTALS-Kyber_).
+Momentálne je organizáciou _NIST_ schválený algoritmus _ML-KEN_ (_CRYSTALS-Kyber_).
 Algoritmy _HQC_, _Bike_ a _Classic Mceliece_ sú v procese schvalovania.
 
 Nasledujúca tabuľka ukazuje parametre jednotlivých algoritmov.
 
 | Algoritmus          | Veľkosť verejného kľúča | Veľkosť súkromného kľúča | Zašifrované dáta |
 | :---                |   ---:                  |   ---:                   |  ---:            |
-| `Kyber512`          | 800 B                   | 1&nbsp;632 B             | 768 B            |
-| `Kyber738`          | 1&nbsp;184 B            | 2&nbsp;400 B             | 1&nbsp;088 B     |
-| `Kyber1024`         | 1&nbsp;568 B            | 3&nbsp;168 B             | 1&nbsp;568 B     |
+| `ML-KEM 512`        | 800 B                   | 1&nbsp;632 B             | 768 B            |
+| `ML-KEM 738`        | 1&nbsp;184 B            | 2&nbsp;400 B             | 1&nbsp;088 B     |
+| `ML-KEM 1024`       | 1&nbsp;568 B            | 3&nbsp;168 B             | 1&nbsp;568 B     |
 | `Bike128`           | 1&nbsp;541 B            | 3&nbsp;114 B             | 1&nbsp;573 B     | 
 | `Bike192`           | 3&nbsp;083 B            | 6&nbsp;198 B             | 3&nbsp;115 B     |
 | `Bike256`           | 5&nbsp;122 B            | 10&nbsp;276 B            | 5&nbsp;154 B     |
@@ -51,61 +52,67 @@ Nasledujúca tabuľka ukazuje parametre jednotlivých algoritmov.
 | `SABER`             | 992 B                   | 2&nbsp;304 B             | 1&nbsp;088 B     |
 | `FireSABER`         | 1&nbsp;312 B            | 3&nbsp;040 B             | 1&nbsp;472 B     |
 
-Nasledujúci kód zobrazuje ukážku použitia algoritmu _Kyber_ v C# pomocou knižnice [BouncyCastle](https://github.com/bcgit/bc-csharp).
+Nasledujúci kód zobrazuje ukážku použitia algoritmu _ML_KEM_ (podľa _FIPS 203_, pôvodne _Kyber_) v C# pomocou knižnice [BouncyCastle](https://github.com/bcgit/bc-csharp).
 
 Ostatné dostupné algoritmy využívajú takmer rovnaký kód jediný rozdiel je v názvoch použitých tried.
 
 ```cs
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Dilithium;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Kyber;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Kems;
 
 SecureRandom random = new SecureRandom();
 
-KyberKeyGenerationParameters keyGenParameters = new KyberKeyGenerationParameters(random, KyberParameters.kyber768);
-KyberKeyPairGenerator kyberKeyPairGenerator = new KyberKeyPairGenerator();
+MLKemKeyGenerationParameters keyGenParameters = new MLKemKeyGenerationParameters(random, MLKemParameters.ml_kem_512);
+MLKemKeyPairGenerator kyberKeyPairGenerator = new MLKemKeyPairGenerator();
 kyberKeyPairGenerator.Init(keyGenParameters);
 
 // Ganerovanie klucoveho paru pre Alicu
 AsymmetricCipherKeyPair aliceKeyPair = kyberKeyPairGenerator.GenerateKeyPair();
 
 // Zobrazenie klucov
-KyberPublicKeyParameters alicePublic = (KyberPublicKeyParameters)aliceKeyPair.Public;
-KyberPrivateKeyParameters alicePrivate = (KyberPrivateKeyParameters)aliceKeyPair.Private;
+MLKemPublicKeyParameters alicePublic = (MLKemPublicKeyParameters)aliceKeyPair.Public;
+MLKemPrivateKeyParameters alicePrivate = (MLKemPrivateKeyParameters)aliceKeyPair.Private;
 byte[] pubEncoded = alicePublic.GetEncoded();
 byte[] privateEncoded = alicePrivate.GetEncoded();
 Console.WriteLine($"Alice's Public key: {PrintData(pubEncoded)}");
 Console.WriteLine($"Alice's Private key: {PrintData(privateEncoded)}");
 
 // Bob enakpsuluje secret a pomocou verejneho klucu Alice
-KyberKemGenerator bobKyberKemGenerator = new KyberKemGenerator(random);
-ISecretWithEncapsulation encapsulatedSecret = bobKyberKemGenerator.GenerateEncapsulated(alicePublic);
-byte[] bobSecret = encapsulatedSecret.GetSecret();
-Console.WriteLine($"Bob's Secret: {PrintData(bobSecret)}");
+MLKemEncapsulator bobKyberKemGenerator = new MLKemEncapsulator(MLKemParameters.ml_kem_512);
+bobKyberKemGenerator.Init(new ParametersWithRandom(alicePublic, random));
 
-// Bon ziska chipertext a posle ho Alici
-byte[] cipherText = encapsulatedSecret.GetEncapsulation();
-Console.WriteLine($"Cipher text: {PrintData(cipherText)}");
+byte[] encodedBytes = new byte[bobKyberKemGenerator.EncapsulationLength];
+byte[] bobSecret = new byte[bobKyberKemGenerator.SecretLength];
+bobKyberKemGenerator.Encapsulate(encodedBytes, 0, encodedBytes.Length, bobSecret, 0, bobSecret.Length);
 
-// Alica dekapsuluje secret pomocou svojho privatneho klucu
-KyberKemExtractor aliceKemExtractor = new KyberKemExtractor(alicePrivate);
-byte[] aliceSecret = aliceKemExtractor.ExtractSecret(cipherText);
-Console.WriteLine($"Alice's Secret: {PrintData(aliceSecret)}");
+Console.WriteLine($"Encoded secret from Bob: {PrintData(encodedBytes)}");
+Console.WriteLine($"Bob secret: {PrintData(bobSecret)}");
+
+// Alice dekapsuluje secret a pomocou svojho privatneho klucu
+MLKemDecapsulator decapsulator = new MLKemDecapsulator(MLKemParameters.ml_kem_512);
+decapsulator.Init(alicePrivate);
+
+byte[] aliceSecret = new byte[decapsulator.SecretLength];
+decapsulator.Decapsulate(encodedBytes, 0, encodedBytes.Length, aliceSecret, 0, aliceSecret.Length);
+
+Console.WriteLine($"Alice secret: {PrintData(aliceSecret)}");
 ```
 
 ## Algoritmy pre podpis
 Tieto algoritmy sú pre podpis dát privátnym kľúčom a overenie podpisu verejným kľúčom.
 
-Momentálne sú NIST-om schválené algoritmy _Dilithium_, _Falcon_ a _SPHINCS+_.
+Momentálne sú NIST-om schválené algoritmy _ML-DSA_ (_Dilithium_), _Falcon_ a _SLH-DSA_ (_SPHINCS+)_.
 
 Nasledujúca tabuľka ukazuje parametre jednotlivých algoritmov.
 
  | Algoritmus                           | Veľkosť verejného kľúča | Veľkosť súkromného kľúča | Veľkosť podpisu  | Security        |
  | :---                                 |  ---:                   | ---:                     | ---:             | ---:            |
- | `Crystals Dilithium 2 (Lattice)`     |     1&nbsp;312 B        |       2&nbsp;528 B       |    2&nbsp;420 B  | 128-bit         |
- | `Crystals Dilithium 3`               |     1&nbsp;952 B        |       4&nbsp;000 B       |    3&nbsp;293 B  | 192-bit         |
- | `Crystals Dilithium 5`               |     2&nbsp;592 B        |       4&nbsp;864 B       |    4&nbsp;595 B  | 256-bit         |
+ | `ML-DSA 2 (Lattice)`                 |     1&nbsp;312 B        |       2&nbsp;528 B       |    2&nbsp;420 B  | 128-bit         |
+ | `ML-DSA 3`                           |     1&nbsp;952 B        |       4&nbsp;000 B       |    3&nbsp;293 B  | 192-bit         |
+ | `ML-DSA 5`                           |     2&nbsp;592 B        |       4&nbsp;864 B       |    4&nbsp;595 B  | 256-bit         |
  | `Falcon 512 (Lattice)`               |       897 B             |       1&nbsp;281 B       |      690 B       | 128-bit         |
  | `Falcon 1024`                        |     1&nbsp;793 B        |       2&nbsp;305 B       |    1&nbsp;330 B  | 256-bit         |
  | `Rainbow Level Ia (Oil-and-Vineger)` |   161&nbsp;600 B        |     103&nbsp;648 B       |       66 B       | 128-bit         |
@@ -118,15 +125,16 @@ Nasledujúca tabuľka ukazuje parametre jednotlivých algoritmov.
  | `GeMSS 128`                          |   352&nbsp;188 B        |          16 B            |       33 B       | 128-bit         |
  | `GeMSS 192`                          | 1&nbsp;237&nbsp;964 B   |          24 B            |       53 B       | 128-bit         |
 
-Nasledujúci kód zobrazuje ukážku použitia algoritmu _Crystals Dilithium_ v C# pomocou knižnice [BouncyCastle](https://github.com/bcgit/bc-csharp).
+Nasledujúci kód zobrazuje ukážku použitia algoritmu _ML-DSA_ (podľa _FIPS 204_, pôvodne _Crystals Dilithium_) v C# pomocou knižnice [BouncyCastle](https://github.com/bcgit/bc-csharp).
 
 Ostatné dostupné algoritmy využívajú takmer rovnaký kód jediný rozdiel je v názvoch použitých tried.
 
 ```cs
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Dilithium;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Kyber;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Signers;
 
 SecureRandom random = new SecureRandom();
 
@@ -134,31 +142,30 @@ SecureRandom random = new SecureRandom();
 byte[] data = new byte[32];
 random.NextBytes(data);
 
-// Vygenerovanie klucoveho paru
-DilithiumKeyGenerationParameters keyGenParameters = new DilithiumKeyGenerationParameters(random, DilithiumParameters.Dilithium3);
-DilithiumKeyPairGenerator dilithiumKeyPairGenerator = new DilithiumKeyPairGenerator();
-dilithiumKeyPairGenerator.Init(keyGenParameters);
-AsymmetricCipherKeyPair keyPair = dilithiumKeyPairGenerator.GenerateKeyPair();
+MLDsaKeyPairGenerator kpg = new MLDsaKeyPairGenerator();
+kpg.Init(new MLDsaKeyGenerationParameters(random, MLDsaParameters.ml_dsa_65));
 
-// Export klucov
-DilithiumPublicKeyParameters publicKey = (DilithiumPublicKeyParameters)keyPair.Public;
-DilithiumPrivateKeyParameters privateKey = (DilithiumPrivateKeyParameters)keyPair.Private;
-byte[] pubEncoded = publicKey.GetEncoded();
-byte[] privateEncoded = privateKey.GetEncoded();
-Console.WriteLine($"Public key: {PrintData(pubEncoded)}");
-Console.WriteLine($"Private key: {PrintData(privateEncoded)}");
+AsymmetricCipherKeyPair kp = kpg.GenerateKeyPair();
+MLDsaPublicKeyParameters publicKey = (MLDsaPublicKeyParameters)kp.Public;
+MLDsaPrivateKeyParameters privateKey = (MLDsaPrivateKeyParameters)kp.Private;
 
-// Podpis dat
-DilithiumSigner alice = new DilithiumSigner();
-alice.Init(true, privateKey);
-byte[] signature = alice.GenerateSignature(data);
+Console.WriteLine($"Public key: {PrintData(publicKey.GetEncoded())}");
+Console.WriteLine($"Private key: {PrintData(privateKey.GetEncoded())}");
+
+MLDsaSigner signer = new MLDsaSigner(MLDsaParameters.ml_dsa_65, false);
+signer.Init(true, privateKey);
+signer.BlockUpdate(data);
+byte[] signature = signer.GenerateSignature();
+
 Console.WriteLine($"Signature: {PrintData(signature)}");
 
-// Overenie podpisu
-DilithiumSigner bob = new DilithiumSigner();
-bob.Init(false, publicKey);
-bool verified = bob.VerifySignature(data, signature);
-Console.WriteLine($"Successfully verified? {verified}");
+MLDsaSigner verifitier = new MLDsaSigner(MLDsaParameters.ml_dsa_65, false);
+verifitier.Init(false, publicKey);
+verifitier.BlockUpdate(data);
+
+bool signatureIsVerified = verifitier.VerifySignature(signature);
+
+Console.WriteLine($"Signature is verified: {signatureIsVerified}");
 ```
 
 Metóda na výpis dát:
@@ -178,6 +185,13 @@ Nie som odborník na interné fungovanie týchto algoritmov a ako pri inej krypt
 _BouncyCastle_ má zatiaľ experimentálne implementácie _CRYSTALS-Dilithium_, _CRYSTALS-Kyber_, _Falcon_, _SPHINCS+_, _Classic&nbsp;McEliece_, _FrodoKEM_, _NTRU_, _NTRU Prime_, _Picnic_, _Saber_, _BIKE_ a _SIKE_. Pričom algoritmus _SIKE_ bude odstránený.
 
 Pre ďalšie čítanie odporúčam nasledujúce zdroje.
+
+## Update maerc 2025
+- _FIPS 203_ premenoval _CRYSTALS-Kyber_ na _ML-KEM_
+- _FIPS 204_ premenoval _CRYSTALS-Dilithium_ na _ML-DSA_
+- _FIPS 205_ premenoval _Sphincs+_ na _SLH-DSA_
+
+Tieto algoritmy boli aj schválené.
 
 ## Zdroje
 1. <https://www.nist.gov/news-events/news/2022/07/nist-announces-first-four-quantum-resistant-cryptographic-algorithms>
