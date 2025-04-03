@@ -1,5 +1,5 @@
 Published: 15.3.2024
-Updated: 28.3.2025
+Updated: 3.4.2025
 Title: Post-kvantová kryptografia v C#
 Menu: Post-kvantová kryptografia v C#
 Cathegory: Dev
@@ -110,9 +110,9 @@ Nasledujúca tabuľka ukazuje parametre jednotlivých algoritmov.
 
  | Algoritmus                           | Veľkosť verejného kľúča | Veľkosť súkromného kľúča | Veľkosť podpisu  | Security        |
  | :---                                 |  ---:                   | ---:                     | ---:             | ---:            |
- | `ML-DSA 2 (Lattice)`                 |     1&nbsp;312 B        |       2&nbsp;528 B       |    2&nbsp;420 B  | 128-bit         |
- | `ML-DSA 3`                           |     1&nbsp;952 B        |       4&nbsp;000 B       |    3&nbsp;293 B  | 192-bit         |
- | `ML-DSA 5`                           |     2&nbsp;592 B        |       4&nbsp;864 B       |    4&nbsp;595 B  | 256-bit         |
+ | `ML-DSA 44`                          |     1&nbsp;312 B        |       2&nbsp;528 B       |    2&nbsp;420 B  | 128-bit         |
+ | `ML-DSA 65`                          |     1&nbsp;952 B        |       4&nbsp;000 B       |    3&nbsp;293 B  | 192-bit         |
+ | `ML-DSA 87`                          |     2&nbsp;592 B        |       4&nbsp;864 B       |    4&nbsp;595 B  | 256-bit         |
  | `Falcon 512 (Lattice)`               |       897 B             |       1&nbsp;281 B       |      690 B       | 128-bit         |
  | `Falcon 1024`                        |     1&nbsp;793 B        |       2&nbsp;305 B       |    1&nbsp;330 B  | 256-bit         |
  | `Rainbow Level Ia (Oil-and-Vineger)` |   161&nbsp;600 B        |     103&nbsp;648 B       |       66 B       | 128-bit         |
