@@ -1,4 +1,5 @@
 Published: 15.5.2025
+Updated: 24.5.2025
 Title: Renderovať HTML na serveri nie je hanba
 Menu: Renderovať HTML na serveri nie je hanba
 Cathegory: Dev
@@ -16,8 +17,8 @@ A to celé pomocou server-renderingu a HTML atribútov, pričom od serveru sa ch
 Sám autor HTMX dúfa v to, že HTMX zanikne a atribúty, ktoré HTMX pridáva sa dostanú do štandardného HTML.
 
 HTMX je na prvý pohľad knižnica, ktorá pridáva do HTML niekoľko atribútov, ktoré umožňujú spraviť HTTP request z akéhokoľvek tagu na akúkoľvek udalosť a výsledok umiestniť niekam na stránku.
-To dokáže aj _jQuery_, tak kde je rozdiel? Rozdiel je v tom, že HTMX je deklaratívne ale hlavne so sebou prináša inú paradigmu v tvorbe UI,
-je to nástroj, ktorý ponúkla dosť, aby sa v ňom dal spraviť e-shop, biznis aplikáciu, manažment portál,... proste 80% vecí na ktoré sa teraz používa React/Angular/Vue.
+To dokáže aj _jQuery_, tak kde je rozdiel? Rozdiel je v tom, že HTMX je deklaratívne ale hlavne so sebou prináša inú paradigmu v tvorbe UI.
+Je to nástroj, ktorý ponúkla dosť, aby sa v ňom dal spraviť e-shop, biznis aplikáciu, manažment portál,... proste 80% vecí na ktoré sa teraz používa React/Angular/Vue.
 
 Povedzme, že máme SPA aplikáciu, kde klikneme na linku pre načítanie dát do tabuľky podľa zvolených filtrov:
 * V reaktej SPA, sa cez store odpáli javascript klient pre REST API, ten zavolá fetch na dáta na serveri, na serveri sa dáta vytiahnu z databázy, z dát sa vytvorí JSON, ktorý sa vráti browseru, ten ho pomocou klienta rozparsuje, vytvorí sa akcia, zavolá sa reducer, updatne sa store, vyrenderujú sa všetky komponenty do virtuálneho DOM-u, ten sa porovná s predchádzajúcim virtuálnym DOM-om, a updatne sa HTML na stránke. 
@@ -37,7 +38,7 @@ Na to prečo a ako použiť HTMX sú tu iné články (linkujem ich nižšie), s
 * Osvedčila sa mi kombinácia [ASP.NET Core Minimal API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-10.0&tabs=visual-studio), HTMX a [RazorSlices](https://github.com/DamianEdwards/RazorSlices). Takže endpoint, model, (prípadne [mediátor handler](https://github.com/martinothamar/Mediator)), a šablónu ide mať v rovnakom adresári, poprípade mať v adresári všetko potrebne ku komponente. Samozrejme ide použiť aj izolácia CSS a AOT kompiláciu!
 * Pre zobrazenie chýb je vhodné použiť `hx-swap-oob`, alebo [HX-Redirect HTTP hlavičku](https://htmx.org/headers/hx-redirect/). 
 * Pri mojich hoby projektoch som javascript nepotreboval. No HTMX neotvorí dialógové okno (aj to dialógové okno ide dnes otvoriť pomocou HTML), na takúto klientsku interakciu ide použiť knižnicu [Alpine.js](https://alpinejs.dev/), ktorá má podobne deklaratívnu filozofiu.  
-* Ak bude potrebné využiť nejaké komponenty, ktoré interagujú na strane klienta, tak je možné použiť web componenty.
+* Ak bude potrebné využiť nejaké komponenty, ktoré interagujú na strane klienta, tak je možné použiť _web componenty_ s čistým javascritom pre jednoduché veci, pre zložitejšsie použiť knižnicu [Lit](https://lit.dev/).
 
 Samozrejme HTMX nie je strieborná guľka, ale vďaka nemu viem tvoriť rovnaké webové aplikácie bez NPM, oveľa rýchlejšie, jednoduchšie a z menším počtom riadkov kódov. 
 
@@ -56,7 +57,7 @@ Pri použití HTMX stačí z modrej oblasti spraviť formulár (označený modro
 
 `hx-get` hovorí kam sa má poslať GET požiadavka, na vyhľadanie logov s parametrami (tie sa získajú s inputov),  
 `hx-target` hovorí, že obsah vrátený zo serveru sa umiestni do nasledujúceho tagu `tbody`,   
-`hx-trigger` hovorí, na aká udalosti reagovať, je tam zahrnutý debouncing, aj úvodné načítanie,   
+`hx-trigger` hovorí, na aká udalosti reagovať, je tam zahrnutá zmena formuláru, debouncing, aj úvodné načítanie,   
 `hx-indicator` hovorí, kde sa nachdza _loading inidicator_.
 
 ![HTMX UI example](images/ModerneHtml/HtmxExample.png){.img-center}
@@ -109,7 +110,7 @@ Tu sú nejaké zdroje o HTMX a kedy ho použiť a nepoužiť:
 1. https://htmx.org/essays/another-real-world-react-to-htmx-port/ - ukážka konverzie reálnej aplikácie z reactu,
 1. https://github.com/khalidabuhakmeh/Htmx.Net - Htmx.Net - HTMX tag helpre pre ASP.NET Core,
 1. https://github.com/DamianEdwards/RazorSlices - _RazorSlices_ - AOT kompatibilná knižnica pre Razor šblóny a Minimal API,
-1. obrázky sú priamo zo stránky <https://htmx.org/>.
+1. Obrázky sú priamo zo stránky <https://htmx.org/>.
 
 ## SSE
 _Server-Sent Events_ je HTTP mechanizmus, ktorým môže server informovať klienta o udalostiach na serveri formou zaslanej správy. Ide o bežný HTTP request,
@@ -126,7 +127,7 @@ async IAsyncEnumerable<SseItem<string>> GetStockValues(CancellationToken cancell
     while(!cancellationToken.IsCancellationRequested) 
     { 
         double value = Random.Shared.NextDouble() * 100.0; 
-        string mark = value > lastValue ? "&#8657;" : "&#8659;"; 
+        string mark = value > lastValue ? "⇑" : "⇓"; 
         string html = $"<p>SSE coin - {value:.00} EUR <span>{mark}</span></p>"; 
 
         yield return new SseItem<string>(html); 
@@ -222,6 +223,10 @@ A následne sa postupne donačítajú jednotlivé jedlá (tu si môžeme predsta
 </body>
 </html>
 ```
+
+Výsledok vyzerá nasledovne:
+
+![Streaming HTML example](images/ModerneHtml/StreamingExample.gif){.img-center}
 
 Tento spôsob žiaľ funguje iba pri prvotnom načítaní stránky, takže nejde využiť pri ajaxových volaniach. 
 
