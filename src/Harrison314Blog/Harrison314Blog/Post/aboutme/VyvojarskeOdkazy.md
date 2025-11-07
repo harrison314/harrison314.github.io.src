@@ -7,6 +7,8 @@ Description: Odkazy na moju tvorbu na iných weboch, ktoré sa týkajú vývoja.
 
 Odkazy na moje miniblogy na iných strańkach, ide hľavne o zaujímavé linky so sveta dotnetu, na ktoré som narazil.
 
+* [Zaujímavé linky #18](https://vyvojari.dev/t/zaujimave-linky-18/913) (11.9.2025)
+* [Zaujímavé linky #17](https://vyvojari.dev/t/zaujimave-linky-17/893) (28.5.2025)
 * [Zaujímavé linky #16](https://vyvojari.dev/t/zaujimave-linky-16/878) (11.4.2025)
 * [Zaujímavé linky #15](https://vyvojari.dev/t/zaujimave-linky-15/820) (26.10.2024)
 * [Zaujímavé linky #14](https://vyvojari.dev/t/zaujimave-linky-14/798) (26.8.2024)
