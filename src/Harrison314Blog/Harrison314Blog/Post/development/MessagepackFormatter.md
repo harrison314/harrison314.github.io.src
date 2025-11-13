@@ -1,9 +1,9 @@
 Published: 13.11.2025
-Title: Vlastny formát v Minimal API
-Menu: Vlastny formát  v Minimal API
+Title: Vlastný formát v Minimal API
+Menu: Vlastný formát  v Minimal API
 Cathegory: Dev
 OgImage: images/InterpolatedStringAsHtmlTemplate/preview.jpg
-Description: Ako doplniť 
+Description: Ako doplniť v .NET 10 a Minimal API vlastný formár tequestov a responsov. Ukázané na messagepack formáte.
 ---
 
 Minimal API prinieslo jednoduché a rýchle riešenie pre JSON REST API. Ale voči kontrolerom majú tú nevýhodu, že sú priamo naviazané na JSON.
