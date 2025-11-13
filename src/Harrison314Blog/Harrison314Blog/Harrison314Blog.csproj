@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetStatic" Version="0.26.6" />
     <PackageReference Include="AspNetStaticContrib" Version="1.1.1" />
-    <PackageReference Include="Markdig" Version="0.41.3" />
+    <PackageReference Include="Markdig" Version="0.43.0" />
     <PackageReference Include="Markdig.SyntaxHighlighting" Version="1.1.7" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
