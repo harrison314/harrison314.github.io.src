@@ -1,0 +1,181 @@
+Published: 5.12.2024
+Title: Optimalizácie, ktoré v práci neskúšajte
+Menu: Optimalizácie v .Net-e
+Cathegory: Dev
+Description: Optimalizácie, ktoré v práci neskúšajte----
+---
+
+Mimo [The One Billion Rows Challenge](/md/1brc.md) som riešil aj iné optimalizácie,
+ktorá síce fungujú, ale ~~doma~~ v práci ich radšej neskúšajte, kolegovia vás za ne zabijú.
+
+## Unrolling cyklov
+Prvou optimalizáciou je unrolling for cyklov.
+Namiesto klasického for-u sa pouije to, e sa viacej prvok spracuje v jednom cykle,
+najèastejšie sa to robí po štyroch.
+
+```cs
+for (int i = 0; i < buffer.Length; i++)
+{
+    buffer[i] = buffer[i] * a + c;
+}
+```
+Sa zmení na:
+```cs
+for (int i = 0; i < buffer.Length; i += 4)
+{
+    buffer[i] = buffer[i] * a + c;
+    buffer[i + 1] = buffer[i + 1] * a + c;
+    buffer[i + 2] = buffer[i + 2] * a + c;
+    buffer[i + 3] = buffer[i + 3] * a + c;
+}
+```
+
+## Polia namiesto tried
+Táto optimalizácia je vlastne proti tomu, ako by sa malo programova keï pomocou štruktúr a tried enkapsulujeme dáta do logickıch celkov.
+Pri tejto optimalizácii sa namiesto po¾a štruktúr pouijú viaceré polia zodpovedajúce fieldom pôvodnej štruktúry.
+Takto je k nim pamäovo lepší prístup. V novších .NET je k tomu moné vıhodne poui vektorizáciu.
+
+Na toto existuje u hotovı source generátor:
+<https://github.com/Cysharp/StructureOfArraysGenerator>
+
+## Modulo nahradi if-om
+V prípadoch, keï sa pouíva circular buffer, alebo niekde poèítame èasto modulo, je ho lepšie hradi obyèajnım porovnaním a odèítaním, alebo bitovou maskou a následnım doèítaním.
+
+## Lock vs. Interlocked
+Sú prípady, kedy ide nahradi lokovanie pomocou triedy `Interlocked`, napríklad v príade cache alebo object poolu.
+Viackrát som u refaktoroval zbytoèné locky, niekedy to ide prepísa tak,
+e sa 99% príadov vyrieši pomocou `Interlocked` a zvyšok pomocou locku.
+
+Odporúèam pozornos zamera na metódu `Interlocked.CompareExchange()`.
+
+## Eliminácia bound-check v poliach
+V èasti mojej diplomovej práci som pouíval viterbiho algoritmus a skryté markovove modely
+na urèovanie slovnıch druhov v slovenskıch vetách. Funguje to tak,
+e máme skryty  markovov model, v ktorom sú zahrnuté pravdepodobnosti,
+e jeden slovnı druh nasleduje za druhım a pravdepodobnosti, e slovo vo vete patrí nejakému slovnému druhu
+(ak slovo nebolo v trénovacích dátach, tak sa pravdepodobnosti odhadovali pod¾a prípony).
+
+V èase písania diplomovej práce mi kompletné pretestovanie na testovacom korpuse trvalo cez osem hodín.
+A väèšinu èasu zabralo práve vyhodnocovanie slovnıch druhov. K optimalizácii som sa dostal a neskôr.
+
+Ešte upozorním na jednu zaujímavos – v škole nás uèili, e Slovenèina má desa slovnıch druhov,
+no v skutoènosti ich máme jedenás (jedenáste je _zvratané príèastie_),
+ale v mojom riešení som ich poil dvanás (u mòa bol dvanásty interpunkcia – bodky, èiarky, otázniky,...).
+
+Viterbiho algoritmus patrí do algoritmov dynamického programovania,
+kde sa pracuje z dvojrozmernım polom _NxM_, kde _N_ je poèet slovnıch druhov, _M_ je dåka vety.
+Celková zloitos je _MxN^2^_. Jediné èo sa dalo optimalizova sú alokácie a prístup k poliam.
+
+V tomto algoritme sa násobia pravdepodobnosti, ale pri implementácii s násobením po nieko¾kıch
+násobení pravdepodobností double podteèie.
+Preto, je lepšie násobenie vymeni za sèítanie logaritmov,
+lebo platí: $ln(a \cdot b) = ln(a) + ln(b)$ a taktie $ln(a) \geq ln(b)$ potom platí aj  $a \geq b$.
+
+Ešte poèas písania diplomovej práce som skúšal poui unsafe kód a alokova si polia pomocou `Marshal.AllocHGlobal()`, ale to rıchlosti nepomohlo.
+
+Dnes u viem, e základom optimalizácie by bol `ArrayPool` pre alokovanie tıchto polí.
+
+Pri tomto riešení som mal ve¾kú vıhodu, e síce bolo potrebné iterova cez kadé slovo,
+ale vnútorné cykly iterujú nad kombináciou konkrétneho slova a slovného druhu.
+Take cyklus šiel rozbali, èo unieslo nejakú úsporu èasu (testovanie podmienky vo _for_).
+Keï som danı cyklus otoèil a namiesto indexov 0 a 11 som šiel od 11 k 0, tak som ušetril viac èasu,
+lebo kompilátor usúdil, e hranice po¾a treba testova len na prvom jedenástom indexe.
+
+
+```cs
+int T = this.words.Length;
+double** a = allocmatrixDouble(this.N, T);
+try
+{
+    for (int i = 0; i < this.N; i++)
+    {
+        a[i][0] = -1.0 * this.beginStates[i] - this.GetWordPropability(i, this.words[0]);
+    }
+
+    double minWeight = 0.0, weight;
+    for (int t = 1; t < T; t++)
+    {
+        for (int j = 0; j < this.N; j++)
+        {
+            minWeight = a[0][t - 1] - this.pseudoTransmision[0];
+
+            for (int i = 1; i < this.N; i++)
+            {
+                weight = a[i][t - 1] - this.pseudoTransmision[i];
+
+                if (weight < minWeight)
+                {
+                    minWeight = weight;
+                }
+            }
+            a[j][t] = minWeight - this.GetWordPropability(j, this.words[t]);
+        }
+    }
+
+    return minWeight;
+}
+finally
+{
+    freeMatrix(a, T);
+}
+```
+
+```cs
+ int T = this.words.Length;
+ WordKindVal[] a = ArrayPool<WordKindVal>.Shared.Rent(T); ;
+ double minWeight = 0.0, weight;
+
+ WordKindVal wordProbality = new WordKindVal();
+ this.GetWordPropability(ref wordProbality, this.words[0]);
+ fixed (WordKindVal* ap = a)
+ {
+     ap->value0 = -this.beginStatesStruct.value0 - wordProbality.value0;
+     ap->value1 = -this.beginStatesStruct.value1 - wordProbality.value1;
+     ap->value2 = -this.beginStatesStruct.value2 - wordProbality.value2;
+     ap->value3 = -this.beginStatesStruct.value3 - wordProbality.value3;
+     ap->value4 = -this.beginStatesStruct.value4 - wordProbality.value4;
+     ap->value5 = -this.beginStatesStruct.value5 - wordProbality.value5;
+     ap->value6 = -this.beginStatesStruct.value6 - wordProbality.value6;
+     ap->value7 = -this.beginStatesStruct.value7 - wordProbality.value7;
+     ap->value8 = -this.beginStatesStruct.value8 - wordProbality.value8;
+     ap->value9 = -this.beginStatesStruct.value9 - wordProbality.value9;
+     ap->value10 = -this.beginStatesStruct.value10 - wordProbality.value10;
+     ap->value11 = -this.beginStatesStruct.value11 - wordProbality.value11;
+
+     for (int t = 1; t < T; t++)
+     {
+         WordKindVal* last = &(ap[t - 1]);
+         string actualWord = this.words[t];
+
+         for (int j = 0; j < this.N; j++)
+         {
+
+             minWeight = last->value0 - this.pseudoTransmisionStruct.value0;
+
+             weight = last->value1 - this.pseudoTransmisionStruct.value1; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value2 - this.pseudoTransmisionStruct.value2; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value3 - this.pseudoTransmisionStruct.value3; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value4 - this.pseudoTransmisionStruct.value4; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value5 - this.pseudoTransmisionStruct.value5; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value6 - this.pseudoTransmisionStruct.value6; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value7 - this.pseudoTransmisionStruct.value7; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value8 - this.pseudoTransmisionStruct.value8; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value9 - this.pseudoTransmisionStruct.value9; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value10 - this.pseudoTransmisionStruct.value10; if (weight < minWeight) { minWeight = weight; }
+             weight = last->value11 - this.pseudoTransmisionStruct.value11; if (weight < minWeight) { minWeight = weight; }
+
+             WordKindVal.SetValueFromPtr(&ap[t], j, minWeight - this.GetWordPropability(j, actualWord));
+         }
+     }
+
+ }
+
+ ArrayPool<WordKindVal>.Shared.Return(a);
+ return minWeight;
+```
+## Èestné zmienky
+- Genrické metaprogramovanie
+- TODO
+
+## Záver
+TODO
