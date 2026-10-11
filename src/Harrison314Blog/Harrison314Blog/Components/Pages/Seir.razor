@@ -1,0 +1,304 @@
+﻿@page "/Seir"
+@inject IUrlManager UriManager
+
+<PageTitle>SEIR vizualizátor</PageTitle>
+<HeadContent>
+    <meta property="og:title" content="SEIR vizualizátor" />
+    <meta property="og:description" content="Jednoduchý SEIR vizualizér na ukážku šírenia niektorých ochorení. Porovnáva SARS-CoV-2 aktuálnu pľúcnu formu moru." />
+    <meta property="og:url" content="@this.UriManager.GetAbsolute("Seir.html")" />
+    <meta property="og:image" content="@this.UriManager.GetAbsolute("images/Seir/Seir.png")" />
+    <meta name="description" content="Jednoduchý SEIR vizualizér na ukážku šírenia niektorých ochorení. Porovnáva SARS-CoV-2 aktuálnu pľúcnu formu moru." />
+</HeadContent>
+
+<h1>SEIR vizualizátor</h1>
+<div class="publishDate">
+    Október 2026
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <p>Na tejto stránke je jednoduchý SEIR vizualizér na ukážku šírenia niektorých ochorení. Porovnáva <em>SARS-CoV-2</em> aktuálnu pľúcnu formu moru.</p>
+        <p><em>SEIR</em> je iteratívny epidemiologický model, kde:</p>
+        <ul>
+            <li><em>S</em> - zdraví jedinci, ktorí môžu ochorieť,</li>
+            <li><em>E</em> - vystavení jedinci,</li>
+            <li><em>I</em> - infekční jedinci,</li>
+            <li><em>R</em> - uzdravení alebo mŕtvi jedinci.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+    <h3>Formulár na zadanie údajov</h3>
+    <form id="simulationForm" class="form-horizontal">
+        <div class="form-group">
+            <label for="pathogen" class="col-sm-3 control-label">Patogén</label>
+            <div class="col-sm-6">
+                <select id="pathogen" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="population" class="col-sm-3 control-label">Veľkosť populácie</label>
+            <div class="col-sm-6">
+                <input id="population" class="form-control" type="number" min="10" step="1" value="100000" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="initialInfected" class="col-sm-3 control-label">Počiatočne nakazení</label>
+            <div class="col-sm-6">
+                <input id="initialInfected" class="form-control" type="number" min="1" step="1" value="10" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="days" class="col-sm-3 control-label">Dĺžka simulácie (dni)</label>
+            <div class="col-sm-6">
+                <input id="days" class="form-control" type="number" min="1" max="3650" step="1" value="180" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contactReduction" class="col-sm-3 control-label">Obmedzenie kontaktov (%)</label>
+            <div class="col-sm-6">
+                <input id="contactReduction" class="form-control" type="number" min="0" max="100" step="1" value="0" required>
+                <p class="help-block">Znižuje prenos patogénu počas celej simulácie.</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-6">
+                <button type="submit" class="btn btn-primary">Spustiť simuláciu</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Parametre patogénu</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr><th>Parameter</th><th>Hodnota</th><th>Význam</th></tr>
+            </thead>
+            <tbody id="pathogenParameters"></tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Priebeh pandémie</h3>
+    <div class="chart-container" style="height:40vh;">
+        <canvas id="seirChart" aria-label="Čiarový graf priebehu pandémie"></canvas>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <p class="col-sm-12">
+    <h3>Súhrn</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody id="summaryTable"></tbody>
+        </table>
+    </div>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-sm-12" >
+        <h3>Konečné rozloženie populácie</h3>
+        <div style="display: flex; align-items: center; justify-content: center;">
+    <div class="donut-container" style="width: 50%;">
+        <canvas id="finalChart" aria-label="Donut graf konečného rozloženia populácie"></canvas>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+(function () {
+    var pathogens = {
+        covid19: {
+            name: 'Covid-19',
+            r0: 2.5,
+            latentDays: 4,
+            infectiousDays: 12,
+            mortality: 0.01,
+            description: 'Hodnoty pre respiračné ochorenie Covid-19.'
+        },
+        plague: {
+            name: 'Pľúcna forma moru',
+            r0: 1.8,
+            latentDays: 1,
+            infectiousDays: 3,
+            mortality: 0.82,
+            description: 'Hodnoty pre rýchlo postupujúcu pľúcnu formu moru.'
+        }
+    };
+
+    var colors = {
+        susceptible: '#337ab7',
+        exposed: '#f0ad4e',
+        infectious: '#d9534f',
+        recovered: '#5cb85c',
+        deceased: '#555555'
+    };
+    var seirChart = null;
+    var finalChart = null;
+    var lastResult = null;
+
+    function formatNumber(value) {
+        return Math.round(value).toLocaleString('sk-SK');
+    }
+
+    function formatPercent(value) {
+        return value.toLocaleString('sk-SK', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+    }
+
+    function selectedPathogen() {
+        return pathogens[document.getElementById('pathogen').value];
+    }
+
+    function renderPathogenOptions() {
+        var select = document.getElementById('pathogen');
+        Object.keys(pathogens).forEach(function (key) {
+            var option = document.createElement('option');
+            option.value = key;
+            option.textContent = pathogens[key].name;
+            select.appendChild(option);
+        });
+    }
+
+    function renderPathogenParameters() {
+        var pathogen = selectedPathogen();
+        var rows = [
+            ['Názov', pathogen.name, pathogen.description],
+            ['Reprodukčné číslo (R₀)', pathogen.r0.toLocaleString('sk-SK'), 'Priemerný počet nových infekcií od jedného chorého.'],
+            ['Inkubačná doba', pathogen.latentDays + ' dní', 'Priemerný čas v skupine E.'],
+            ['Infekčná doba', pathogen.infectiousDays + ' dní', 'Priemerný čas v skupine I.'],
+            ['Odhadovaná úmrtnosť', formatPercent(pathogen.mortality * 100), 'Podiel infekčných osôb, ktoré v modeli zomrú.']
+        ];
+        document.getElementById('pathogenParameters').innerHTML = rows.map(function (row) {
+            return '<tr><th>' + row[0] + '</th><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
+        }).join('');
+    }
+
+    function readNumber(id) {
+        return Number(document.getElementById(id).value);
+    }
+
+    function simulate() {
+        var pathogen = selectedPathogen();
+        var population = Math.max(10, Math.floor(readNumber('population')));
+        var initialInfected = Math.min(population - 1, Math.max(1, Math.floor(readNumber('initialInfected'))));
+        var days = Math.max(1, Math.floor(readNumber('days')));
+        var contactReduction = Math.min(100, Math.max(0, readNumber('contactReduction'))) / 100;
+        var susceptible = population - initialInfected;
+        var exposed = 0;
+        var infectious = initialInfected;
+        var recovered = 0;
+        var deceased = 0;
+        var beta = pathogen.r0 / pathogen.infectiousDays * (1 - contactReduction);
+        var sigma = 1 / pathogen.latentDays;
+        var gamma = 1 / pathogen.infectiousDays;
+        var timeline = { labels: [], S: [], E: [], I: [], R: [], D: [] };
+
+        for (var day = 0; day <= days; day++) {
+            timeline.labels.push(day);
+            timeline.S.push(susceptible);
+            timeline.E.push(exposed);
+            timeline.I.push(infectious);
+            timeline.R.push(recovered);
+            timeline.D.push(deceased);
+
+            var newExposed = Math.min(susceptible, beta * susceptible * infectious / population);
+            var newInfectious = Math.min(exposed, sigma * exposed);
+            var leavingInfectious = Math.min(infectious, gamma * infectious);
+            var newDeaths = leavingInfectious * pathogen.mortality;
+            var newRecovered = leavingInfectious - newDeaths;
+
+            susceptible -= newExposed;
+            exposed += newExposed - newInfectious;
+            infectious += newInfectious - leavingInfectious;
+            recovered += newRecovered;
+            deceased += newDeaths;
+        }
+
+        lastResult = { pathogen: pathogen, population: population, days: days, contactReduction: contactReduction, timeline: timeline, final: { S: susceptible, E: exposed, I: infectious, R: recovered, D: deceased } };
+        updateSummary(lastResult);
+        drawCharts(lastResult);
+    }
+
+    function updateSummary(result) {
+        var final = result.final;
+        var totalEverInfected = result.population - final.S;
+        var rows = [
+            ['Patogén', result.pathogen.name],
+            ['Dĺžka simulácie', result.days + ' dní'],
+            ['Obmedzenie kontaktov', formatPercent(result.contactReduction * 100)],
+            ['Najvyšší počet infekčných', formatNumber(Math.max.apply(null, result.timeline.I))],
+            ['Nakazení počas simulácie', formatNumber(totalEverInfected) + ' (' + formatPercent(totalEverInfected / result.population * 100) + ')'],
+            ['Citliví (S)', formatNumber(final.S)],
+            ['Exponovaní (E)', formatNumber(final.E)],
+            ['Infekční (I)', formatNumber(final.I)],
+            ['Zotavení (R)', formatNumber(final.R)],
+            ['Zomrelí (odhad)', formatNumber(final.D)]
+        ];
+        document.getElementById('summaryTable').innerHTML = rows.map(function (row, index) {
+            return '<tr><th>' + row[0] + '</th><td' + (index === 0 ? ' class="result-highlight"' : '') + '>' + row[1] + '</td></tr>';
+        }).join('');
+    }
+
+    function drawCharts(result) {
+        var timeline = result.timeline;
+        if (seirChart) { seirChart.destroy(); }
+        if (finalChart) { finalChart.destroy(); }
+
+        seirChart = new Chart(document.getElementById('seirChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: timeline.labels,
+                datasets: [
+                    { label: 'Citliví (S)', data: timeline.S, borderColor: colors.susceptible, backgroundColor: colors.susceptible, pointRadius: 0, tension: 0.15 },
+                    { label: 'Exponovaní (E)', data: timeline.E, borderColor: colors.exposed, backgroundColor: colors.exposed, pointRadius: 0, tension: 0.15 },
+                    { label: 'Infekční (I)', data: timeline.I, borderColor: colors.infectious, backgroundColor: colors.infectious, pointRadius: 0, tension: 0.15 },
+                    { label: 'Zotavení (R)', data: timeline.R, borderColor: colors.recovered, backgroundColor: colors.recovered, pointRadius: 0, tension: 0.15 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function (context) { return context.dataset.label + ': ' + formatNumber(context.parsed.y); } } } },
+                scales: { x: { title: { display: true, text: 'Deň' } }, y: { beginAtZero: true, title: { display: true, text: 'Počet osôb' } } }
+            }
+        });
+
+        finalChart = new Chart(document.getElementById('finalChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Citliví (S)', 'Exponovaní (E)', 'Infekční (I)', 'Zotavení (R)', 'Zomrelí'],
+                datasets: [{ data: [result.final.S, result.final.E, result.final.I, result.final.R, result.final.D], backgroundColor: [colors.susceptible, colors.exposed, colors.infectious, colors.recovered, colors.deceased] }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function (context) { return context.label + ': ' + formatNumber(context.parsed); } } } } }
+        });
+    }
+
+    document.getElementById('pathogen').addEventListener('change', function () {
+        renderPathogenParameters();
+        simulate();
+    });
+    document.getElementById('simulationForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        simulate();
+    });
+
+    renderPathogenOptions();
+    renderPathogenParameters();
+    simulate();
+}());
+</script>
+@code {
+}

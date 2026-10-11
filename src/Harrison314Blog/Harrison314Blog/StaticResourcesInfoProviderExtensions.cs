@@ -13,6 +13,7 @@ internal static class StaticResourcesInfoProviderExtensions
         provider.Add(new PageResource("/GeneralAll") { OutFile = "GeneralAll.html", LastModified = DateTime.UtcNow });
         provider.Add(new PageResource("/All") { OutFile = "All.html", LastModified = DateTime.UtcNow });
         provider.Add(new PageResource("/Portfolio") { OutFile = "Portfolio.html", LastModified = DateTime.UtcNow });
+        provider.Add(new PageResource("/Seir") { OutFile = "Seir.html", LastModified = new DateTime(2026, 10, 10) });
 
 
         provider.Add(new BinResource("/feed.rss") { OptimizationType = OptimizationType.None });
